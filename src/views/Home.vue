@@ -1,0 +1,187 @@
+<template>
+  <v-container>
+    <v-row class="mt-10" align="center" justify="center">
+      <v-col
+        v-if="!showTopBanner"
+        xs="12"
+        sm="8"
+        md="6"
+        lg="5"
+        xl="3"
+      >
+        <v-img src="/images/51Talk-10-Years-Logo.png"></v-img>
+      </v-col>
+      <v-col offset-lg="1" xs="12" sm="8" md="6" lg="5" xl="3">
+        <v-card class="mx-auto" outlined>
+          <v-img v-if="showTopBanner" src="/images/51Talk-10-Years-Logo.png"></v-img>
+          <v-card-title> Center Owner PRS Admin Login </v-card-title>
+          <v-list-item three-line>
+            <v-list-item-content>
+              <form>
+                <!-- <v-list-item-title class="headline mb-3"></v-list-item-title> -->
+                <v-alert v-if="alert.show" cols="12" :type="alert.type">
+                  <span v-html="alert.message"></span>
+                </v-alert>
+                <v-text-field
+                  cols="12"
+                  v-model="form.username"
+                  label="Username"
+                  @input="$v.form.username.$touch()"
+                  @blur="$v.form.username.$touch()"
+                  @keyup.enter="submit"
+                  :error-messages="usernameErrors"
+                  :disabled="isLoading"
+                  outlined
+                  required
+                ></v-text-field>
+                <v-text-field
+                  cols="12"
+                  v-model="form.password"
+                  :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                  :type="showPassword ? 'text' : 'password'"
+                  @click:append="showPassword = !showPassword"
+                  label="Password"
+                  @input="$v.form.password.$touch()"
+                  @blur="$v.form.password.$touch()"
+                  @keyup.enter="submit"
+                  :error-messages="passwordErrors"
+                  :disabled="isLoading"
+                  outlined
+                  required
+                ></v-text-field>
+                <v-row>
+                  <v-col cols="12">
+                    <v-divider></v-divider>
+                  </v-col>
+                </v-row>
+              </form>
+              <v-btn
+                class="py-6"
+                color="primary"
+                :loading="isLoading"
+                @click="submit"
+                block
+              >
+                Submit
+              </v-btn>
+              <v-row>
+                <v-col cols="12" align="center">
+                  <v-btn
+                    :loading="isLoading"
+                    :to="{ name: 'admin-forgot-password' }"
+                    class="ma-1"
+                    color="#00B4EE"
+                    plain
+                  >
+                    Forgot Password?
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-list-item-content>
+          </v-list-item>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
+
+<script>
+import { validationMixin } from "vuelidate";
+import { required } from "vuelidate/lib/validators";
+export default {
+  name: "login",
+  mixins: [validationMixin],
+  validations: {
+    form: {
+      password: { required },
+      username: { required },
+    },
+  },
+  data: () => ({
+    isLoading: false,
+    showPassword: false,
+    form: {
+      username: "",
+      password: "",
+    },
+    alert: {
+      show: false,
+      message: "",
+      type: "error",
+    },
+  }),
+  methods: {
+    submit() {
+      this.isLoading = true;
+      this.alert.show = false;
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        this.isLoading = false;
+        this.alert = {
+          show: true,
+          type: "error",
+          message: "Please Check Errors Below",
+        };
+      } else {
+        this.$store
+          .dispatch("adminLogin", this.form)
+          .then((response) => {
+            setTimeout(() => {
+              this.$router.push({
+                name: "admin-account",
+              });
+              this.isLoading = false;
+            }, 1000);
+          })
+          .catch((err) => {
+            setTimeout(() => {
+              let msg = "";
+              if (err.response.data.message) {
+                msg = err.response.data.message;
+              } else {
+                msg = "Something went wrong. Please contact the administrator";
+              }
+              this.alert = {
+                show: true,
+                type: "error",
+                message: msg,
+              };
+              this.isLoading = false;
+            }, 1000);
+          });
+      }
+    },
+  },
+  computed: {
+    usernameErrors() {
+      const errors = [];
+      if (!this.$v.form.username.$dirty) return errors;
+      !this.$v.form.username.required && errors.push("E-mail is required");
+      return errors;
+    },
+    passwordErrors() {
+      const errors = [];
+      if (!this.$v.form.password.$dirty) return errors;
+      !this.$v.form.password.required && errors.push("Password is required");
+      return errors;
+    },
+    showTopBanner() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return 220;
+        case "sm":
+          return 400;
+        case "md":
+          return false;
+        case "lg":
+          return false;
+        case "xl":
+          return false;
+      }
+    },
+  },
+};
+</script>
