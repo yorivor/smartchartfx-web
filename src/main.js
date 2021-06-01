@@ -17,6 +17,8 @@ const options = {
   ]
 }
 
+import "@/assets/main.scss";
+
 Vue.use(VueHtmlToPaper, options);
 
 import vuetify from './plugins/vuetify';

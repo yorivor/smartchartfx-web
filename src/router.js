@@ -7,6 +7,9 @@ import Account from './views/Account.vue'
 import ResetPassword from './views/ResetPassword.vue'
 import ForgotPassword from './views/ForgotPassword.vue'
 
+import User from './views/User.vue'
+import Order from './views/Order.vue'
+
 /** Common Imports End Here */
 Vue.use(Router)
 
@@ -23,7 +26,7 @@ let router = new Router({
     },
     {
       path: '/my-account',
-      name: 'my-account',
+      name: 'account',
       meta: { requiresAuth: true, title: 'My Account' },
       component: Account
     },
@@ -37,6 +40,18 @@ let router = new Router({
       path: '/reset-password/:token',
       name: 'reset-password',
       meta: { requiresAuth: false, title: 'Reset Password' },
+      component: ResetPassword
+    },
+    {
+      path: '/orders',
+      name: 'orders',
+      meta: { requiresAuth: true, title: 'Orders' },
+      component: ResetPassword
+    },
+    {
+      path: '/users',
+      name: 'users',
+      meta: { requiresAuth: true, title: 'Users' },
       component: ResetPassword
     },
     {
