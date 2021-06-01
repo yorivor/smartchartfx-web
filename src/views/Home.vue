@@ -1,20 +1,13 @@
 <template>
   <v-container>
     <v-row class="mt-10" align="center" justify="center">
-      <v-col
-        v-if="!showTopBanner"
-        xs="12"
-        sm="8"
-        md="6"
-        lg="5"
-        xl="3"
-      >
+      <v-col v-if="!showTopBanner" xs="12" sm="8" md="6" lg="5" xl="3">
         <v-img src="/images/51Talk-10-Years-Logo.png"></v-img>
       </v-col>
       <v-col offset-lg="1" xs="12" sm="8" md="6" lg="5" xl="3">
         <v-card class="mx-auto" outlined>
           <v-img v-if="showTopBanner" src="/images/51Talk-10-Years-Logo.png"></v-img>
-          <v-card-title> Center Owner PRS Admin Login </v-card-title>
+          <v-card-title> {{ appName }} Login </v-card-title>
           <v-list-item three-line>
             <v-list-item-content>
               <form>
@@ -49,11 +42,6 @@
                   outlined
                   required
                 ></v-text-field>
-                <v-row>
-                  <v-col cols="12">
-                    <v-divider></v-divider>
-                  </v-col>
-                </v-row>
               </form>
               <v-btn
                 class="py-6"
@@ -65,10 +53,10 @@
                 Submit
               </v-btn>
               <v-row>
-                <v-col cols="12" align="center">
+                <v-col class="mt-3" cols="12" align="center">
                   <v-btn
                     :loading="isLoading"
-                    :to="{ name: 'admin-forgot-password' }"
+                    :to="{ name: 'forgot-password' }"
                     class="ma-1"
                     color="#00B4EE"
                     plain
@@ -85,15 +73,18 @@
         </v-card>
       </v-col>
     </v-row>
+    <loading :is-loading="isLoading" />
   </v-container>
 </template>
 
 <script>
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
+import Loading from "../components/Loading";
 export default {
-  name: "login",
+  name: "home",
   mixins: [validationMixin],
+  components: { Loading },
   validations: {
     form: {
       password: { required },
@@ -101,6 +92,7 @@ export default {
     },
   },
   data: () => ({
+    appName: process.env.VUE_APP_TITLE || "",
     isLoading: false,
     showPassword: false,
     form: {
@@ -127,19 +119,20 @@ export default {
         };
       } else {
         this.$store
-          .dispatch("adminLogin", this.form)
+          .dispatch("login", this.form)
           .then((response) => {
             setTimeout(() => {
               this.$router.push({
-                name: "admin-account",
+                name: "my-account",
               });
               this.isLoading = false;
             }, 1000);
           })
           .catch((err) => {
+            console.log(err)
             setTimeout(() => {
               let msg = "";
-              if (err.response.data.message) {
+              if (err.response != undefined) {
                 msg = err.response.data.message;
               } else {
                 msg = "Something went wrong. Please contact the administrator";
@@ -179,6 +172,8 @@ export default {
         case "lg":
           return false;
         case "xl":
+          return false;
+        default:
           return false;
       }
     },

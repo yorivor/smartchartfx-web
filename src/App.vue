@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <v-navigation-drawer
+      v-if="isLoggedIn && currentRouteName != 'home'"
       v-model="drawer"
       :expand-on-hover="true"
       :mini-variant="true"
@@ -14,12 +15,12 @@
             <img src="/favicon.ico" />
           </v-list-item-avatar>
           <v-list-item-content>
-            <v-list-item-title>Health Declaration Form</v-list-item-title>
+            <v-list-item-title>{{ appName }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-divider></v-divider>
         <!-- View My Account -->
-        <v-list-item v-if="isLoggedIn" :to="{ name: 'my-account' }" link>
+        <v-list-item :to="{ name: 'my-account' }" link>
           <v-list-item-icon>
             <v-icon>mdi-account-box</v-icon>
           </v-list-item-icon>
@@ -27,47 +28,27 @@
             <v-list-item-title>{{ displayname }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-
-        <!-- Fill Up Form -->
-        <v-list-item :to="{ name: 'health-declaration-form' }" link>
+        <v-divider></v-divider>
+        <!-- Users -->
+        <v-list-item :to="{ name: 'users' }" link>
           <v-list-item-icon>
             <v-icon>mdi-format-list-numbered</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>Fill Up Form</v-list-item-title>
+            <v-list-item-title>Users</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item
-          v-if="isLoggedIn && isAdmin"
-          :to="{ name: 'health-declarations' }"
-          link
-        >
+        <!-- Orders -->
+        <v-list-item :to="{ name: 'orders' }" link>
           <v-list-item-icon>
             <v-icon>mdi-table-large</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>List</v-list-item-title>
+            <v-list-item-title>Orders</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
         <v-divider></v-divider>
-        <v-list-item v-if="!isLoggedIn" :to="{ name: 'home' }" link exact>
-          <v-list-item-icon>
-            <v-icon>mdi-account-box</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>Login</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <!-- Register -->
-        <v-list-item v-if="!isLoggedIn" :to="{ name: 'register' }" link>
-          <v-list-item-icon>
-            <v-icon>mdi-account-plus</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>Register</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
         <!-- Logout -->
         <v-list-item v-if="isLoggedIn" @click="logout" link>
           <v-list-item-icon>
@@ -78,7 +59,7 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
-        <!-- Login -->
+      <!-- Login -->
     </v-navigation-drawer>
 
     <v-main>
@@ -91,6 +72,7 @@
 export default {
   name: "App",
   data: () => ({
+    appName: process.env.VUE_APP_TITLE,
     drawer: true,
   }),
   methods: {
@@ -113,11 +95,9 @@ export default {
     isAdmin: function () {
       return this.$store.getters.isAdmin;
     },
+    currentRouteName: function () {
+      return this.$route.name;
+    },
   },
 };
 </script>
-<style lang="scss">
-.theme--dark.v-btn.v-btn--icon {
-  color: #000 !important;
-}
-</style>

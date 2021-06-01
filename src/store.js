@@ -1,9 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import { STATUS_CODES } from 'http'
-
-// import { stat } from 'fs';
 
 Vue.use(Vuex)
 
@@ -14,8 +11,6 @@ export default new Vuex.Store({
     username: localStorage.getItem('username') || '',
     displayname: localStorage.getItem('displayname') || '',
     usertype: localStorage.getItem('usertype') || '',
-    hdfispassed: localStorage.getItem('hdfispassed') || '',
-    hdfmessage: localStorage.getItem('hdfmessage') || '',
   },
   mutations: {
     auth_request(state) {
@@ -49,18 +44,6 @@ export default new Vuex.Store({
       localStorage.removeItem('token')
       state.token = ''
     },
-    set_result(state, result) {
-      localStorage.setItem('hdfispassed', result.isPassed)
-      localStorage.setItem('hdfmessage', result.message)
-      state.hdfispassed = result.isPassed
-      state.hdfmessage = result.message
-    },
-    unset_result(state) {
-      localStorage.removeItem('hdfispassed')
-      localStorage.removeItem('hdfmessage')
-      state.hdfispassed = ''
-      state.hdfmessage = ''
-    }
   },
   actions: {
     login({ commit }, user) {
@@ -119,25 +102,11 @@ export default new Vuex.Store({
         resolve()
       })
     },
-    setResult({ commit }, result) {
-      return new Promise((resolve) => {
-        commit('set_result', result)
-        resolve()
-      })
-    },
-    unsetResult({ commit }) {
-      return new Promise((resolve) => {
-        commit('unset_result')
-        resolve()
-      })
-    }
   },
   getters: {
     isLoggedIn: state => state.token != '',
     authStatus: state => state.status,
     displayname: state => state.displayname,
     isAdmin: state => state.usertype == 'admin',
-    hdfispassed: state => state.hdfispassed,
-    hdfmessage: state => state.hdfmessage,
   }
 })
