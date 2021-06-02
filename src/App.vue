@@ -35,7 +35,16 @@
             <v-icon>mdi-account-box-multiple</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>Users</v-list-item-title>
+            <v-list-item-title>Users Management</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <!-- Company -->
+        <v-list-item :to="{ name: 'companies' }" link>
+          <v-list-item-icon>
+            <v-icon>mdi-office-building</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Companies Management</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <!-- Orders -->
