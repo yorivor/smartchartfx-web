@@ -20,7 +20,7 @@
         </v-list-item>
         <v-divider></v-divider>
         <!-- View My Account -->
-        <v-list-item :to="{ name: 'my-account' }" link>
+        <v-list-item :to="{ name: 'account' }" link>
           <v-list-item-icon>
             <v-icon>mdi-account-box</v-icon>
           </v-list-item-icon>
@@ -32,7 +32,7 @@
         <!-- Users -->
         <v-list-item :to="{ name: 'users' }" link>
           <v-list-item-icon>
-            <v-icon>mdi-format-list-numbered</v-icon>
+            <v-icon>mdi-account-box-multiple</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>Users</v-list-item-title>

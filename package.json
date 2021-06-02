@@ -16,6 +16,7 @@
     "sass-loader": "^10.0.0",
     "vue": "^2.6.12",
     "vue-html-to-paper": "^1.4.1",
+    "vue-json-excel": "^0.3.0",
     "vue-router": "^3.5.1",
     "vuelidate": "^0.7.6",
     "vuetify": "^2.5.1",

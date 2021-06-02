@@ -46,13 +46,13 @@ let router = new Router({
       path: '/orders',
       name: 'orders',
       meta: { requiresAuth: true, title: 'Orders' },
-      component: ResetPassword
+      component: Order
     },
     {
       path: '/users',
       name: 'users',
       meta: { requiresAuth: true, title: 'Users' },
-      component: ResetPassword
+      component: User
     },
     {
       path: "/*",

@@ -123,7 +123,7 @@ export default {
           .then((response) => {
             setTimeout(() => {
               this.$router.push({
-                name: "my-account",
+                name: "account",
               });
               this.isLoading = false;
             }, 1000);

@@ -26,8 +26,9 @@
           hasModule ||
           hasField
         "
-        v-slot:item.actions="{ item }"
+        v-slot:[`item.actions`]="{ item }"
       >
+        <!-- v-slot:item.actions="{ item }" -->
         <!-- hasField -->
         <v-icon v-if="hasField" medium @click="$emit('field', item)">
           mdi-focus-field-vertical &nbsp;
@@ -331,15 +332,15 @@ export default {
     generate() {
       this.isLoading = true;
       this.rows = [];
-      var requestUrl = "";
+      var requestUrl = this.$api;
       if (this.path.includes("?")) {
-        requestUrl =
+        requestUrl +=
           this.path + "&page=" + this.pagination.current_page + this.parameters;
       } else {
-        requestUrl =
+        requestUrl +=
           this.path + "?page=" + this.pagination.current_page + this.parameters;
       }
-      this.$axios
+      this.$http
         .get(requestUrl)
         .then((response) => {
           this.headers = response.data.response.headers;
