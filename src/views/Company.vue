@@ -31,6 +31,12 @@
       @close="showEdit = false"
       @generate-table="generateTable"
     />
+    <company-address
+      :show="showAddress"
+      :item="form"
+      @close="showAddress = false"
+      @generate-table="generateTable"
+    />
     <confirm-box
       :show="showDeactivate"
       :message="deactivateMessage"
@@ -49,6 +55,7 @@
 import DataTable from "../components/DataTable.vue";
 import CompanyAdd from "../components/Company/Add.vue";
 import CompanyEdit from "../components/Company/Edit.vue";
+import CompanyAddress from "../components/Company/Address/Index.vue";
 import ConfirmBox from "../components/ConfirmBox.vue";
 import AlertBox from "../components/AlertBox.vue";
 export default {
@@ -57,6 +64,7 @@ export default {
     DataTable,
     CompanyAdd,
     CompanyEdit,
+    CompanyAddress,
     ConfirmBox,
     AlertBox,
   },
@@ -65,6 +73,7 @@ export default {
     showAdd: false,
     showEdit: false,
     showDeactivate: false,
+    showAddress: false,
     deactivateMessage: "",
     alert: {
       show: false,
@@ -89,8 +98,8 @@ export default {
       this.showDeactivate = true;
     },
     viewAddress(item) {
-      /** @TODO Create View for Addresses per Company */
-      alert("View Address");
+      this.form = item;
+      this.showAddress = true;
     },
     submit() {
       this.isLoading = true;
@@ -121,44 +130,6 @@ export default {
   },
   mounted() {
     this.generateTable();
-  },
-  computed: {
-    fullnameErrors() {
-      const errors = [];
-      if (!this.$v.form.name.$dirty) return errors;
-      !this.$v.form.name.required && errors.push("Full Name is required");
-      !this.$v.form.name.minLength && errors.push("Full Name minimum length is 4");
-      !this.$v.form.name.maxLength && errors.push("Full Name max length is 50");
-      return errors;
-    },
-    usernameErrors() {
-      const errors = [];
-      if (!this.$v.form.username.$dirty) return errors;
-      !this.$v.form.username.required && errors.push("Username is required");
-      !this.$v.form.username.email && errors.push("E-Mail is invalid");
-      !this.$v.form.username.minLength && errors.push("Username minimum length is 4");
-      !this.$v.form.username.maxLength && errors.push("Username max length is 50");
-      return errors;
-    },
-    passwordErrors() {
-      const errors = [];
-      if (!this.$v.form.password.$dirty) return errors;
-      !this.$v.form.password.required && errors.push("Password is required");
-      !this.$v.form.password.minLength && errors.push("Password minimum length is 6");
-      !this.$v.form.password.maxLength && errors.push("Password minimum length is 60");
-      !this.$v.form.confirm_password.sameAsPassword &&
-        errors.push("Password must same as Confirm Password");
-      return errors;
-    },
-    confirmPasswordErrors() {
-      const errors = [];
-      if (!this.$v.form.confirm_password.$dirty) return errors;
-      !this.$v.form.confirm_password.required &&
-        errors.push("Confirm Password is required");
-      !this.$v.form.confirm_password.sameAsPassword &&
-        errors.push("Confirm Password must same as Password");
-      return errors;
-    },
   },
 };
 </script>
