@@ -1,61 +1,79 @@
 <template>
-  <modal v-if="confirm" @close="confirm=false">
-    <template v-slot:header>{{ title }}</template>
-    <template v-slot:body>
-      <span v-html="message"></span>
+  <v-dialog v-model="showModal" transition="dialog-top-transition" :width="width">
+    <template>
+      <v-card>
+        <v-toolbar color="primary"><span v-html="title"> </span></v-toolbar>
+        <v-container>
+          <p v-html="message"></p>
+        </v-container>
+        <v-card-actions class="justify-end">
+          <v-btn color="primary" @click="answeredYes"> {{ buttonYes }} </v-btn>
+          <v-btn color="error" @click="showModal = false"> {{ buttonNo }} </v-btn>
+        </v-card-actions>
+      </v-card>
     </template>
-    <template v-slot:footer>
-      <button type="button" class="btn btn-warning" @click="submit(true)">Yes</button>
-      <button type="button" class="btn btn-secondary" @click="submit(false)">No</button>
-    </template>
-  </modal>
+  </v-dialog>
 </template>
 <script>
-import Modal from "./Modal.vue";
 export default {
   name: "confirm-box",
-  components: { Modal },
   props: {
-    button_yes: {
-      type: String,
-      required: false,
-      default: "Yes"
+    show: {
+      type: Boolean,
+      required: true,
+      default: false,
     },
-    button_no: {
+    buttonYes: {
       type: String,
       required: false,
-      default: "No"
+      default: "Yes",
+    },
+    buttonNo: {
+      type: String,
+      required: false,
+      default: "No",
     },
     title: {
       type: String,
       required: false,
-      default: "Please Confirm"
+      default: "Please Confirm",
     },
     message: {
       type: String,
       required: false,
-      default: "Are you sure you want to continue?"
-    }
+      default: "Are you sure you want to continue?",
+    },
   },
-  data() {
-    return {
-      confirm: false
-    };
-  },
+  data: () => ({
+    showModal: false,
+  }),
   methods: {
-    show() {
-      this.confirm = true;
+    answeredYes() {
+      this.$emit("yes");
+      this.showModal = false;
     },
-    hide() {
-      this.confirm = false;
+  },
+  computed: {
+    width() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return "95%";
+        case "sm":
+          return "85%";
+        default:
+          return "500";
+      }
     },
-    toggleModal() {
-      this.confirm = this.confirm ? false : true;
+  },
+  watch: {
+    show: function () {
+      this.showModal = this.show;
     },
-    submit(status) {
-      this.$emit("status", status);
-      this.confirm = false;
-    }
-  }
+    showModal: function () {
+      if (!this.showModal) {
+        this.$emit("no");
+      }
+    },
+  },
 };
 </script>

@@ -1,42 +1,62 @@
 <template>
-  <modal v-if="show" @close="show=false">
-    <template v-slot:header>{{ title }}</template>
-    <template v-slot:body>
-      <span v-html="message"></span>
+  <v-dialog v-model="showModal" transition="dialog-top-transition" :width="width">
+    <template>
+      <v-card>
+        <v-toolbar color="primary"><span v-html="title"> </span></v-toolbar>
+        <v-container>
+          <p v-html="message"></p>
+        </v-container>
+        <v-card-actions class="justify-end">
+          <v-btn color="error" @click="showModal = false"> Close </v-btn>
+        </v-card-actions>
+      </v-card>
     </template>
-    <template v-slot:footer>
-      <button type="button" class="btn btn-primary" @click="show=false">{{ button_close }}</button>
-    </template>
-  </modal>
+  </v-dialog>
 </template>
 <script>
-import Modal from "./Modal.vue";
 export default {
-  components: { Modal },
-  name: "alert-box",
+  name: "confirm-box",
   props: {
-    button_close: {
+    show: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    title: {
       type: String,
       required: false,
-      default: "Close"
-    }
-  },
-  data: function() {
-    return {
-      show: false,
-      title: "Alert",
-      message: "Something went wrong! Please contact the Administrator."
-    };
-  },
-  methods: {
-    open(title = "", message = "") {
-      this.show = true;
-      this.title = title;
-      this.message = message;
+      default: "Notification",
     },
-    close() {
-      this.show = false;
-    }
-  }
+    message: {
+      type: String,
+      required: false,
+      default: "",
+    },
+  },
+  data: () => ({
+    showModal: false,
+  }),
+  computed: {
+    width() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return "95%";
+        case "sm":
+          return "85%";
+        default:
+          return "500";
+      }
+    },
+  },
+  watch: {
+    show: function () {
+      this.showModal = this.show;
+    },
+    showModal: function () {
+      if (!this.showModal) {
+        this.$emit("close");
+      }
+    },
+  },
 };
 </script>
