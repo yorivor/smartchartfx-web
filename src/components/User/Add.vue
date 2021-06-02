@@ -27,6 +27,20 @@
                 :error-messages="userTypeErrors"
                 required
               ></v-select>
+              <v-select
+                v-if="showCompany"
+                v-model="form.company_id"
+                label="Company"
+                :items="companies"
+                item-text="name"
+                item-value="id"
+                outlined
+                dense
+                @input="$v.form.company_id.$touch()"
+                @blur="$v.form.company_id.$touch()"
+                :error-messages="companyErrors"
+                required
+              ></v-select>
               <v-text-field
                 v-model="form.username"
                 label="Username/E-Mail"
@@ -94,7 +108,14 @@
 </template>
 <script>
 import { validationMixin } from "vuelidate";
-import { required, minLength, maxLength, email, sameAs } from "vuelidate/lib/validators";
+import {
+  required,
+  minLength,
+  maxLength,
+  email,
+  sameAs,
+  requiredIf,
+} from "vuelidate/lib/validators";
 export default {
   name: "user-add",
   mixins: [validationMixin],
@@ -109,6 +130,11 @@ export default {
     form: {
       user_type_id: {
         required,
+      },
+      company_id: {
+        required: requiredIf(function () {
+          return this.showCompany;
+        }),
       },
       fullname: {
         required,
@@ -137,12 +163,14 @@ export default {
     showInputPassword: false,
     showInputPasswordConfirm: false,
     userTypes: [],
+    companies: [],
     alert: {
       show: false,
       message: "",
       type: "error",
     },
     form: {
+      company_id: "",
       user_type_id: "",
       fullname: "",
       username: "",
@@ -154,12 +182,14 @@ export default {
     getDropdowns() {
       this.$http.get(this.$api + "/users/dropdowns").then((response) => {
         this.userTypes = response.data.response.userTypes;
+        this.companies = response.data.response.companies;
       });
     },
     submit() {
       let url = this.$api + "/users";
       this.isLoading = true;
       this.alert.show = false;
+      this.form.company_id = this.showCompany ? this.form.company_id : null;
       this.$v.$touch();
       if (this.$v.$invalid) {
         this.isLoading = false;
@@ -170,6 +200,7 @@ export default {
             this.$v.$reset();
             this.form = {
               user_type_id: "",
+              company_id: "",
               fullname: "",
               username: "",
               password: "",
@@ -207,6 +238,12 @@ export default {
       !this.$v.form.user_type_id.required && errors.push("User Type is required");
       return errors;
     },
+    companyErrors() {
+      const errors = [];
+      if (!this.$v.form.company_id.$dirty) return errors;
+      !this.$v.form.company_id.required && errors.push("Company is required");
+      return errors;
+    },
     fullnameErrors() {
       const errors = [];
       if (!this.$v.form.fullname.$dirty) return errors;
@@ -241,6 +278,16 @@ export default {
         errors.push("Confirm Password must same as Password");
       return errors;
     },
+    showCompany() {
+      let itemObject = this.userTypes.find((x) => x.id == this.form.user_type_id) || {
+        code: "",
+      };
+      if (!["admin", "data"].includes(itemObject.code)) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     width() {
       switch (this.$vuetify.breakpoint.name) {
         case "xs":
@@ -257,7 +304,9 @@ export default {
       this.showModal = this.show;
       if (!this.show) {
         this.$v.$reset();
+        this.alert.show = false;
         this.form = {
+          company_id: "",
           user_type_id: "",
           fullname: "",
           username: "",
