@@ -24,11 +24,22 @@
           hasTaskMangement ||
           hasOrder ||
           hasModule ||
-          hasField
+          hasField ||
+          hasAddress
         "
         v-slot:[`item.actions`]="{ item }"
       >
         <!-- v-slot:item.actions="{ item }" -->
+        
+        <!-- hasAddress (Stop) -->
+        <v-icon
+          v-if="hasAddress"
+          medium
+          @click="$emit('viewAddress', item)"
+          class="mr-2" 
+        >
+          mdi-map-marker
+        </v-icon>
         <!-- hasField -->
         <v-icon v-if="hasField" medium @click="$emit('field', item)">
           mdi-focus-field-vertical &nbsp;
@@ -268,6 +279,11 @@ export default {
       default: false,
     },
     hasField: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    hasAddress: {
       type: Boolean,
       required: false,
       default: false,
