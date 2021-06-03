@@ -16,7 +16,7 @@
             <v-form>
               <v-text-field
                 v-model="form.name"
-                label="Vendor Name"
+                label="Name"
                 :counter="120"
                 dense
                 outlined
@@ -81,6 +81,7 @@
 import { validationMixin } from "vuelidate";
 import {
   required,
+  minLength,
   maxLength,
   email,
 } from "vuelidate/lib/validators";
@@ -110,6 +111,7 @@ export default {
     form: {
       name: {
         required,
+        minLength: minLength(4),
         maxLength: maxLength(120),
       },
       address: {
@@ -121,6 +123,7 @@ export default {
       },
       contact_person: {
         required,
+        minLength: minLength(4),
         maxLength: maxLength(120),
       },
       contact_number: {
@@ -192,8 +195,9 @@ export default {
     nameErrors() {
       const errors = [];
       if (!this.$v.form.name.$dirty) return errors;
-      !this.$v.form.name.required && errors.push("Vendor Name is required");
-      !this.$v.form.name.maxLength && errors.push("Vendor Name max length is 120");
+      !this.$v.form.name.required && errors.push("Name is required");
+      !this.$v.form.name.minLength && errors.push("Name minimum length is 4");
+      !this.$v.form.name.maxLength && errors.push("Name max length is 120");
       return errors;
     },
     addressErrors() {
@@ -213,6 +217,7 @@ export default {
       const errors = [];
       if (!this.$v.form.contact_person.$dirty) return errors;
       !this.$v.form.contact_person.required && errors.push("Contact Person is required");
+      !this.$v.form.contact_person.minLength && errors.push("Contact Person minimum length is 4");
       !this.$v.form.contact_person.maxLength && errors.push("Contact Person max length is 120");
       return errors;
     },

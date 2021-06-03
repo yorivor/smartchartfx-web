@@ -143,8 +143,8 @@ export default {
     nameErrors() {
       const errors = [];
       if (!this.$v.form.name.$dirty) return errors;
-      !this.$v.form.name.required && errors.push("Vendor Name is required");
-      !this.$v.form.name.maxLength && errors.push("Vendor Name max length is 120");
+      !this.$v.form.name.required && errors.push("Name is required");
+      !this.$v.form.name.maxLength && errors.push("Name max length is 120");
       return errors;
     },
     addressErrors() {
@@ -156,7 +156,7 @@ export default {
     emailErrors() {
       const errors = [];
       if (!this.$v.form.email.$dirty) return errors;
-      !this.$v.form.email.required && errors.push("Email is required");
+      !this.$v.form.email.required && errors.push("E-mail is required");
       !this.$v.form.email.email && errors.push("E-Mail is invalid");
       return errors;
     },
