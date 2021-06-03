@@ -15,9 +15,11 @@
       :hasEdit="true"
       :hasDelete="true"
       :hasAddress="true"
+      :hasContact="true"
       @edit="edit"
       @delete="deactivate"
       @viewAddress="viewAddress"
+      @viewContact="viewContact"
       :path="'/companies'"
     />
     <company-add
@@ -29,6 +31,12 @@
       :show="showEdit"
       :item="form"
       @close="showEdit = false"
+      @generate-table="generateTable"
+    />
+    <company-contact
+      :show="showContact"
+      :item="form"
+      @close="showContact = false"
       @generate-table="generateTable"
     />
     <company-address
@@ -56,6 +64,7 @@ import DataTable from "../components/DataTable.vue";
 import CompanyAdd from "../components/Company/Add.vue";
 import CompanyEdit from "../components/Company/Edit.vue";
 import CompanyAddress from "../components/Company/Address/Index.vue";
+import CompanyContact from "../components/Company/Contact/Index.vue";
 import ConfirmBox from "../components/ConfirmBox.vue";
 import AlertBox from "../components/AlertBox.vue";
 export default {
@@ -65,6 +74,7 @@ export default {
     CompanyAdd,
     CompanyEdit,
     CompanyAddress,
+    CompanyContact,
     ConfirmBox,
     AlertBox,
   },
@@ -74,6 +84,7 @@ export default {
     showEdit: false,
     showDeactivate: false,
     showAddress: false,
+    showContact: false,
     deactivateMessage: "",
     alert: {
       show: false,
@@ -100,6 +111,10 @@ export default {
     viewAddress(item) {
       this.form = item;
       this.showAddress = true;
+    },
+    viewContact(item) {
+      this.form = item;
+      this.showContact = true;
     },
     submit() {
       this.isLoading = true;
