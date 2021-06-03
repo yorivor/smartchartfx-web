@@ -180,13 +180,13 @@ export default {
   }),
   methods: {
     getDropdowns() {
-      this.$http.get(this.$api + "/users/dropdowns").then((response) => {
+      this.$http.get(this.$api + "/admin/users/dropdowns").then((response) => {
         this.userTypes = response.data.response.userTypes;
         this.companies = response.data.response.companies;
       });
     },
     submit() {
-      let url = this.$api + "/users";
+      let url = this.$api + "/admin/users";
       this.isLoading = true;
       this.alert.show = false;
       this.form.company_id = this.showCompany ? this.form.company_id : null;

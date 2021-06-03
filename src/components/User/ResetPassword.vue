@@ -117,7 +117,7 @@ export default {
   }),
   methods: {
     submit() {
-      let url = this.$api + "/users/" + this.form.id;
+      let url = this.$api + "/admin/users/" + this.form.id;
       let data = {
         update_type: "password",
         password: this.form.password,

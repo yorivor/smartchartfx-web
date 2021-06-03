@@ -7,8 +7,10 @@ import Account from './views/Account.vue'
 import ResetPassword from './views/ResetPassword.vue'
 import ForgotPassword from './views/ForgotPassword.vue'
 
-import User from './views/User.vue'
-import Company from './views/Company.vue'
+
+import AdminIndex from './views/Admin/Index.vue'
+import AdminUser from './views/Admin/User.vue'
+import AdminCompany from './views/Admin/Company.vue'
 import Order from './views/Order.vue'
 
 /** Common Imports End Here */
@@ -24,12 +26,6 @@ let router = new Router({
       name: 'home',
       meta: { requiresAuth: false, title: 'Home' },
       component: Home
-    },
-    {
-      path: '/my-account',
-      name: 'account',
-      meta: { requiresAuth: true, title: 'My Account' },
-      component: Account
     },
     {
       path: '/forgot-password',
@@ -50,29 +46,49 @@ let router = new Router({
       component: Order
     },
     {
-      path: '/users',
-      name: 'users',
-      meta: { requiresAuth: true, title: 'Users' },
-      component: User
+      path: '/my-account',
+      name: 'account',
+      meta: { requiresAuth: true, title: 'My Account' },
+      component: Account
     },
     {
-      path: '/companies',
-      name: 'companies',
-      meta: { requiresAuth: true, title: 'Companies' },
-      component: Company
+      path: '/admin',
+      component: AdminIndex,
+      children: [
+        {
+          path: 'users',
+          name: 'users',
+          meta: { requiresAuth: true, title: 'Users', access: ['admin'] },
+          component: AdminUser
+        },
+        {
+          path: 'companies',
+          name: 'companies',
+          meta: { requiresAuth: true, title: 'Companies', access: ['admin'] },
+          component: AdminCompany
+        },
+      ]
+    },
+    {
+      path: "/unauthorized",
+      name: 'unauthorized',
+      meta: { requiresAuth: false, title: 'Unauthorized (401)' },
+      component: () => import('./views/Unauthorized.vue')
     },
     {
       path: "/*",
       name: 'pagenotfound',
       meta: { requiresAuth: false, title: 'Page Not Found (404)' },
       component: () => import('./views/PageNotFound.vue')
-    }
-
+    },
   ]
 })
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (to.meta.access != undefined && !to.meta.access.includes(store.getters.userType)) {
+      next('/unauthorized')
+    }
     if (store.getters.isLoggedIn) {
       store.dispatch('checkSession').then(() => {
         document.title = process.env.VUE_APP_TITLE + ' - ' + to.meta.title
