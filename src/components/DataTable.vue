@@ -19,31 +19,114 @@
           hasPrint ||
           hasView ||
           hasChangePassword ||
-          hasTask ||
           hasAdd ||
-          hasTaskMangement ||
           hasOrder ||
-          hasModule ||
-          hasField ||
           hasAddress
         "
         v-slot:[`item.actions`]="{ item }"
       >
         <!-- v-slot:item.actions="{ item }" -->
-        
-        <!-- hasAddress (Stop) -->
+
+        <!-- hasAddress -->
         <v-icon
+          color="secondary"
           v-if="hasAddress"
           medium
           @click="$emit('viewAddress', item)"
-          class="mr-2" 
+          class="mr-2"
         >
           mdi-map-marker
         </v-icon>
-        <!-- hasField -->
-        <v-icon v-if="hasField" medium @click="$emit('field', item)">
-          mdi-focus-field-vertical &nbsp;
+
+        <!-- hasContact -->
+        <v-icon
+          color="secondary"
+          v-if="hasContact"
+          medium
+          @click="$emit('viewContact', item)"
+          class="mr-2"
+        >
+          mdi-card-account-phone
         </v-icon>
+        <!-- hasView -->
+        <v-icon
+          v-if="hasView"
+          medium
+          class="mr-2 float-center"
+          @click="$emit('view', item)"
+        >
+          mdi-file-eye &nbsp;
+        </v-icon>
+        <!-- hasPrint -->
+        <v-icon
+          color="secondary"
+          v-if="hasPrint"
+          medium
+          class="mr-2"
+          @click="$emit('print', item)"
+        >
+          mdi-printer &nbsp;
+        </v-icon>
+        <!-- hasEdit -->
+        <v-icon
+          color="secondary"
+          v-if="hasEdit"
+          medium
+          class="mr-2"
+          @click="$emit('edit', item)"
+        >
+          mdi-pencil &nbsp;
+        </v-icon>
+        <!-- hasUser -->
+        <v-icon
+          color="secondary"
+          v-if="hasUser"
+          medium
+          class="mr-2"
+          @click="$emit('user', item)"
+        >
+          mdi-account-child &nbsp;
+        </v-icon>
+        <!-- hasChangePassword -->
+        <v-icon
+          color="secondary"
+          v-if="hasChangePassword"
+          medium
+          class="mr-2"
+          @click="$emit('changePassword', item)"
+        >
+          mdi-lock-alert &nbsp;
+        </v-icon>
+        <!-- hasDelete -->
+        <v-icon color="error" v-if="hasDelete" medium @click="$emit('delete', item)">
+          mdi-delete &nbsp;
+        </v-icon>
+        <!-- hasAdd -->
+        <v-icon color="secondary" v-if="hasAdd" medium @click="$emit('add', item)">
+          mdi-playlist-plus &nbsp;
+        </v-icon>
+      </template>
+
+      <template v-if="hasStatus" v-slot:[`item.is_active`]="{ item }">
+        <!-- hasTaskMangement (Stop) -->
+        <v-icon
+          color="success"
+          v-if="item.is_active == 1"
+          medium
+          @click="$emit('changeStatus', item)"
+        >
+          mdi-check-circle
+        </v-icon>
+        <v-icon
+          color="error"
+          v-if="item.is_active == 0"
+          medium
+          @click="$emit('changeStatus', item)"
+        >
+          mdi-close-circle
+        </v-icon>
+      </template>
+      <template v-if="hasOrder" v-slot:[`item.order`]="{ item }">
         <!-- hasOrder (UP)-->
         <span v-if="hasOrder">
           <span
@@ -79,76 +162,6 @@
           </span>
           <span v-else class="ml-7"></span>
         </span>
-        <!-- hasModuleManagement -->
-        <v-icon v-if="hasModule" medium @click="$emit('module', item)">
-          mdi-account-settings &nbsp;
-        </v-icon>
-        <!-- hasView -->
-        <v-icon
-          v-if="hasView"
-          medium
-          class="mr-2 float-center"
-          @click="$emit('view', item)"
-        >
-          mdi-file-eye &nbsp;
-        </v-icon>
-        <!-- hasPrint -->
-        <v-icon v-if="hasPrint" medium class="mr-2" @click="$emit('print', item)">
-          mdi-printer &nbsp;
-        </v-icon>
-        <!-- hasEdit -->
-        <v-icon v-if="hasEdit" medium class="mr-2" @click="$emit('edit', item)">
-          mdi-pencil &nbsp;
-        </v-icon>
-        <!-- hasUser -->
-        <v-icon v-if="hasUser" medium class="mr-2" @click="$emit('user', item)">
-          mdi-account-child &nbsp;
-        </v-icon>
-        <!-- hasTask -->
-        <v-icon v-if="hasTask" medium class="mr-2" @click="$emit('task', item)">
-          mdi-account-clock &nbsp;
-        </v-icon>
-        <!-- hasChangePassword -->
-        <v-icon
-          v-if="hasChangePassword"
-          medium
-          class="mr-2"
-          @click="$emit('changePassword', item)"
-        >
-          mdi-lock-alert &nbsp;
-        </v-icon>
-        <!-- hasDelete -->
-        <v-icon v-if="hasDelete" medium @click="$emit('delete', item)">
-          mdi-delete &nbsp;
-        </v-icon>
-        <!-- hasAdd -->
-        <v-icon v-if="hasAdd" medium @click="$emit('add', item)">
-          mdi-playlist-plus &nbsp;
-        </v-icon>
-        <!-- hasTaskMangement (Pause) -->
-        <v-icon
-          v-if="hasTaskMangement && item.status == 2"
-          medium
-          @click="$emit('taskPause', item)"
-        >
-          mdi-pause &nbsp;
-        </v-icon>
-        <!-- hasTaskMangement (Start)-->
-        <v-icon
-          v-if="hasTaskMangement && (item.status == 0 || item.status == 3)"
-          medium
-          @click="$emit('taskStart', item)"
-        >
-          mdi-play &nbsp;
-        </v-icon>
-        <!-- hasTaskMangement (Stop) -->
-        <v-icon
-          v-if="hasTaskMangement && item.status == 2"
-          medium
-          @click="$emit('taskStop', item)"
-        >
-          mdi-stop &nbsp;
-        </v-icon>
       </template>
       <template v-slot:expanded-item="{ headers, item }">
         <td :colspan="headers.length">{{ item.remarks }}</td>
@@ -208,6 +221,11 @@ export default {
       required: true,
       default: "",
     },
+    hasStatus: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
     hasExpand: {
       type: Boolean,
       required: false,
@@ -238,11 +256,6 @@ export default {
       required: false,
       default: false,
     },
-    hasTask: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
     hasChangePassword: {
       type: Boolean,
       required: false,
@@ -263,27 +276,22 @@ export default {
       required: false,
       default: false,
     },
-    hasModule: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
-    hasTaskMangement: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
     hasDownloadExcel: {
       type: Boolean,
       required: false,
       default: false,
     },
-    hasField: {
+    hasAddress: {
       type: Boolean,
       required: false,
       default: false,
     },
-    hasAddress: {
+    hasContact: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    hasDeactivate: {
       type: Boolean,
       required: false,
       default: false,

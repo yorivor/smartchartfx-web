@@ -2,23 +2,12 @@
   <v-dialog v-model="showModal" transition="dialog-top-transition" :width="width">
     <template>
       <v-card>
-        <v-toolbar color="primary">Edit Address</v-toolbar>
+        <v-toolbar color="primary">Add Contact</v-toolbar>
         <v-container>
           <v-alert v-if="alert.show" cols="12" :type="alert.type">
             <span v-html="alert.message"></span>
           </v-alert>
           <v-form>
-            <v-text-field
-              v-model="form.code"
-              label="Code"
-              :counter="120"
-              dense
-              outlined
-              @input="$v.form.code.$touch()"
-              @blur="$v.form.code.$touch()"
-              :error-messages="codeErrors"
-              required
-            ></v-text-field>
             <v-text-field
               v-model="form.name"
               :counter="120"
@@ -30,10 +19,38 @@
               :error-messages="nameErrors"
               required
             ></v-text-field>
+            <v-text-field
+              v-model="form.email"
+              label="E-Mail"
+              :counter="120"
+              dense
+              outlined
+              @input="$v.form.email.$touch()"
+              @blur="$v.form.email.$touch()"
+              :error-messages="emailErrors"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="form.mobile_number"
+              label="Mobile Number"
+              :counter="11"
+              dense
+              outlined
+              @input="$v.form.mobile_number.$touch()"
+              @blur="$v.form.mobile_number.$touch()"
+              :error-messages="mobileNumberErrors"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="form.phone_number"
+              label="Phone Number"
+              dense
+              outlined
+            ></v-text-field>
           </v-form>
         </v-container>
         <v-card-actions class="justify-end">
-          <v-btn color="primary" @click="submit"> Submit </v-btn>
+          <v-btn color="primary" @click="submit">Submit</v-btn>
           <v-btn color="error" @click="showModal = false">Close</v-btn>
         </v-card-actions>
       </v-card>
@@ -42,9 +59,9 @@
 </template>
 <script>
 import { validationMixin } from "vuelidate";
-import { required, minLength, maxLength, email, sameAs } from "vuelidate/lib/validators";
+import { required, minLength, maxLength, email, numeric } from "vuelidate/lib/validators";
 export default {
-  name: "address-edit",
+  name: "contact-add",
   mixins: [validationMixin],
   props: {
     show: {
@@ -52,28 +69,30 @@ export default {
       required: true,
       default: false,
     },
-    item: {
-      type: Object,
+    companyId: {
+      type: Number,
       required: true,
-      default: () => ({
-        id: "",
-        company_id: "",
-        code: "",
-        name: "",
-      }),
+      default: 0,
     },
   },
   validations: {
     form: {
-      code: {
-        required,
-        minLength: minLength(1),
-        maxLength: maxLength(120),
-      },
       name: {
         required,
         minLength: minLength(4),
         maxLength: maxLength(120),
+      },
+      email: {
+        required,
+        email,
+        minLength: minLength(4),
+        maxLength: maxLength(120),
+      },
+      mobile_number: {
+        required,
+        numeric,
+        minLength: minLength(11),
+        maxLength: maxLength(11),
       },
     },
   },
@@ -85,19 +104,15 @@ export default {
       type: "error",
     },
     form: {
-      id: "",
-      code: "",
       name: "",
+      email: "",
+      mobile_number: "",
+      phone_number: "",
     },
   }),
   methods: {
     submit() {
-      let url =
-        this.$api + "/companies/" + this.item.company_id + "/addresses/" + this.item.id;
-      let data = {
-        code: this.form.code,
-        name: this.form.name,
-      };
+      let url = this.$api + "/companies/" + this.companyId + "/contacts";
       this.isLoading = true;
       this.alert.show = false;
       this.$v.$touch();
@@ -105,9 +120,13 @@ export default {
         this.isLoading = false;
       } else {
         this.$http
-          .put(url, data)
+          .post(url, this.form)
           .then((response) => {
             this.$v.$reset();
+            this.form = {
+              code: "",
+              name: "",
+            };
             this.alert = {
               show: true,
               type: "success",
@@ -134,20 +153,32 @@ export default {
     },
   },
   computed: {
-    codeErrors() {
-      const errors = [];
-      if (!this.$v.form.code.$dirty) return errors;
-      !this.$v.form.code.required && errors.push("Code is required");
-      !this.$v.form.code.minLength && errors.push("Code minimum length is 1");
-      !this.$v.form.code.maxLength && errors.push("Code max length is 120");
-      return errors;
-    },
     nameErrors() {
       const errors = [];
       if (!this.$v.form.name.$dirty) return errors;
       !this.$v.form.name.required && errors.push("Name is required");
       !this.$v.form.name.minLength && errors.push("Name minimum length is 4");
       !this.$v.form.name.maxLength && errors.push("Name max length is 120");
+      return errors;
+    },
+    emailErrors() {
+      const errors = [];
+      if (!this.$v.form.email.$dirty) return errors;
+      !this.$v.form.email.required && errors.push("E-Mail is required");
+      !this.$v.form.email.email && errors.push("E-Mail is invalid");
+      !this.$v.form.email.minLength && errors.push("E-Mail minimum length is 4");
+      !this.$v.form.email.maxLength && errors.push("E-Mail max length is 120");
+      return errors;
+    },
+    mobileNumberErrors() {
+      const errors = [];
+      if (!this.$v.form.mobile_number.$dirty) return errors;
+      !this.$v.form.mobile_number.required && errors.push("Mobile Number is required");
+      !this.$v.form.mobile_number.numeric && errors.push("Mobile Number must be numeric");
+      !this.$v.form.mobile_number.minLength &&
+        errors.push("Mobile Number minimum length is 4");
+      !this.$v.form.mobile_number.maxLength &&
+        errors.push("Mobile Number max length is 120");
       return errors;
     },
     width() {
@@ -164,19 +195,11 @@ export default {
   watch: {
     show: function () {
       this.showModal = this.show;
-      if (this.show) {
-        this.form = {
-          id: this.item.id,
-          code: this.item.code,
-          name: this.item.name,
-        };
-      }
     },
     showModal: function () {
       if (!this.showModal) {
         this.$v.$reset();
         this.form = {
-          id: "",
           code: "",
           name: "",
         };
