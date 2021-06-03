@@ -16,9 +16,7 @@
       @edit="edit"
       :hasDelete="true"
       @delete="deactivate"
-      :hasAddress="true"
-      @viewAddress="viewAddress"
-      :path="'/vendors'"
+      :path="'/admin/vendors'"
     />
     <vendor-add :show="showAdd" @close="showAdd = false" @generate-table="generateTable" />
     <vendor-edit
@@ -80,13 +78,13 @@ export default {
     deactivate(item) {
       this.usedKey = item.id;
       this.deactivateMessage = "Are you sure you want to deactivate ";
-      this.deactivateMessage += item.fullname;
+      this.deactivateMessage += item.name;
       this.deactivateMessage += "?";
       this.showDeactivate = true;
     },
     submit() {
       this.isLoading = true;
-      let url = this.$api + "/vendors/" + this.usedKey;
+      let url = this.$api + "/admin/vendors/" + this.usedKey;
       this.$http
         .delete(url)
         .then((response) => {

@@ -145,13 +145,13 @@ export default {
   }),
   methods: {
     submit() {
-      let url = this.$api + "/verndors/" + this.form.id;
+      let url = this.$api + "/admin/vendors/" + this.form.id;
       let data = {
         name: this.form.name,
         address: this.form.address,
-        email: this.email,
-        contact_person: this.contact_person,
-        contact_number: this.contact_number,
+        email: this.form.email,
+        contact_person: this.form.contact_person,
+        contact_number: this.form.contact_number,
       };
       this.isLoading = true;
       this.alert.show = false;
