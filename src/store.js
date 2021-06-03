@@ -20,7 +20,7 @@ export default new Vuex.Store({
       state.status = 'success'
       state.token = datum.token
       state.displayname = datum.fullname
-      state.usertype = datum.usertype
+      state.usertype = datum.type.code
     },
     auth_error(state) {
       state.status = 'error'
@@ -107,6 +107,11 @@ export default new Vuex.Store({
     isLoggedIn: state => state.token != '',
     authStatus: state => state.status,
     displayname: state => state.displayname,
+    userType: state => state.usertype,
     isAdmin: state => state.usertype == 'admin',
+    isData: state => state.usertype == 'data',
+    isPrepearer: state => state.usertype == 'prepearer',
+    isReviewer: state => state.usertype == 'reviewer',
+    isApprover: state => state.usertype == 'approver',
   }
 })

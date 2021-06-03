@@ -99,7 +99,7 @@ export default {
   }),
   methods: {
     submit() {
-      let url = this.$api + "/companies/" + this.item.id;
+      let url = this.$api + "/admin/companies/" + this.item.id;
       let data = {
         code: this.form.code,
         name: this.form.name,

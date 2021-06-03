@@ -30,7 +30,7 @@
         </v-list-item>
         <v-divider></v-divider>
         <!-- Users -->
-        <v-list-item :to="{ name: 'users' }" link>
+        <v-list-item v-if="isAdmin" :to="{ name: 'users' }" link>
           <v-list-item-icon>
             <v-icon>mdi-account-box-multiple</v-icon>
           </v-list-item-icon>
@@ -39,7 +39,7 @@
           </v-list-item-content>
         </v-list-item>
         <!-- Company -->
-        <v-list-item :to="{ name: 'companies' }" link>
+        <v-list-item v-if="isAdmin" :to="{ name: 'companies' }" link>
           <v-list-item-icon>
             <v-icon>mdi-office-building</v-icon>
           </v-list-item-icon>

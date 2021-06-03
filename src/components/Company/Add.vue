@@ -81,7 +81,7 @@ export default {
   }),
   methods: {
     submit() {
-      let url = this.$api + "/companies";
+      let url = this.$api + "/admin/companies";
       this.isLoading = true;
       this.alert.show = false;
       this.$v.$touch();

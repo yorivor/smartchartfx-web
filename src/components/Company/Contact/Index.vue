@@ -34,7 +34,7 @@
             @edit="edit"
             @delete="deactivate"
             @changeStatus="changeStatus"
-            :path="'/companies/' + item.id + '/contacts'"
+            :path="'/admin/companies/' + item.id + '/contacts'"
           />
           <contact-add
             :show="showAdd"
@@ -120,7 +120,7 @@ export default {
     changeStatus(item) {
       let url =
         this.$api +
-        "/companies/" +
+        "/admin/companies/" +
         this.item.id +
         "/contacts/" +
         item.id +
@@ -150,7 +150,7 @@ export default {
     },
     submit() {
       this.isLoading = true;
-      let url = this.$api + "/companies/" + this.item.id + "/contacts/" + this.usedKey;
+      let url = this.$api + "/admin/companies/" + this.item.id + "/contacts/" + this.usedKey;
       this.$http
         .delete(url)
         .then((response) => {

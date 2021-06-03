@@ -140,13 +140,13 @@ export default {
   }),
   methods: {
     getDropdowns() {
-      this.$http.get(this.$api + "/users/dropdowns").then((response) => {
+      this.$http.get(this.$api + "/admin/users/dropdowns").then((response) => {
         this.userTypes = response.data.response.userTypes;
         this.companies = response.data.response.companies;
       });
     },
     submit() {
-      let url = this.$api + "/users/" + this.form.id;
+      let url = this.$api + "/admin/users/" + this.form.id;
       let data = {
         fullname: this.form.fullname,
         user_type_id: this.form.user_type_id,

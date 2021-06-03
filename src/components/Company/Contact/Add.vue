@@ -112,7 +112,7 @@ export default {
   }),
   methods: {
     submit() {
-      let url = this.$api + "/companies/" + this.companyId + "/contacts";
+      let url = this.$api + "/admin/companies/" + this.companyId + "/contacts";
       this.isLoading = true;
       this.alert.show = false;
       this.$v.$touch();
