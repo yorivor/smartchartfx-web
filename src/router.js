@@ -10,6 +10,7 @@ import ForgotPassword from './views/ForgotPassword.vue'
 import User from './views/User.vue'
 import Company from './views/Company.vue'
 import Order from './views/Order.vue'
+import Vendor from './views/Vendor.vue'
 
 /** Common Imports End Here */
 Vue.use(Router)
@@ -60,6 +61,12 @@ let router = new Router({
       name: 'companies',
       meta: { requiresAuth: true, title: 'Companies' },
       component: Company
+    },
+    {
+      path: '/vendors',
+      name: 'vendors',
+      meta: { requiresAuth: true, title: 'Vendors' },
+      component: Vendor
     },
     {
       path: "/*",

@@ -19,7 +19,7 @@
     "vue-json-excel": "^0.3.0",
     "vue-router": "^3.5.1",
     "vuelidate": "^0.7.6",
-    "vuetify": "^2.5.1",
+    "vuetify": "^2.5.3",
     "vuex": "^3.6.2"
   },
   "devDependencies": {
@@ -30,7 +30,7 @@
     "eslint": "^7.27.0",
     "eslint-plugin-vue": "^7.10.0",
     "jsonwebtoken": "^8.5.0",
-    "vue-cli-plugin-vuetify": "^2.4.0",
+    "vue-cli-plugin-vuetify": "^2.4.1",
     "vue-template-compiler": "^2.6.12"
   },
   "eslintConfig": {
