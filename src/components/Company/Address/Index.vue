@@ -29,9 +29,11 @@
           <data-table
             ref="addresses"
             :hasEdit="true"
-            :hasDelete="true"
             @edit="edit"
+            :hasDelete="true"
             @delete="deactivate"
+            :hasStatus="true"
+            @changeStatus="changeStatus"
             :path="'/companies/' + item.id + '/addresses'"
           />
           <address-add
@@ -114,6 +116,37 @@ export default {
       this.deactivateMessage += item.name;
       this.deactivateMessage += "?";
       this.showDeactivate = true;
+    },
+    changeStatus(item) {
+      let url =
+        this.$api +
+        "/companies/" +
+        this.item.id +
+        "/addresses/" +
+        item.id +
+        "/toggle-status";
+      this.$http
+        .put(url)
+        .then((response) => {
+          this.generateTable();
+          this.isLoading = false;
+          this.alert.show = true;
+          this.alert.message = response.data.message;
+        })
+        .catch((error) => {
+          let msg = "";
+          if (error.response !== undefined) {
+            msg = error.response.data.message;
+          } else {
+            msg = "Something went wrong. Please contact the administrator";
+          }
+          this.alert = {
+            show: true,
+            type: "error",
+            message: msg,
+          };
+          this.isLoading = false;
+        });
     },
     submit() {
       this.isLoading = true;

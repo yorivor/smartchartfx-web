@@ -13,13 +13,15 @@
     <data-table
       ref="companies"
       :hasEdit="true"
-      :hasDelete="true"
-      :hasAddress="true"
-      :hasContact="true"
       @edit="edit"
+      :hasDelete="true"
       @delete="deactivate"
+      :hasAddress="true"
       @viewAddress="viewAddress"
+      :hasContact="true"
       @viewContact="viewContact"
+      :hasStatus="true"
+      @changeStatus="changeStatus"
       :path="'/companies'"
     />
     <company-add
@@ -115,6 +117,31 @@ export default {
     viewContact(item) {
       this.form = item;
       this.showContact = true;
+    },
+    changeStatus(item) {
+      let url = this.$api + "/companies/" + item.id + "/toggle-status";
+      this.$http
+        .put(url)
+        .then((response) => {
+          this.generateTable();
+          this.isLoading = false;
+          this.alert.show = true;
+          this.alert.message = response.data.message;
+        })
+        .catch((error) => {
+          let msg = "";
+          if (error.response !== undefined) {
+            msg = error.response.data.message;
+          } else {
+            msg = "Something went wrong. Please contact the administrator";
+          }
+          this.alert = {
+            show: true,
+            type: "error",
+            message: msg,
+          };
+          this.isLoading = false;
+        });
     },
     submit() {
       this.isLoading = true;

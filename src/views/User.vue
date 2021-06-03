@@ -13,11 +13,13 @@
     <data-table
       ref="users"
       :hasEdit="true"
-      :hasChangePassword="true"
-      :hasDelete="true"
       @edit="edit"
+      :hasChangePassword="true"
       @changePassword="changePassword"
+      :hasDelete="true"
       @delete="deactivate"
+      :hasStatus="true"
+      @changeStatus="changeStatus"
       :path="'/users'"
     />
     <user-add :show="showAdd" @close="showAdd = false" @generate-table="generateTable" />
@@ -96,6 +98,31 @@ export default {
       this.deactivateMessage += item.fullname;
       this.deactivateMessage += "?";
       this.showDeactivate = true;
+    },
+    changeStatus(item) {
+      let url = this.$api + "/users/" + item.id + "/toggle-status";
+      this.$http
+        .put(url)
+        .then((response) => {
+          this.generateTable();
+          this.isLoading = false;
+          this.alert.show = true;
+          this.alert.message = response.data.message;
+        })
+        .catch((error) => {
+          let msg = "";
+          if (error.response !== undefined) {
+            msg = error.response.data.message;
+          } else {
+            msg = "Something went wrong. Please contact the administrator";
+          }
+          this.alert = {
+            show: true,
+            type: "error",
+            message: msg,
+          };
+          this.isLoading = false;
+        });
     },
     submit() {
       this.isLoading = true;

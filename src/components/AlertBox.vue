@@ -3,7 +3,7 @@
     <template>
       <v-card>
         <v-toolbar color="primary"><span v-html="title"> </span></v-toolbar>
-        <v-container>
+        <v-container class="text-center">
           <p v-html="message"></p>
         </v-container>
         <v-card-actions class="justify-end">
