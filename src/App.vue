@@ -57,7 +57,7 @@
           </v-list-item-content>
         </v-list-item>
         <!-- Verdors -->
-        <v-list-item :to="{ name: 'vendors' }" link>
+        <v-list-item v-if="isAdmin" :to="{ name: 'vendors' }" link>
           <v-list-item-icon>
             <v-icon>mdi-city</v-icon>
           </v-list-item-icon>

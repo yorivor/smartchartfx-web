@@ -12,7 +12,7 @@ import AdminIndex from './views/Admin/Index.vue'
 import AdminUser from './views/Admin/User.vue'
 import AdminCompany from './views/Admin/Company.vue'
 import Order from './views/Order.vue'
-import Vendor from './views/Vendor.vue'
+import AdminVendor from './views/Admin/Vendor.vue'
 
 /** Common Imports End Here */
 Vue.use(Router)
@@ -68,6 +68,12 @@ let router = new Router({
           meta: { requiresAuth: true, title: 'Companies', access: ['admin'] },
           component: AdminCompany
         },
+        {
+          path: 'vendors',
+          name: 'vendors',
+          meta: { requiresAuth: true, title: 'Vendors', access: ['admin'] },
+          component: AdminVendor
+        },
       ]
     },
     {
@@ -75,12 +81,6 @@ let router = new Router({
       name: 'unauthorized',
       meta: { requiresAuth: false, title: 'Unauthorized (401)' },
       component: () => import('./views/Unauthorized.vue')
-    },
-    {
-      path: '/vendors',
-      name: 'vendors',
-      meta: { requiresAuth: true, title: 'Vendors' },
-      component: Vendor
     },
     {
       path: "/*",

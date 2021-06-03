@@ -16,6 +16,8 @@
       @edit="edit"
       :hasDelete="true"
       @delete="deactivate"
+      :hasStatus="true"
+      @changeStatus="changeStatus"
       :path="'/admin/vendors'"
     />
     <vendor-add :show="showAdd" @close="showAdd = false" @generate-table="generateTable" />
@@ -40,11 +42,11 @@
   </v-container>
 </template>
 <script>
-import DataTable from "../components/DataTable.vue";
-import VendorAdd from "../components/Vendor/Add.vue";
-import VendorEdit from "../components/Vendor/Edit.vue";
-import ConfirmBox from "../components/ConfirmBox.vue";
-import AlertBox from "../components/AlertBox.vue";
+import DataTable from "../../components/DataTable.vue";
+import VendorAdd from "../../components/Vendor/Add.vue";
+import VendorEdit from "../../components/Vendor/Edit.vue";
+import ConfirmBox from "../../components/ConfirmBox.vue";
+import AlertBox from "../../components/AlertBox.vue";
 export default {
   name: "vendors",
   components: {
@@ -81,6 +83,31 @@ export default {
       this.deactivateMessage += item.name;
       this.deactivateMessage += "?";
       this.showDeactivate = true;
+    },
+    changeStatus(item) {
+      let url = this.$api + "/admin/vendors/" + item.id + "/toggle-status";
+      this.$http
+        .put(url)
+        .then((response) => {
+          this.generateTable();
+          this.isLoading = false;
+          this.alert.show = true;
+          this.alert.message = response.data.message;
+        })
+        .catch((error) => {
+          let msg = "";
+          if (error.response !== undefined) {
+            msg = error.response.data.message;
+          } else {
+            msg = "Something went wrong. Please contact the administrator";
+          }
+          this.alert = {
+            show: true,
+            type: "error",
+            message: msg,
+          };
+          this.isLoading = false;
+        });
     },
     submit() {
       this.isLoading = true;
