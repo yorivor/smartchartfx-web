@@ -85,7 +85,7 @@ import {
   email,
 } from "vuelidate/lib/validators";
 export default {
-  name: "user-edit",
+  name: "vendor-edit",
   mixins: [validationMixin],
   props: {
     show: {
