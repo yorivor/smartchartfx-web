@@ -119,7 +119,7 @@ export default {
   methods: {
     submit() {
       let url =
-        this.$api + "/companies/" + this.item.company_id + "/contacts/" + this.item.id;
+        this.$api + "/admin/companies/" + this.item.company_id + "/contacts/" + this.item.id;
       let data = {
         name: this.form.name,
         email: this.form.email,

@@ -20,7 +20,6 @@
           hasView ||
           hasChangePassword ||
           hasAdd ||
-          hasOrder ||
           hasAddress
         "
         v-slot:[`item.actions`]="{ item }"
@@ -207,14 +206,22 @@
         {{ pagination.total }}
       </v-col>
     </v-row>
+
+    <alert-box
+      :show="alert.show"
+      :title="alert.title"
+      :message="alert.message"
+      @close="alert.show = false"
+    />
   </div>
 </template>
 
 <script>
 import downloadexcel from "vue-json-excel";
+import AlertBox from "./AlertBox.vue";
 export default {
   name: "data-table",
-  components: { downloadexcel },
+  components: { downloadexcel, AlertBox },
   props: {
     path: {
       type: String,
@@ -328,6 +335,11 @@ export default {
     parameters: [],
     expanded: [],
     isLoading: false,
+    alert: {
+      show: false,
+      title: "Notification",
+      message: "Error Loading Data"
+    }
   }),
   methods: {
     async fetchExcelData() {
@@ -373,7 +385,7 @@ export default {
           this.isLoading = false;
         })
         .catch(() => {
-          alert("Loading Error Data.");
+          this.alert.show = true;
           this.isLoading = false;
         });
     },

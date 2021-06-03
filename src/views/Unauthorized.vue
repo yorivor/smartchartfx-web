@@ -5,27 +5,23 @@
         <v-card class="px-12 py-12">
           <v-row class="mt-8">
             <v-col cols="12">
-              <v-icon color="secondary" :size="iconSize"> mdi-file-remove </v-icon>
+              <v-icon color="secondary" :size="iconSize"> mdi-lock-outline </v-icon>
             </v-col>
           </v-row>
           <v-row class="mt-8">
-            <v-col cols="12" >
-              <p class="text-h5 text--secondary">Error Four Oh Four!</p>
-              <p class="text-h5 text--secondary">
-                You're in a location where you are not supposed to be.
-              </p>
-              <p class="text-h5 text--secondary">Page Not Found</p>
+            <v-col cols="8" offset="2">
+              <p class="text-h5 text--secondary">You Are Accessing Beyond Your Limit</p>
+              <p class="text-h5 text--secondary">Unauthorized (401)</p>
             </v-col>
           </v-row>
         </v-card>
       </v-col>
     </v-row>
   </v-container>
-  <!-- mdiBookOffOutline  -->
 </template>
 <script>
 export default {
-  name: "pagenotfound",
+  name: "unauthorized",
   computed: {
     iconSize() {
       switch (this.$vuetify.breakpoint.name) {

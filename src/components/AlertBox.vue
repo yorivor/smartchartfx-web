@@ -2,9 +2,9 @@
   <v-dialog v-model="showModal" transition="dialog-top-transition" :width="width">
     <template>
       <v-card>
-        <v-toolbar color="primary"><span v-html="title"> </span></v-toolbar>
+        <v-toolbar color="primary"><b><span v-html="title"> </span></b></v-toolbar>
         <v-container class="text-center">
-          <p v-html="message"></p>
+          <p class="my-6 mx-4" v-html="message"></p>
         </v-container>
         <v-card-actions class="justify-end">
           <v-btn color="error" @click="showModal = false"> Close </v-btn>
@@ -44,7 +44,7 @@ export default {
         case "sm":
           return "85%";
         default:
-          return "500";
+          return "450";
       }
     },
   },
