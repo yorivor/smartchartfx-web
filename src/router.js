@@ -11,17 +11,13 @@ import ForgotPassword from './views/ForgotPassword.vue'
 import AdminIndex from './views/Admin/Index.vue'
 import AdminUser from './views/Admin/User.vue'
 import AdminCompany from './views/Admin/Company.vue'
-<<<<<<< HEAD
-import Order from './views/Order.vue'
-import AdminVendor from './views/Admin/Vendor.vue'
-=======
 import AdminPurchaseOrder from './views/Admin/PurchaseOrder.vue'
+import AdminVendor from './views/Admin/Vendor.vue'
 
 /** Prepeaer, Reviewer, Approver Import */
 import PrepearerPurchaseOrder from './views/PurchaseOrder/Prepearer.vue'
 import ReviewerPurchaseOrder from './views/PurchaseOrder/Reviewer.vue'
 import ApproverPurchaseOrder from './views/PurchaseOrder/Approver.vue'
->>>>>>> 067d9781e0e2726ca89d6c12c6e1b18bed9a55f6
 
 /** Common Imports End Here */
 Vue.use(Router)
