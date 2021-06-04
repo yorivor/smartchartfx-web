@@ -7,12 +7,21 @@ import Account from './views/Account.vue'
 import ResetPassword from './views/ResetPassword.vue'
 import ForgotPassword from './views/ForgotPassword.vue'
 
-
+/** Admin Import */
 import AdminIndex from './views/Admin/Index.vue'
 import AdminUser from './views/Admin/User.vue'
 import AdminCompany from './views/Admin/Company.vue'
+<<<<<<< HEAD
 import Order from './views/Order.vue'
 import AdminVendor from './views/Admin/Vendor.vue'
+=======
+import AdminPurchaseOrder from './views/Admin/PurchaseOrder.vue'
+
+/** Prepeaer, Reviewer, Approver Import */
+import PrepearerPurchaseOrder from './views/PurchaseOrder/Prepearer.vue'
+import ReviewerPurchaseOrder from './views/PurchaseOrder/Reviewer.vue'
+import ApproverPurchaseOrder from './views/PurchaseOrder/Approver.vue'
+>>>>>>> 067d9781e0e2726ca89d6c12c6e1b18bed9a55f6
 
 /** Common Imports End Here */
 Vue.use(Router)
@@ -41,10 +50,22 @@ let router = new Router({
       component: ResetPassword
     },
     {
-      path: '/orders',
-      name: 'orders',
-      meta: { requiresAuth: true, title: 'Orders' },
-      component: Order
+      path: '/prepearer/purchase-orders',
+      name: 'prepearer-purchase-orders',
+      meta: { requiresAuth: true, title: 'Purchase Orders', access: ['prepearer'] },
+      component: PrepearerPurchaseOrder
+    },
+    {
+      path: '/reviewer/purchase-orders',
+      name: 'reviewer-purchase-orders',
+      meta: { requiresAuth: true, title: 'Purchase Orders', access: ['reviewer'] },
+      component: ReviewerPurchaseOrder
+    },
+    {
+      path: '/approver/purchase-orders',
+      name: 'approver-purchase-orders',
+      meta: { requiresAuth: true, title: 'Purchase Orders', access: ['approver'] },
+      component: ApproverPurchaseOrder
     },
     {
       path: '/my-account',
@@ -58,13 +79,13 @@ let router = new Router({
       children: [
         {
           path: 'users',
-          name: 'users',
+          name: 'admin-users',
           meta: { requiresAuth: true, title: 'Users', access: ['admin'] },
           component: AdminUser
         },
         {
           path: 'companies',
-          name: 'companies',
+          name: 'admin-companies',
           meta: { requiresAuth: true, title: 'Companies', access: ['admin'] },
           component: AdminCompany
         },
@@ -74,6 +95,12 @@ let router = new Router({
           meta: { requiresAuth: true, title: 'Vendors', access: ['admin'] },
           component: AdminVendor
         },
+        {
+          path: 'purchase-orders',
+          name: 'admin-purchase-orders',
+          meta: { requiresAuth: true, title: 'Purchase Order', access: ['admin'] },
+          component: AdminPurchaseOrder
+        }
       ]
     },
     {

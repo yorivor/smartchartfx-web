@@ -30,30 +30,62 @@
         </v-list-item>
         <v-divider></v-divider>
         <!-- Users -->
-        <v-list-item v-if="isAdmin" :to="{ name: 'users' }" link>
+        <v-list-item v-if="isAdmin" :to="{ name: 'admin-users' }" link>
           <v-list-item-icon>
             <v-icon>mdi-account-box-multiple</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>Users Management</v-list-item-title>
+            <v-list-item-title>User Management</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+
         <!-- Company -->
-        <v-list-item v-if="isAdmin" :to="{ name: 'companies' }" link>
+        <v-list-item v-if="isAdmin" :to="{ name: 'admin-companies' }" link>
           <v-list-item-icon>
             <v-icon>mdi-office-building</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>Companies Management</v-list-item-title>
+            <v-list-item-title>Company Management</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <!-- Orders -->
-        <v-list-item :to="{ name: 'orders' }" link>
+
+        <!-- Admin Purchase Orders -->
+        <v-list-item v-if="isAdmin" :to="{ name: 'admin-purchase-orders' }" link>
           <v-list-item-icon>
             <v-icon>mdi-table-large</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>Orders</v-list-item-title>
+            <v-list-item-title>Purchase Orders</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <!-- Prepearer Purchase Orders -->
+        <v-list-item v-if="isPrepearer" :to="{ name: 'prepearer-purchase-orders' }" link>
+          <v-list-item-icon>
+            <v-icon>mdi-table-large</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Purchase Orders</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <!-- Reviewer Purchase Orders -->
+        <v-list-item v-if="isReviewer" :to="{ name: 'reviewer-purchase-orders' }" link>
+          <v-list-item-icon>
+            <v-icon>mdi-table-large</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Purchase Orders</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <!-- Approver Purchase Orders -->
+        <v-list-item v-if="isApprover" :to="{ name: 'approver-purchase-orders' }" link>
+          <v-list-item-icon>
+            <v-icon>mdi-table-large</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Purchase Orders</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <!-- Verdors -->
@@ -112,6 +144,18 @@ export default {
     },
     isAdmin: function () {
       return this.$store.getters.isAdmin;
+    },
+    isData: function () {
+      return this.$store.getters.isData;
+    },
+    isPrepearer: function () {
+      return this.$store.getters.isPrepearer;
+    },
+    isReviewer: function () {
+      return this.$store.getters.isReviewer;
+    },
+    isApprover: function () {
+      return this.$store.getters.isApprover;
     },
     currentRouteName: function () {
       return this.$route.name;
