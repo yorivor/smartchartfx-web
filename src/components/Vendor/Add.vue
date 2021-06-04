@@ -136,7 +136,7 @@ export default {
   }),
   methods: {
     submit() {
-      let url = this.$api + "/vendors";
+      let url = this.$api + "/admin/vendors";
       this.isLoading = true;
       this.alert.show = false;
       this.$v.$touch();
