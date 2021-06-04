@@ -12,6 +12,7 @@ import AdminIndex from './views/Admin/Index.vue'
 import AdminUser from './views/Admin/User.vue'
 import AdminCompany from './views/Admin/Company.vue'
 import AdminPurchaseOrder from './views/Admin/PurchaseOrder.vue'
+import AdminVendor from './views/Admin/Vendor.vue'
 
 /** Prepeaer, Reviewer, Approver Import */
 import PrepearerPurchaseOrder from './views/PurchaseOrder/Prepearer.vue'
@@ -85,11 +86,17 @@ let router = new Router({
           component: AdminCompany
         },
         {
+          path: 'vendors',
+          name: 'vendors',
+          meta: { requiresAuth: true, title: 'Vendors', access: ['admin'] },
+          component: AdminVendor
+        },
+        {
           path: 'purchase-orders',
           name: 'admin-purchase-orders',
           meta: { requiresAuth: true, title: 'Purchase Order', access: ['admin'] },
           component: AdminPurchaseOrder
-        },
+        }
       ]
     },
     {

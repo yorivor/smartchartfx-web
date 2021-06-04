@@ -88,6 +88,15 @@
             <v-list-item-title>Purchase Orders</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <!-- Verdors -->
+        <v-list-item v-if="isAdmin" :to="{ name: 'vendors' }" link>
+          <v-list-item-icon>
+            <v-icon>mdi-city</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Vendors</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
 
         <v-divider></v-divider>
         <!-- Logout -->
