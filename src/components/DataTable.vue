@@ -24,8 +24,7 @@
         "
         v-slot:[`item.actions`]="{ item }"
       >
-        <!-- v-slot:item.actions="{ item }" -->
-
+        <v-icon> </v-icon>
         <!-- hasAddress -->
         <v-icon
           color="secondary"
@@ -36,7 +35,6 @@
         >
           mdi-map-marker
         </v-icon>
-
         <!-- hasContact -->
         <v-icon
           color="secondary"
@@ -54,7 +52,7 @@
           class="mr-2 float-center"
           @click="$emit('view', item)"
         >
-          mdi-file-eye &nbsp;
+          mdi-file-eye 
         </v-icon>
         <!-- hasPrint -->
         <v-icon
@@ -64,7 +62,7 @@
           class="mr-2"
           @click="$emit('print', item)"
         >
-          mdi-printer &nbsp;
+          mdi-printer 
         </v-icon>
         <!-- hasEdit -->
         <v-icon
@@ -74,7 +72,7 @@
           class="mr-2"
           @click="$emit('edit', item)"
         >
-          mdi-pencil &nbsp;
+          mdi-pencil 
         </v-icon>
         <!-- hasUser -->
         <v-icon
@@ -84,7 +82,7 @@
           class="mr-2"
           @click="$emit('user', item)"
         >
-          mdi-account-child &nbsp;
+          mdi-account-child 
         </v-icon>
         <!-- hasChangePassword -->
         <v-icon
@@ -94,20 +92,31 @@
           class="mr-2"
           @click="$emit('changePassword', item)"
         >
-          mdi-lock-alert &nbsp;
+          mdi-lock-alert 
         </v-icon>
         <!-- hasDelete -->
-        <v-icon color="error" v-if="hasDelete" medium @click="$emit('delete', item)">
-          mdi-delete &nbsp;
+        <v-icon
+          color="error"
+          v-if="hasDelete"
+          medium
+          @click="$emit('delete', item)"
+        >
+          mdi-delete 
         </v-icon>
         <!-- hasAdd -->
-        <v-icon color="secondary" v-if="hasAdd" medium @click="$emit('add', item)">
-          mdi-playlist-plus &nbsp;
+        <v-icon
+          color="secondary"
+          v-if="hasAdd"
+          medium
+          @click="$emit('add', item)"
+        >
+          mdi-playlist-plus 
         </v-icon>
       </template>
 
       <template v-if="hasStatus" v-slot:[`item.is_active`]="{ item }">
-        <!-- hasTaskMangement (Stop) -->
+        <v-icon> </v-icon>
+        <!-- Activate -->
         <v-icon
           color="success"
           v-if="item.is_active == 1"
@@ -116,6 +125,7 @@
         >
           mdi-check-circle
         </v-icon>
+        <!-- Deactivate -->
         <v-icon
           color="error"
           v-if="item.is_active == 0"
@@ -139,7 +149,7 @@
             "
           >
             <v-icon medium @click="$emit('orderup', item)">
-              mdi-arrow-up-box &nbsp;
+              mdi-arrow-up-box 
             </v-icon>
           </span>
           <span v-else class="mr-7"></span>
@@ -156,7 +166,7 @@
             "
           >
             <v-icon medium @click="$emit('orderdown', item)">
-              mdi-arrow-down-box &nbsp;
+              mdi-arrow-down-box 
             </v-icon>
           </span>
           <span v-else class="ml-7"></span>
@@ -338,8 +348,8 @@ export default {
     alert: {
       show: false,
       title: "Notification",
-      message: "Error Loading Data"
-    }
+      message: "Error Loading Data",
+    },
   }),
   methods: {
     async fetchExcelData() {

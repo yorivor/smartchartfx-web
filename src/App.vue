@@ -50,7 +50,11 @@
         </v-list-item>
 
         <!-- Admin Purchase Orders -->
-        <v-list-item v-if="isAdmin" :to="{ name: 'admin-purchase-orders' }" link>
+        <v-list-item
+          v-if="isAdmin"
+          :to="{ name: 'admin-purchase-orders' }"
+          link
+        >
           <v-list-item-icon>
             <v-icon>mdi-table-large</v-icon>
           </v-list-item-icon>
@@ -60,7 +64,11 @@
         </v-list-item>
 
         <!-- Prepearer Purchase Orders -->
-        <v-list-item v-if="isPrepearer" :to="{ name: 'prepearer-purchase-orders' }" link>
+        <v-list-item
+          v-if="isPrepearer"
+          :to="{ name: 'prepearer-purchase-orders' }"
+          link
+        >
           <v-list-item-icon>
             <v-icon>mdi-table-large</v-icon>
           </v-list-item-icon>
@@ -70,7 +78,11 @@
         </v-list-item>
 
         <!-- Reviewer Purchase Orders -->
-        <v-list-item v-if="isReviewer" :to="{ name: 'reviewer-purchase-orders' }" link>
+        <v-list-item
+          v-if="isReviewer"
+          :to="{ name: 'reviewer-purchase-orders' }"
+          link
+        >
           <v-list-item-icon>
             <v-icon>mdi-table-large</v-icon>
           </v-list-item-icon>
@@ -80,7 +92,11 @@
         </v-list-item>
 
         <!-- Approver Purchase Orders -->
-        <v-list-item v-if="isApprover" :to="{ name: 'approver-purchase-orders' }" link>
+        <v-list-item
+          v-if="isApprover"
+          :to="{ name: 'approver-purchase-orders' }"
+          link
+        >
           <v-list-item-icon>
             <v-icon>mdi-table-large</v-icon>
           </v-list-item-icon>
@@ -106,6 +122,19 @@
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>Logout</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-divider></v-divider>
+        <v-list-item justify-end class="mb-0" @click="toggleTheme">
+          <v-list-item-icon>
+            <v-icon>mdi-brightness-6</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>
+              <span
+                v-html="'Switch to ' + (!isDarkTheme ? 'Dark' : 'Light') + ' Theme'"
+              ></span>
+            </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -134,6 +163,14 @@ export default {
     goTo(routeName) {
       this.$router.push({ name: routeName });
     },
+    toggleTheme() {
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+      if (this.$vuetify.theme.dark) {
+        this.$store.dispatch("setToDarkTheme");
+      } else {
+        this.$store.dispatch("setToLightTheme");
+      }
+    },
   },
   computed: {
     isLoggedIn: function () {
@@ -157,9 +194,20 @@ export default {
     isApprover: function () {
       return this.$store.getters.isApprover;
     },
+    isDarkTheme: function () {
+      return this.$store.getters.isDarkTheme;
+    },
     currentRouteName: function () {
       return this.$route.name;
     },
+  },
+  mounted() {
+    const theme = this.$store.getters.isDarkTheme;
+    if (theme) {
+      this.$vuetify.theme.dark = true;
+    } else {
+      this.$vuetify.theme.dark = false;
+    }
   },
 };
 </script>

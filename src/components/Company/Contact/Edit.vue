@@ -7,7 +7,7 @@
           <v-alert v-if="alert.show" cols="12" :type="alert.type">
             <span v-html="alert.message"></span>
           </v-alert>
-          <v-form>
+          <v-form @submit.prevent="submit">
             <v-text-field
               v-model="form.name"
               :counter="120"
@@ -47,12 +47,16 @@
               dense
               outlined
             ></v-text-field>
+            <v-row class="text-right">
+              <v-col cols="12">
+                <v-btn class="my-3 mx-3" type="submit" color="primary"> Submit </v-btn>
+                <v-btn class="my-3 mx-3" color="error" @click="showModal = false">
+                  Close
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-form>
         </v-container>
-        <v-card-actions class="justify-end">
-          <v-btn color="primary" @click="submit"> Submit </v-btn>
-          <v-btn color="error" @click="showModal = false">Close</v-btn>
-        </v-card-actions>
       </v-card>
     </template>
   </v-dialog>

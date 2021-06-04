@@ -2,8 +2,19 @@
   <v-container>
     <v-list-item-title class="headline mb-1">Company Management</v-list-item-title>
     <v-row>
-      <v-col class="text-right" cols="12" xl="2" lg="12" md="6" sm="12">
-        <div class="my-2">
+      <v-col class="text-left my-3" xs="6" sm="6" md="3" lg="3" xl="3">
+        <v-text-field
+          v-model="params.search"
+          label="Search"
+          dense
+          outlined
+          hide-details
+          @change="generateTable"
+        ></v-text-field>
+      </v-col>
+      <v-spacer></v-spacer>
+      <v-col class="text-right" cols="6">
+        <div class="my-3">
           <v-btn @click="showAdd = true" depressed large color="primary">
             Create Company
           </v-btn>
@@ -88,6 +99,7 @@ export default {
     showAddress: false,
     showContact: false,
     deactivateMessage: "",
+    params: { search: "" },
     alert: {
       show: false,
       title: "Notification",
@@ -97,6 +109,7 @@ export default {
   }),
   methods: {
     generateTable() {
+      this.$refs.companies.setParameters(this.params);
       this.$refs.companies.generate();
     },
     edit(item) {
