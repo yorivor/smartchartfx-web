@@ -35,6 +35,17 @@
         >
           mdi-map-marker
         </v-icon>
+        <!-- hasCompany -->
+        <v-icon
+          color="secondary"
+          v-if="hasCompany && !['data', 'admin'].includes(item.type.code)"
+          medium
+          @click="$emit('company', item)"
+          class="mr-2"
+        >
+          mdi-office-building
+        </v-icon>
+        <v-icon color="grey" v-else-if="hasCompany" medium class="mr-2"> mdi-office-building </v-icon>
         <!-- hasContact -->
         <v-icon
           color="secondary"
@@ -52,7 +63,7 @@
           class="mr-2 float-center"
           @click="$emit('view', item)"
         >
-          mdi-file-eye 
+          mdi-file-eye
         </v-icon>
         <!-- hasPrint -->
         <v-icon
@@ -62,7 +73,7 @@
           class="mr-2"
           @click="$emit('print', item)"
         >
-          mdi-printer 
+          mdi-printer
         </v-icon>
         <!-- hasEdit -->
         <v-icon
@@ -72,7 +83,7 @@
           class="mr-2"
           @click="$emit('edit', item)"
         >
-          mdi-pencil 
+          mdi-pencil
         </v-icon>
         <!-- hasUser -->
         <v-icon
@@ -82,7 +93,7 @@
           class="mr-2"
           @click="$emit('user', item)"
         >
-          mdi-account-child 
+          mdi-account-child
         </v-icon>
         <!-- hasChangePassword -->
         <v-icon
@@ -92,25 +103,15 @@
           class="mr-2"
           @click="$emit('changePassword', item)"
         >
-          mdi-lock-alert 
+          mdi-lock-alert
         </v-icon>
         <!-- hasDelete -->
-        <v-icon
-          color="error"
-          v-if="hasDelete"
-          medium
-          @click="$emit('delete', item)"
-        >
-          mdi-delete 
+        <v-icon color="error" v-if="hasDelete" medium @click="$emit('delete', item)">
+          mdi-delete
         </v-icon>
         <!-- hasAdd -->
-        <v-icon
-          color="secondary"
-          v-if="hasAdd"
-          medium
-          @click="$emit('add', item)"
-        >
-          mdi-playlist-plus 
+        <v-icon color="secondary" v-if="hasAdd" medium @click="$emit('add', item)">
+          mdi-plus
         </v-icon>
       </template>
 
@@ -148,9 +149,7 @@
                 .indexOf(item.id) != 0
             "
           >
-            <v-icon medium @click="$emit('orderup', item)">
-              mdi-arrow-up-box 
-            </v-icon>
+            <v-icon medium @click="$emit('orderup', item)"> mdi-arrow-up-box </v-icon>
           </span>
           <span v-else class="mr-7"></span>
           <!-- hasOrder (DOWN) -->
@@ -165,9 +164,7 @@
                 rows.length - 1
             "
           >
-            <v-icon medium @click="$emit('orderdown', item)">
-              mdi-arrow-down-box 
-            </v-icon>
+            <v-icon medium @click="$emit('orderdown', item)"> mdi-arrow-down-box </v-icon>
           </span>
           <span v-else class="ml-7"></span>
         </span>
@@ -304,6 +301,11 @@ export default {
       default: false,
     },
     hasContact: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    hasCompany: {
       type: Boolean,
       required: false,
       default: false,
