@@ -45,7 +45,9 @@
         >
           mdi-office-building
         </v-icon>
-        <v-icon color="grey" v-else-if="hasCompany" medium class="mr-2"> mdi-office-building </v-icon>
+        <v-icon color="grey" v-else-if="hasCompany" medium class="mr-2">
+          mdi-office-building
+        </v-icon>
         <!-- hasContact -->
         <v-icon
           color="secondary"
@@ -58,6 +60,7 @@
         </v-icon>
         <!-- hasView -->
         <v-icon
+          color="secondary"
           v-if="hasView"
           medium
           class="mr-2 float-center"
@@ -136,6 +139,14 @@
           mdi-close-circle
         </v-icon>
       </template>
+
+      <template v-if="hasPoStatus" v-slot:[`item.status`]="{ item }">
+        <span v-if="item.status == 1"> For Review </span>
+        <span v-if="item.status == 2"> For Approval </span>
+        <span v-if="item.status == 3"> Approved </span>
+        <span v-if="item.status == 4"> Rejected </span>
+      </template>
+
       <template v-if="hasOrder" v-slot:[`item.order`]="{ item }">
         <!-- hasOrder (UP)-->
         <span v-if="hasOrder">
@@ -236,6 +247,11 @@ export default {
       default: "",
     },
     hasStatus: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    hasPoStatus: {
       type: Boolean,
       required: false,
       default: false,

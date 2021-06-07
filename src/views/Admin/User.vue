@@ -2,7 +2,7 @@
   <v-container>
     <v-list-item-title class="headline mb-1">User Management</v-list-item-title>
     <v-row>
-      <v-col class="text-left my-3" xs="6" sm="6" md="3" lg="3" xl="3">
+      <v-col class="text-left my-3" cols="6" xs="6" sm="6" md="3" lg="3" xl="3">
         <v-text-field
           v-model="params.search"
           label="Search"
