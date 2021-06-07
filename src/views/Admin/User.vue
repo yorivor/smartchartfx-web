@@ -29,6 +29,8 @@
       @delete="deactivate"
       :hasStatus="true"
       @changeStatus="changeStatus"
+      :hasCompany="true"
+      @company="viewCompany"
       :path="'/admin/users'"
     />
     <user-add :show="showAdd" @close="showAdd = false" @generate-table="generateTable" />
@@ -42,6 +44,12 @@
       :show="showResetPassword"
       :item="form"
       @close="showResetPassword = false"
+      @generate-table="generateTable"
+    />
+    <user-company
+      :show="showCompany"
+      :item="form"
+      @close="showCompany = false"
       @generate-table="generateTable"
     />
     <confirm-box
@@ -63,6 +71,7 @@ import DataTable from "../../components/DataTable.vue";
 import UserAdd from "../../components/User/Add.vue";
 import UserEdit from "../../components/User/Edit.vue";
 import UserResetPassword from "../../components/User/ResetPassword.vue";
+import UserCompany from "../../components/User/Company.vue";
 import ConfirmBox from "../../components/ConfirmBox.vue";
 import AlertBox from "../../components/AlertBox.vue";
 export default {
@@ -72,6 +81,7 @@ export default {
     UserAdd,
     UserEdit,
     UserResetPassword,
+    UserCompany,
     ConfirmBox,
     AlertBox,
   },
@@ -79,6 +89,7 @@ export default {
     usedKey: "",
     showAdd: false,
     showEdit: false,
+    showCompany: false,
     showResetPassword: false,
     showDeactivate: false,
     deactivateMessage: "",
@@ -102,6 +113,10 @@ export default {
     changePassword(item) {
       this.form = item;
       this.showResetPassword = true;
+    },
+    viewCompany(item) {
+      this.form = item;
+      this.showCompany = true;
     },
     deactivate(item) {
       this.usedKey = item.id;
