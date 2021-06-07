@@ -11,6 +11,7 @@ export default new Vuex.Store({
     username: localStorage.getItem('username') || '',
     displayname: localStorage.getItem('displayname') || '',
     usertype: localStorage.getItem('usertype') || '',
+    isDarkTheme: localStorage.getItem('isDarkTheme') || 'no',
   },
   mutations: {
     auth_request(state) {
@@ -43,6 +44,12 @@ export default new Vuex.Store({
     unset_token(state) {
       localStorage.removeItem('token')
       state.token = ''
+    },
+    set_light_theme(state) {
+      state.isDarkTheme = 'no';
+    },
+    set_dark_theme(state) {
+      state.isDarkTheme = 'yes';
     },
   },
   actions: {
@@ -102,12 +109,28 @@ export default new Vuex.Store({
         resolve()
       })
     },
+    setToDarkTheme({ commit }) {
+      return new Promise((resolve, reject) => {
+        console.log('settodark')
+        localStorage.setItem('isDarkTheme', 'yes')
+        commit('set_dark_theme')
+        resolve()
+      })
+    },
+    setToLightTheme({ commit }) {
+      return new Promise((resolve, reject) => {
+        localStorage.setItem('isDarkTheme', 'no')
+        commit('set_light_theme')
+        resolve()
+      })
+    }
   },
   getters: {
     isLoggedIn: state => state.token != '',
     authStatus: state => state.status,
     displayname: state => state.displayname,
     userType: state => state.usertype,
+    isDarkTheme: state => state.isDarkTheme == 'yes',
     isAdmin: state => state.usertype == 'admin',
     isData: state => state.usertype == 'data',
     isPrepearer: state => state.usertype == 'prepearer',

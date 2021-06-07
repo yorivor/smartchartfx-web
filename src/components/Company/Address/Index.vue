@@ -18,8 +18,19 @@
         </v-toolbar>
         <v-container>
           <v-row>
-            <v-col class="text-right" cols="12" xl="2" lg="12" md="6" sm="12">
-              <div class="my-2">
+            <v-col class="text-left my-3" xs="6" sm="6" md="3" lg="3" xl="3">
+              <v-text-field
+                v-model="params.search"
+                label="Search"
+                dense
+                outlined
+                hide-details
+                @change="generateTable"
+              ></v-text-field>
+            </v-col>
+            <v-spacer></v-spacer>
+            <v-col class="text-right" cols="6">
+              <div class="my-3">
                 <v-btn @click="showAdd = true" depressed large color="primary"
                   >Add Address</v-btn
                 >
@@ -98,6 +109,7 @@ export default {
     showEdit: false,
     showDeactivate: false,
     deactivateMessage: "",
+    params: { search: "" },
     alert: {
       show: false,
       title: "Notification",
@@ -150,7 +162,8 @@ export default {
     },
     submit() {
       this.isLoading = true;
-      let url = this.$api + "/admin/companies/" + this.item.id + "/addresses/" + this.usedKey;
+      let url =
+        this.$api + "/admin/companies/" + this.item.id + "/addresses/" + this.usedKey;
       this.$http
         .delete(url)
         .then((response) => {
@@ -177,6 +190,7 @@ export default {
     generateTable() {
       if (this.show) {
         this.$nextTick(() => {
+          this.$refs.addresses.setParameters(this.params);
           this.$refs.addresses.generate();
         });
       }
@@ -185,6 +199,7 @@ export default {
   watch: {
     show: function () {
       if (this.show) {
+        this.params.search = "";
         this.showModal = this.show;
         this.generateTable();
       }

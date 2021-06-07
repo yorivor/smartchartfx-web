@@ -2,12 +2,21 @@
   <v-container>
     <v-list-item-title class="headline mb-1">User Management</v-list-item-title>
     <v-row>
-      <v-col class="text-right" cols="12" xl="2" lg="12" md="6" sm="12">
-        <div class="my-2">
-          <v-btn @click="showAdd = true" depressed large color="primary">
-            Create User
-          </v-btn>
-        </div>
+      <v-col class="text-left my-3" xs="6" sm="6" md="3" lg="3" xl="3">
+        <v-text-field
+          v-model="params.search"
+          label="Search"
+          dense
+          outlined
+          hide-details
+          @change="generateTable"
+        ></v-text-field>
+      </v-col>
+      <v-spacer></v-spacer>
+      <v-col class="text-right" cols="6">
+        <v-btn class="my-3" @click="showAdd = true" depressed large color="primary">
+          Create User
+        </v-btn>
       </v-col>
     </v-row>
     <data-table
@@ -78,10 +87,12 @@ export default {
       title: "Notification",
       message: "Sample alert",
     },
+    params: { search: "" },
     form: {},
   }),
   methods: {
     generateTable() {
+      this.$refs.users.setParameters(this.params);
       this.$refs.users.generate();
     },
     edit(item) {

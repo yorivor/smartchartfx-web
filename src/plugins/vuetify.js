@@ -11,7 +11,7 @@ export default new Vuetify({
     dark: false,
     themes: {
       light: {
-        primary: { 
+        primary: {
           base: '#FFE800',
           darken1: '#ebd500',
           darken2: '#dec900',
@@ -26,6 +26,19 @@ export default new Vuetify({
         error: '#FF5252',
         bannercolor: '#FFFFFF'
       },
+      dark: {
+        primary: {
+          base: '#FFE800',
+          darken1: '#ebd500',
+          darken2: '#dec900',
+          darken3: '#c7b400',
+          darken4: '#a69600'
+        },
+        secondary: '#00B4EE'
+      }
     },
+  },
+  icons: {
+    iconfont: 'mdiSvg',
   },
 });

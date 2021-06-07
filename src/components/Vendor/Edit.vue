@@ -13,7 +13,7 @@
             <v-alert v-if="alert.show" cols="12" :type="alert.type">
               <span v-html="alert.message"></span>
             </v-alert>
-            <v-form>
+            <v-form @submit.prevent="submit">
               <v-text-field
                 v-model="form.name"
                 label="Name"
@@ -66,12 +66,18 @@
                 :error-messages="contactNumberErrors"
                 required
               ></v-text-field>
+              <v-row class="text-right">
+                <v-col cols="12">
+                  <v-btn class="my-3 mx-3" type="submit" color="primary">
+                    Submit
+                  </v-btn>
+                  <v-btn class="my-3 mx-3" color="error" @click="$emit('close')">
+                    Close
+                  </v-btn>
+                </v-col>
+              </v-row>
             </v-form>
           </v-container>
-          <v-card-actions class="justify-end">
-            <v-btn color="primary" @click="submit"> Submit </v-btn>
-            <v-btn color="error" @click="$emit('close')">Close</v-btn>
-          </v-card-actions>
         </v-card>
       </template>
     </v-dialog>
@@ -79,12 +85,7 @@
 </template>
 <script>
 import { validationMixin } from "vuelidate";
-import {
-  required,
-  minLength,
-  maxLength,
-  email,
-} from "vuelidate/lib/validators";
+import { required, minLength, maxLength, email } from "vuelidate/lib/validators";
 export default {
   name: "vendor-edit",
   mixins: [validationMixin],
@@ -119,7 +120,7 @@ export default {
       },
       email: {
         required,
-        email
+        email,
       },
       contact_person: {
         required,
@@ -217,8 +218,10 @@ export default {
       const errors = [];
       if (!this.$v.form.contact_person.$dirty) return errors;
       !this.$v.form.contact_person.required && errors.push("Contact Person is required");
-      !this.$v.form.contact_person.minLength && errors.push("Contact Person minimum length is 4");
-      !this.$v.form.contact_person.maxLength && errors.push("Contact Person max length is 120");
+      !this.$v.form.contact_person.minLength &&
+        errors.push("Contact Person minimum length is 4");
+      !this.$v.form.contact_person.maxLength &&
+        errors.push("Contact Person max length is 120");
       return errors;
     },
     contactNumberErrors() {
