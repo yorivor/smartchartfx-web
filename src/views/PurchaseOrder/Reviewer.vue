@@ -24,7 +24,7 @@
       :show="showView"
       @close="showView = false"
       :item="form"
-      @generate-table="generateTable"
+      @generateTable="generateTable"
     />
     <alert-box
       :show="alert.show"
