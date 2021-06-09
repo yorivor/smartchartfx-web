@@ -65,8 +65,8 @@
 
         <!-- Prepearer Purchase Orders -->
         <v-list-item
-          v-if="isPrepearer"
-          :to="{ name: 'prepearer-purchase-orders' }"
+          v-if="isPreparer"
+          :to="{ name: 'preparer-purchase-orders' }"
           link
         >
           <v-list-item-icon>
@@ -185,8 +185,8 @@ export default {
     isData: function () {
       return this.$store.getters.isData;
     },
-    isPrepearer: function () {
-      return this.$store.getters.isPrepearer;
+    isPreparer: function () {
+      return this.$store.getters.isPreparer;
     },
     isReviewer: function () {
       return this.$store.getters.isReviewer;

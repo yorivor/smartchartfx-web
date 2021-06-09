@@ -133,7 +133,7 @@ export default new Vuex.Store({
     isDarkTheme: state => state.isDarkTheme == 'yes',
     isAdmin: state => state.usertype == 'admin',
     isData: state => state.usertype == 'data',
-    isPrepearer: state => state.usertype == 'prepearer',
+    isPreparer: state => state.usertype == 'preparer',
     isReviewer: state => state.usertype == 'reviewer',
     isApprover: state => state.usertype == 'approver',
   }
