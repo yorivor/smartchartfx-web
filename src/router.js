@@ -15,7 +15,7 @@ import AdminPurchaseOrder from './views/Admin/PurchaseOrder.vue'
 import AdminVendor from './views/Admin/Vendor.vue'
 
 /** Prepeaer, Reviewer, Approver Import */
-import PrepearerPurchaseOrder from './views/PurchaseOrder/Prepearer.vue'
+import PreparerPurchaseOrder from './views/PurchaseOrder/Preparer.vue'
 import ReviewerPurchaseOrder from './views/PurchaseOrder/Reviewer.vue'
 import ApproverPurchaseOrder from './views/PurchaseOrder/Approver.vue'
 
@@ -46,10 +46,10 @@ let router = new Router({
       component: ResetPassword
     },
     {
-      path: '/prepearer/purchase-orders',
-      name: 'prepearer-purchase-orders',
-      meta: { requiresAuth: true, title: 'Purchase Orders', access: ['prepearer'] },
-      component: PrepearerPurchaseOrder
+      path: '/preparer/purchase-orders',
+      name: 'preparer-purchase-orders',
+      meta: { requiresAuth: true, title: 'Purchase Orders', access: ['preparer'] },
+      component: PreparerPurchaseOrder
     },
     {
       path: '/reviewer/purchase-orders',
