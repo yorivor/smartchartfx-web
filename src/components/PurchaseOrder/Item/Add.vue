@@ -8,18 +8,6 @@
             <span v-html="alert.message"></span>
           </v-alert>
           <v-form @submit.prevent="submit">
-            <v-file-input
-              accept="image/*"
-              label="Logo"
-              hint="Upload Logo"
-              persistent-hint
-              prepend-icon="mdi-camera"
-              @change="fileChange"
-              v-model="form.logo"
-              required
-              dense
-              outlined
-            ></v-file-input>
             <v-text-field
               v-model="form.item_number"
               label="Item Number"
@@ -153,7 +141,6 @@ export default {
       type: "error",
     },
     form: {
-      logo: "",
       item_number: "",
       unit: "",
       quantity: "",
@@ -162,38 +149,19 @@ export default {
     },
   }),
   methods: {
-    fileChange(file) {
-      this.form.logo = file;
-    },
     submit() {
       let url = this.$api + "/preparer/purchase-orders/" + this.purchaseOrdersId + '/items';
       this.isLoading = true;
       this.alert.show = false;
-
-      let headers = {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        }
-      };
-      let postForm = new FormData();
-      postForm.append("file", this.form.logo);
-      postForm.append("item_number", this.form.item_number);
-      postForm.append("unit", this.form.unit);
-      postForm.append("description", this.form.description);
-      postForm.append("quantity", this.form.quantity);
-      postForm.append("unit_price", this.form.unit_price);
-      postForm.append("total", this.form.total);
-
       this.$v.$touch();
       if (this.$v.$invalid) {
         this.isLoading = false;
       } else {
         this.$http
-          .post(url, postForm, headers)
+          .post(url, this.form)
           .then((response) => {
             this.$v.$reset();
             this.form= {
-              logo: "",
               item_number: "",
               unit: "",
               description: "",
@@ -286,8 +254,7 @@ export default {
     showModal: function () {
       if (!this.showModal) {
         this.$v.$reset();
-        this.form= {
-          logo: "",
+        this.form = {
           item_number: "",
           unit: "",
           description: "",

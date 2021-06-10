@@ -143,7 +143,6 @@
                   <thead>
                     <tr>
                       <th>Item #</th>
-                      <th>Logo</th>
                       <th>Description</th>
                       <th>Qty</th>
                       <th>Unit</th>
@@ -154,7 +153,6 @@
                   <tbody>
                     <tr v-for="(row, index) in items" :key="index">
                       <td v-html="row.item_no"></td>
-                      <td><img class="img-size" :src="row.image" /></td>
                       <td v-html="row.description"></td>
                       <td v-html="row.quantity"></td>
                       <td v-html="row.unit || 'pcs'"></td>
