@@ -115,6 +115,7 @@
                   <thead>
                     <tr>
                       <th>Item #</th>
+                      <th>Logo</th>
                       <th>Description</th>
                       <th>Qty</th>
                       <th>Unit</th>
@@ -125,6 +126,7 @@
                   <tbody>
                     <tr v-for="(row, index) in items" :key="index">
                       <td v-html="row.item_no"></td>
+                      <td><img class="img-size" :src="row.image" /></td>
                       <td v-html="row.description"></td>
                       <td v-html="row.quantity"></td>
                       <td v-html="row.unit || 'pcs'"></td>
@@ -217,7 +219,7 @@
             </v-list-item>
           </v-list>
           <v-divider></v-divider>
-          <v-list three-line subheader>
+          <v-list v-if="this.userType != 'preparer'" three-line subheader>
             <v-list-item>
               <v-list-item-content>
                 <v-row>
@@ -531,5 +533,8 @@ export default {
 <style scoped>
 .v-list-item__title {
   white-space: normal;
+}
+.img-size {
+  width:10%;
 }
 </style>

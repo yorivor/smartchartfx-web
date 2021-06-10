@@ -26,9 +26,17 @@
       @view="view"
       :hasEdit="true"
       @edit="edit"
+      :hasAdd="true"
+      @add="addItem"
       :hasDelete="true"
       @delete="deactivate"
       :path="'/preparer/purchase-orders'"
+    />
+    <purchase-order-item
+      :show="showAddItem"
+      @close="showAddItem = false"
+      :item="form"
+      @generate-table="generateTable"
     />
     <purchase-order-view
       :show="showView"
@@ -62,12 +70,14 @@ import DataTable from "../../components/DataTable.vue";
 import PurchaseOrderView from "../../components/PurchaseOrder/View.vue";
 import PurchaseOrderAdd from "../../components/PurchaseOrder/Add.vue";
 import PurchaseOrderEdit from "../../components/PurchaseOrder/Edit.vue";
+import PurchaseOrderItem from "../../components/PurchaseOrder/Item/Index.vue";
 import ConfirmBox from "../../components/ConfirmBox.vue";
 import AlertBox from "../../components/AlertBox.vue";
 export default {
   name: "users",
   components: {
     DataTable,
+    PurchaseOrderItem,
     PurchaseOrderView,
     PurchaseOrderAdd,
     PurchaseOrderEdit,
@@ -79,6 +89,7 @@ export default {
     showView: false,
     showAdd: false,
     showEdit: false,
+    showAddItem: false,
     showDeactivate: false,
     deactivateMessage: "",
     alert: {
@@ -105,6 +116,10 @@ export default {
     view(item) {
       this.form = item;
       this.showView = true;
+    },
+    addItem(item) {
+      this.form = item;
+      this.showAddItem = true;
     },
     edit(item) {
       this.form = item;
