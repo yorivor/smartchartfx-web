@@ -8,6 +8,19 @@
             <span v-html="alert.message"></span>
           </v-alert>
           <v-form @submit.prevent="submit">
+            <v-file-input
+              prepend-icon="mdi-camera"
+              accept="image/*"
+              label="Logo"
+              v-model="form.logo"
+              @input="$v.form.logo.$touch()"
+              @blur="$v.form.logo.$touch()"
+              :error-messages="logoErrors"
+              dense
+              outlined
+              append-icon="mdi-eye"
+              @click:append="showIconModal = true"
+            ></v-file-input>
             <v-text-field
               v-model="form.code"
               label="Code"
@@ -42,9 +55,40 @@
         </v-container>
       </v-card>
     </template>
+    <v-dialog v-model="showIconModal" transition="dialog-top-transition" :width="width">
+      <template>
+        <v-card>
+          <v-toolbar color="primary">Edit Company</v-toolbar>
+          <v-container>
+            <img :src="$api + form.logoHolder" width="100%" />
+            <v-row class="text-right">
+              <v-col cols="12">
+                <v-btn class="my-3" color="error" @click="showIconModal = false">
+                  Close
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card>
+      </template>
+    </v-dialog>
   </v-dialog>
 </template>
 <script>
+const fileSizeValidation = (value, vm) => {
+  if (!value) {
+    return true;
+  }
+  let file = value;
+  return file.size < 10 * 1024 * 1024;
+};
+const fileType = (value, vm) => {
+  if (!value) {
+    return true;
+  }
+  let file = value;
+  return !["png", "jpg", "jpeg", "gif"].includes(file.type);
+};
 import { validationMixin } from "vuelidate";
 import { required, minLength, maxLength, email, sameAs } from "vuelidate/lib/validators";
 export default {
@@ -63,11 +107,16 @@ export default {
         id: "",
         code: "",
         name: "",
+        logo: "",
       }),
     },
   },
   validations: {
     form: {
+      logo: {
+        fileType,
+        fileSizeValidation,
+      },
       code: {
         required,
         minLength: minLength(1),
@@ -82,8 +131,7 @@ export default {
   },
   data: () => ({
     showModal: false,
-    showInputPassword: false,
-    showInputPasswordConfirm: false,
+    showIconModal: false,
     costCenters: [],
     userTypes: [],
     alert: {
@@ -95,24 +143,35 @@ export default {
       id: "",
       code: "",
       name: "",
+      logo: "",
+      logoHolder: "",
     },
   }),
   methods: {
     submit() {
-      let url = this.$api + "/admin/companies/" + this.item.id;
-      let data = {
-        code: this.form.code,
-        name: this.form.name,
+      let headers = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       };
+      let url = this.$api + "/admin/companies/" + this.item.id;
       this.isLoading = true;
       this.alert.show = false;
+      let formData = new FormData();
+      formData.append("_method", "PUT");
+      formData.append("name", this.form.name);
+      formData.append("code", this.form.code);
+      if (this.form.logo !== null) {
+        formData.append("logo", this.form.logo);
+      }
       this.$v.$touch();
       if (this.$v.$invalid) {
         this.isLoading = false;
       } else {
         this.$http
-          .put(url, data)
+          .post(url, formData, headers)
           .then((response) => {
+            this.form.logoHolder = response.data.response.logo;
             this.$v.$reset();
             this.alert = {
               show: true,
@@ -140,6 +199,13 @@ export default {
     },
   },
   computed: {
+    logoErrors() {
+      const errors = [];
+      if (!this.$v.form.logo.$dirty) return errors;
+      !this.$v.form.logo.fileType && errors.push("Logo file type must be png, jpg, jpeg");
+      !this.$v.form.logo.fileSizeValidation && errors.push("Logo max size is 10MB");
+      return errors;
+    },
     codeErrors() {
       const errors = [];
       if (!this.$v.form.code.$dirty) return errors;
@@ -175,16 +241,21 @@ export default {
           id: this.item.show,
           code: this.item.code,
           name: this.item.name,
+          logo: null,
+          logoHolder: this.item.logo,
         };
       }
     },
     showModal: function () {
       if (!this.showModal) {
         this.$v.$reset();
+        this.alert.show = false;
         this.form = {
           id: "",
           code: "",
           name: "",
+          logo: null,
+          logoHolder: "",
         };
         this.$emit("close");
       }

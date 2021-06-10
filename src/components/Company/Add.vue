@@ -8,6 +8,18 @@
             <span v-html="alert.message"></span>
           </v-alert>
           <v-form @submit.prevent="submit">
+            <v-file-input
+              prepend-icon="mdi-camera"
+              accept="image/*"
+              label="Logo"
+              v-model="form.logo"
+              @input="$v.form.logo.$touch()"
+              @blur="$v.form.logo.$touch()"
+              :error-messages="logoErrors"
+              required
+              dense
+              outlined
+            ></v-file-input>
             <v-text-field
               v-model="form.code"
               label="Code"
@@ -45,6 +57,20 @@
   </v-dialog>
 </template>
 <script>
+const fileSizeValidation = (value, vm) => {
+  if (!value) {
+    return true;
+  }
+  let file = value;
+  return file.size < 10 * 1024 * 1024;
+};
+const fileType = (value, vm) => {
+  if (!value) {
+    return true;
+  }
+  let file = value;
+  return !["png", "jpg", "jpeg", "gif"].includes(file.type);
+};
 import { validationMixin } from "vuelidate";
 import { required, minLength, maxLength, email, sameAs } from "vuelidate/lib/validators";
 export default {
@@ -59,6 +85,11 @@ export default {
   },
   validations: {
     form: {
+      logo: {
+        required,
+        fileType,
+        fileSizeValidation,
+      },
       code: {
         required,
         minLength: minLength(1),
@@ -81,24 +112,35 @@ export default {
     form: {
       code: "",
       name: "",
+      logo: null,
     },
   }),
   methods: {
     submit() {
+      let headers = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
       let url = this.$api + "/admin/companies";
       this.isLoading = true;
       this.alert.show = false;
       this.$v.$touch();
+      let formData = new FormData();
+      formData.append("logo", this.form.logo, this.form.logo.name);
+      formData.append("name", this.form.name);
+      formData.append("code", this.form.code);
       if (this.$v.$invalid) {
         this.isLoading = false;
       } else {
         this.$http
-          .post(url, this.form)
+          .post(url, formData, headers)
           .then((response) => {
             this.$v.$reset();
             this.form = {
               code: "",
               name: "",
+              logo: null,
             };
             this.alert = {
               show: true,
@@ -126,6 +168,14 @@ export default {
     },
   },
   computed: {
+    logoErrors() {
+      const errors = [];
+      if (!this.$v.form.logo.$dirty) return errors;
+      !this.$v.form.logo.required && errors.push("Logo is required");
+      !this.$v.form.logo.fileType && errors.push("Logo file type must be png, jpg, jpeg");
+      !this.$v.form.logo.fileSizeValidation && errors.push("Logo max size is 10MB");
+      return errors;
+    },
     codeErrors() {
       const errors = [];
       if (!this.$v.form.code.$dirty) return errors;
@@ -160,9 +210,11 @@ export default {
     showModal: function () {
       if (!this.showModal) {
         this.$v.$reset();
+        this.alert.show = false;
         this.form = {
           code: "",
           name: "",
+          logo: null,
         };
         this.$emit("close");
       }

@@ -18,24 +18,52 @@
         </v-toolbar>
         <v-container>
           <v-list three-line subheader>
-            <v-subheader><h1>Purchase Order Details</h1></v-subheader>
+            <v-subheader><h1>Purchase Order</h1></v-subheader>
             <v-list-item>
               <v-list-item-content>
+                <!-- <v-content> -->
                 <v-row>
-                  <v-col cols="12" xs="12" sm="12" md="6" lg="6" xl="6">
-                    <v-list-item-subtitle> Date </v-list-item-subtitle>
-                    <v-list-item-title>
-                      {{ new Date(item.created_at).toJSON().slice(0, 10) }}
-                    </v-list-item-title>
+                  <v-col cols="6" xs="6" sm="6" md="3" lg="3" xl="3">
+                    <img
+                      width="100%"
+                      :src="$api + item.company.logo"
+                      alt="Company Logo"
+                    />
                   </v-col>
-                  <v-col cols="12" xs="12" sm="12" md="6" lg="6" xl="6">
-                    <v-list-item-subtitle> Purchase Order Number </v-list-item-subtitle>
-                    <v-list-item-title>{{ item.po_number }}</v-list-item-title>
+                  <v-col
+                    cols="6"
+                    xs="6"
+                    sm="6"
+                    md="3"
+                    lg="3"
+                    xl="3"
+                    offset-md="6"
+                    offset-lg="6"
+                    offset-xl="6"
+                  >
+                    <v-row>
+                      <v-col cols="12">
+                        <v-list-item-subtitle> Date </v-list-item-subtitle>
+                        <v-list-item-title>
+                          {{ new Date(item.created_at).toJSON().slice(0, 10) }}
+                        </v-list-item-title>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="12">
+                        <v-list-item-subtitle>
+                          Purchase Order Number
+                        </v-list-item-subtitle>
+                        <v-list-item-title>{{ item.po_number }}</v-list-item-title>
+                      </v-col>
+                    </v-row>
                   </v-col>
                 </v-row>
+                <!-- </v-content> -->
               </v-list-item-content>
             </v-list-item>
           </v-list>
+          <v-divider></v-divider>
           <v-list three-line subheader>
             <v-list-item>
               <v-list-item-content>
@@ -205,7 +233,7 @@
                   <template v-for="(upload, uploadKey) in uploads">
                     <v-col :key="uploadKey" cols="3">
                       <a
-                        :style="{color: isDarkTheme ? '#ffe800 ' : '#000'}"
+                        :style="{ color: isDarkTheme ? '#ffe800 ' : '#000' }"
                         :href="$api + uploadPath + upload.file"
                         :download="upload.file"
                         target="_blank"
@@ -229,6 +257,7 @@
                       rows="6"
                       counter="350"
                       label="Remarks"
+                      required
                       @input="$v.remark.content.$touch()"
                       @blur="$v.remark.content.$touch()"
                       :error-messages="remarksErrors"
@@ -260,7 +289,7 @@
                       dense
                       block
                     >
-                      Reject &nbsp; <v-icon> mdi-close </v-icon>
+                      Decline &nbsp; <v-icon> mdi-close </v-icon>
                     </v-btn>
                   </v-col>
                 </v-row>
@@ -291,6 +320,44 @@
         </v-container>
       </v-card>
     </template>
+    <v-dialog
+      v-model="showApproveModal"
+      transition="dialog-top-transition"
+      :width="width"
+    >
+      <template>
+        <v-card>
+          <v-toolbar color="primary">Notification</v-toolbar>
+          <v-container>
+            <form @submit.prevent="submit()">
+              <v-row class="text-right">
+                <v-col class="mt-6" cols="12">
+                  <v-select
+                    :items="approvers"
+                    v-model="assignedTo"
+                    outlined
+                    dense
+                    required
+                    @input="$v.assignedTo.$touch()"
+                    @blur="$v.assignedTo.$touch()"
+                    :error-messages="assignedToErrors"
+                    item-text="fullname"
+                    item-value="id"
+                    label="Assign To"
+                  ></v-select>
+                </v-col>
+                <v-col cols="12">
+                  <v-btn class="mb-3 mx-3" type="submit" color="primary"> Submit </v-btn>
+                  <v-btn class="mb-3" color="error" @click="showApproveModal = false">
+                    Close
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </form>
+          </v-container>
+        </v-card>
+      </template>
+    </v-dialog>
     <confirm-box
       :show="confirm.show"
       :message="confirm.message"
@@ -338,13 +405,18 @@ export default {
         maxLength: maxLength(550),
       },
     },
+    assignedTo: {
+      required,
+    },
   },
   data: () => ({
     isLoading: false,
     showModal: false,
+    showApproveModal: false,
     showButtons: false,
     deactivateMessage: "",
     params: { search: "" },
+    assignedTo: "",
     actionTaken: "",
     alert: {
       show: false,
@@ -356,6 +428,7 @@ export default {
     items: [],
     uploads: [],
     remarks: [],
+    approvers: [],
     confirm: {
       message: "",
       show: false,
@@ -365,11 +438,53 @@ export default {
   methods: {
     showConfirm(action) {
       this.actionTaken = action;
-      this.confirm.message = "Are you sure you want to ";
-      this.confirm.message += action + " this Purchase Order ";
-      this.confirm.message += this.item.po_number;
-      this.confirm.message += "?";
-      this.confirm.show = true;
+      if (this.isApprover || action == "reject") {
+        if (action == "reject") {
+          action = "decline";
+        }
+        this.assignedTo = "donotvalidate";
+        this.confirm.message = "Are you sure you want to ";
+        this.confirm.message += action + " this Purchase Order ";
+        this.confirm.message += this.item.po_number;
+        this.confirm.message += "?";
+        this.confirm.show = true;
+      } else {
+        this.$v.assignedTo.$reset();
+        this.getApprovers();
+        this.assignedTo = "";
+        this.showApproveModal = true;
+      }
+    },
+    getApprovers() {
+      this.isLoading = true;
+      let url =
+        this.$api +
+        "/" +
+        this.userType +
+        "/purchase-orders/" +
+        this.item.id +
+        "/approvers";
+      this.$http
+        .get(url)
+        .then((response) => {
+          this.approvers = response.data.response;
+        })
+        .catch((error) => {
+          let msg = "";
+          if (error.response !== undefined) {
+            msg = error.response.data.message;
+          } else {
+            msg = "Something went wrong. Please contact the administrator";
+          }
+          this.alert = {
+            show: true,
+            type: "error",
+            message: msg,
+          };
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
     hotReloadRemarks() {
       this.isLoading = true;
@@ -392,13 +507,15 @@ export default {
             type: "error",
             message: msg,
           };
+        })
+        .finally(() => {
           this.isLoading = false;
         });
     },
     addRemark() {
       this.isLoading = true;
-      this.$v.$touch();
-      if (this.$v.$invalid) {
+      this.$v.remark.$touch();
+      if (this.$v.remark.$invalid) {
         this.isLoading = false;
       } else {
         let url =
@@ -443,36 +560,43 @@ export default {
       let data = {
         action: this.actionTaken,
         remark: this.remark.content,
+        assigned_to: this.assignedTo,
       };
-      this.$http
-        .put(url, data)
-        .then((response) => {
-          this.isLoading = false;
-          this.alert.show = true;
-          this.alert.message = response.data.message;
-          this.showButtons = false;
-          this.remark.content = "";
-          this.$emit("generateTable");
-          this.hotReloadRemarks();
-          this.$v.$reset();
-        })
-        .catch((error) => {
-          let msg = "";
-          if (error.response !== undefined) {
-            msg = error.response.data.message;
-          } else {
-            msg = "Something went wrong. Please contact the administrator";
-          }
-          this.alert = {
-            show: true,
-            type: "error",
-            message: msg,
-          };
-          this.isLoading = false;
-        })
-        .finally(() => {
-          this.isLoading = false;
-        });
+      this.$v.assignedTo.$touch();
+      if (this.$v.assignedTo.$invalid) {
+        this.isLoading = false;
+      } else {
+        this.$http
+          .put(url, data)
+          .then((response) => {
+            this.showApproveModal = false;
+            this.isLoading = false;
+            this.alert.show = true;
+            this.alert.message = response.data.message;
+            this.showButtons = false;
+            this.remark.content = "";
+            this.hotReloadRemarks();
+            this.$v.$reset();
+          })
+          .catch((error) => {
+            let msg = "";
+            if (error.response !== undefined) {
+              msg = error.response.data.message;
+            } else {
+              msg = "Something went wrong. Please contact the administrator";
+            }
+            this.alert = {
+              show: true,
+              type: "error",
+              message: msg,
+            };
+            this.isLoading = false;
+          })
+          .finally(() => {
+            this.$emit("generateTable");
+            this.isLoading = false;
+          });
+      }
     },
   },
   watch: {
@@ -498,6 +622,7 @@ export default {
         this.items = [];
         this.remarks = [];
         this.uploads = [];
+        this.$v.$reset();
         this.$emit("close");
         this.$emit("generateTable");
       }
@@ -510,6 +635,12 @@ export default {
       !this.$v.remark.content.required && errors.push("Remarks is required");
       !this.$v.remark.content.minLength && errors.push("Remarks minimum length is 2");
       !this.$v.remark.content.maxLength && errors.push("Remarks max length is 350");
+      return errors;
+    },
+    assignedToErrors() {
+      const errors = [];
+      if (!this.$v.assignedTo.$dirty) return errors;
+      !this.$v.assignedTo.required && errors.push("Assign to is required");
       return errors;
     },
     isPrepearer: function () {
@@ -527,6 +658,16 @@ export default {
     isDarkTheme: function () {
       return this.$store.getters.isDarkTheme;
     },
+    width() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return "95%";
+        case "sm":
+          return "85%";
+        default:
+          return "500";
+      }
+    },
   },
 };
 </script>
@@ -538,3 +679,4 @@ export default {
   width:10%;
 }
 </style>
+
