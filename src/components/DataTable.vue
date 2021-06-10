@@ -144,7 +144,7 @@
         <span v-if="item.status == 1"> For Review </span>
         <span v-if="item.status == 2"> For Approval </span>
         <span v-if="item.status == 3"> Approved </span>
-        <span v-if="item.status == 4"> Rejected </span>
+        <span v-if="item.status == 4"> Declined </span>
       </template>
 
       <template v-if="hasOrder" v-slot:[`item.order`]="{ item }">
