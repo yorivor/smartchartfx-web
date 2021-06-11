@@ -51,7 +51,7 @@ import {
   decimal,
  } from "vuelidate/lib/validators";
 export default {
-  name: "purchase-order-items-add",
+  name: "purchase-order-upload-add",
   mixins: [validationMixin],
   props: {
     show: {

@@ -63,7 +63,7 @@ import ConfirmBox from "../../ConfirmBox.vue";
 import AlertBox from "../../AlertBox.vue";
 import PurchaseOrderUploadAdd from "./Add.vue";
 export default {
-  name: "purchase-oder-item",
+  name: "purchase-oder-upload",
   components: { DataTable, ConfirmBox, AlertBox, PurchaseOrderUploadAdd},
   props: {
     show: {
