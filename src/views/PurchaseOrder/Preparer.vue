@@ -22,13 +22,29 @@
     <data-table
       ref="purchaseOrders"
       :hasPoStatus="true"
+      :hasUpload="true"
+      @upload="addUpload"
       :hasView="true"
       @view="view"
       :hasEdit="true"
       @edit="edit"
+      :hasAdd="true"
+      @add="addItem"
       :hasDelete="true"
       @delete="deactivate"
       :path="'/preparer/purchase-orders'"
+    />
+    <purchase-order-item
+      :show="showAddItem"
+      @close="showAddItem = false"
+      :item="form"
+      @generate-table="generateTable"
+    />
+    <purchase-order-upload
+      :show="showAddUpload"
+      @close="showAddUpload = false"
+      :item="form"
+      @generate-table="generateTable"
     />
     <purchase-order-view
       :show="showView"
@@ -62,12 +78,16 @@ import DataTable from "../../components/DataTable.vue";
 import PurchaseOrderView from "../../components/PurchaseOrder/View.vue";
 import PurchaseOrderAdd from "../../components/PurchaseOrder/Add.vue";
 import PurchaseOrderEdit from "../../components/PurchaseOrder/Edit.vue";
+import PurchaseOrderItem from "../../components/PurchaseOrder/Item/Index.vue";
+import PurchaseOrderUpload from "../../components/PurchaseOrder/Upload/Index.vue";
 import ConfirmBox from "../../components/ConfirmBox.vue";
 import AlertBox from "../../components/AlertBox.vue";
 export default {
   name: "users",
   components: {
     DataTable,
+    PurchaseOrderItem,
+    PurchaseOrderUpload,
     PurchaseOrderView,
     PurchaseOrderAdd,
     PurchaseOrderEdit,
@@ -79,6 +99,8 @@ export default {
     showView: false,
     showAdd: false,
     showEdit: false,
+    showAddItem: false,
+    showAddUpload: false,
     showDeactivate: false,
     deactivateMessage: "",
     alert: {
@@ -105,6 +127,14 @@ export default {
     view(item) {
       this.form = item;
       this.showView = true;
+    },
+    addItem(item) {
+      this.form = item;
+      this.showAddItem = true;
+    },
+    addUpload(item) {
+      this.form = item;
+      this.showAddUpload = true;
     },
     edit(item) {
       this.form = item;

@@ -15,6 +15,7 @@
       <template
         v-if="
           hasEdit ||
+          hasUpload ||
           hasDelete ||
           hasPrint ||
           hasView ||
@@ -87,6 +88,16 @@
           @click="$emit('edit', item)"
         >
           mdi-pencil
+        </v-icon>
+        <!-- hasUpload -->
+        <v-icon
+          color="secondary"
+          v-if="hasUpload"
+          medium
+          class="mr-2"
+          @click="$emit('upload', item)"
+        >
+          mdi-file-upload
         </v-icon>
         <!-- hasUser -->
         <v-icon
@@ -272,6 +283,11 @@ export default {
       default: false,
     },
     hasEdit: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    hasUpload: {
       type: Boolean,
       required: false,
       default: false,

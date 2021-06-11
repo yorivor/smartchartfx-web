@@ -245,7 +245,7 @@
             </v-list-item>
           </v-list>
           <v-divider></v-divider>
-          <v-list three-line subheader>
+          <v-list v-if="this.userType != 'preparer'" three-line subheader>
             <v-list-item>
               <v-list-item-content>
                 <v-row>
@@ -672,6 +672,9 @@ export default {
 <style scoped>
 .v-list-item__title {
   white-space: normal;
+}
+.img-size {
+  width:10%;
 }
 </style>
 
