@@ -9,7 +9,7 @@
       <v-card>
         <v-toolbar color="primary">
           <v-toolbar-title>
-            <span v-html="'Items for ' + item.company.name"></span>
+            <span v-html="'Upload Documents for ' + item.company.name"></span>
           </v-toolbar-title>
           <v-spacer></v-spacer>
           <v-btn icon @click="showModal = false">
@@ -20,30 +20,23 @@
           <v-row>
             <v-col class="text-right" cols="12">
               <div class="my-3">
-                <v-btn @click="showAdd = true" depressed large color="primary"
-                  >Add Items</v-btn
-                >
+                <v-btn 
+                  @click="showAdd = true" 
+                  depressed large color="primary"
+                >Add Document</v-btn>
               </div>
             </v-col>
           </v-row>
           <data-table
             ref="items"
-            :hasEdit="true"
-            @edit="edit"
             :hasDelete="true"
             @delete="deactivate"
-            :path="'/preparer/purchase-orders/' + item.id + '/items'"
+            :path="'/preparer/purchase-orders/' + item.id + '/uploads'"
           />
-          <purchase-order-item-add
+          <purchase-order-upload-add
             :show="showAdd"
             :purchaseOrdersId="item.id"
             @close="showAdd = false"
-            @generate-table="generateTable"
-          />
-          <purchase-order-item-edit
-            :show="showEdit"
-            :item="form"
-            @close="showEdit = false"
             @generate-table="generateTable"
           />
           <confirm-box
@@ -68,11 +61,10 @@
 import DataTable from "../../DataTable.vue";
 import ConfirmBox from "../../ConfirmBox.vue";
 import AlertBox from "../../AlertBox.vue";
-import PurchaseOrderItemAdd from "./Add.vue";
-import PurchaseOrderItemEdit from "./Edit.vue";
+import PurchaseOrderUploadAdd from "./Add.vue";
 export default {
   name: "purchase-oder-item",
-  components: { DataTable, ConfirmBox, AlertBox, PurchaseOrderItemAdd, PurchaseOrderItemEdit},
+  components: { DataTable, ConfirmBox, AlertBox, PurchaseOrderUploadAdd},
   props: {
     show: {
       type: Boolean,
@@ -84,11 +76,7 @@ export default {
       required: true,
       default: () => ({
         id: "",
-        item_number: "",
-        unit: "",
-        quantity: "",
-        unit_price: "",
-        total: "",
+        file: ""
       }),
     },
   },
@@ -105,12 +93,6 @@ export default {
     },
     form: { 
       id: "", 
-      purchaseOrdersId: "", 
-      item_number: "",
-      unit: "",
-      quantity: "",
-      unit_price: "",
-      total: "",
     },
   }),
   methods: {
@@ -121,14 +103,14 @@ export default {
     deactivate(item) {
       this.usedKey = item.id;
       this.deactivateMessage = "Are you sure you want to delete ";
-      this.deactivateMessage += item.item_no;
+      this.deactivateMessage += item.name;
       this.deactivateMessage += "?";
       this.showDeactivate = true;
     },
     submit() {
       this.isLoading = true;
       let url =
-        this.$api + "/preparer/purchase-orders/" + this.item.id + "/items/" + this.usedKey;
+        this.$api + "/preparer/purchase-orders/" + this.item.id + "/uploads/" + this.usedKey;
       this.$http
         .delete(url)
         .then((response) => {
