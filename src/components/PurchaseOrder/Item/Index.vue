@@ -28,6 +28,8 @@
           </v-row>
           <data-table
             ref="items"
+            :hasEdit="true"
+            @edit="edit"
             :hasDelete="true"
             @delete="deactivate"
             :path="'/preparer/purchase-orders/' + item.id + '/items'"
@@ -36,6 +38,12 @@
             :show="showAdd"
             :purchaseOrdersId="item.id"
             @close="showAdd = false"
+            @generate-table="generateTable"
+          />
+          <purchase-order-edit
+            :show="showEdit"
+            :item="form"
+            @close="showEdit = false"
             @generate-table="generateTable"
           />
           <confirm-box
@@ -61,10 +69,10 @@ import DataTable from "../../DataTable.vue";
 import ConfirmBox from "../../ConfirmBox.vue";
 import AlertBox from "../../AlertBox.vue";
 import PurchaseOrderAdd from "./Add.vue";
-
+import PurchaseOrderEdit from "./Edit.vue";
 export default {
   name: "purchase-oder-item",
-  components: { DataTable, ConfirmBox, AlertBox, PurchaseOrderAdd},
+  components: { DataTable, ConfirmBox, AlertBox, PurchaseOrderAdd, PurchaseOrderEdit},
   props: {
     show: {
       type: Boolean,

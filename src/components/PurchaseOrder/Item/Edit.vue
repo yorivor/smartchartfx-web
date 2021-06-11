@@ -2,7 +2,7 @@
   <v-dialog v-model="showModal" transition="dialog-top-transition" :width="width">
     <template>
       <v-card>
-        <v-toolbar color="primary">Add Item</v-toolbar>
+        <v-toolbar color="primary">Edit Item</v-toolbar>
         <v-container>
           <v-alert v-if="alert.show" cols="12" :type="alert.type">
             <span v-html="alert.message"></span>
@@ -89,10 +89,9 @@ import { validationMixin } from "vuelidate";
 import { 
   required, 
   maxLength,
-  decimal,
- } from "vuelidate/lib/validators";
+  decimal, } from "vuelidate/lib/validators";
 export default {
-  name: "purchase-order-items-add",
+  name: "item-edit",
   mixins: [validationMixin],
   props: {
     show: {
@@ -100,10 +99,19 @@ export default {
       required: true,
       default: false,
     },
-    purchaseOrdersId: {
-      type: Number,
+    item: {
+      type: Object,
       required: true,
-      default: 0,
+      default: () => ({
+        id: "",
+        purchase_order_id: "", 
+        item_number: "",
+        unit: "",
+        description: "",
+        quantity: "",
+        unit_price: "",
+        total: "",
+      }),
     },
   },
   validations: {
@@ -141,6 +149,7 @@ export default {
       type: "error",
     },
     form: {
+      id: "",
       item_number: "",
       unit: "",
       description: "",
@@ -151,7 +160,15 @@ export default {
   }),
   methods: {
     submit() {
-      let url = this.$api + "/preparer/purchase-orders/" + this.purchaseOrdersId + '/items';
+        let url = this.$api + "/preparer/purchase-orders/" + this.item.purchase_order_id + '/items/' + this.item.id;
+      let data = {
+        item_number: this.form.item_number,
+        unit: this.form.unit,
+        description: this.form.description,
+        quantity: this.form.quantity,
+        unit_price: this.form.unit_price,
+        total: this.form.total,
+      };
       this.isLoading = true;
       this.alert.show = false;
       this.$v.$touch();
@@ -159,17 +176,9 @@ export default {
         this.isLoading = false;
       } else {
         this.$http
-          .post(url, this.form)
+          .put(url, data)
           .then((response) => {
             this.$v.$reset();
-            this.form= {
-              item_number: "",
-              unit: "",
-              description: "",
-              quantity: "",
-              unit_price: "",
-              total: "",
-            };
             this.alert = {
               show: true,
               type: "success",
@@ -251,11 +260,23 @@ export default {
   watch: {
     show: function () {
       this.showModal = this.show;
+      if (this.show) {
+        this.form = {
+          id: this.item.id,
+          item_number: this.item.item_no,
+          unit: this.item.unit,
+          description: this.item.description,
+          quantity: this.item.quantity,
+          unit_price: this.item.unit_price,
+          total: this.item.total,
+        };
+      }
     },
     showModal: function () {
       if (!this.showModal) {
         this.$v.$reset();
         this.form = {
+          id: "",
           item_number: "",
           unit: "",
           description: "",
