@@ -245,6 +245,31 @@
             </v-list-item>
           </v-list>
           <v-divider></v-divider>
+          <v-list v-if="this.userType == 'preparer'" three-line subheader>
+            <v-list-item>
+              <v-list-item-content>
+                <form @submit.prevent="update()">
+                  <v-col cols="12" xs="12" sm="6" md="6" lg="4" xl="4">
+                    <v-select
+                      v-model="review.reviewer"
+                      label="Select Reviewer"
+                      :items="reviewers"
+                      item-text="fullname"
+                      item-value="id"
+                      @input="$v.review.reviewer.$touch()"
+                      @blur="$v.review.reviewer.$touch()"
+                      :error-messages="reviewerErrors"
+                      outlined
+                      dense
+                      required
+                    ></v-select>
+                  </v-col>
+                  <v-btn class="my-3 mx-3" type="submit" color="primary"> Submit </v-btn>
+                </form>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+          <v-divider></v-divider>
           <v-list v-if="this.userType != 'preparer'" three-line subheader>
             <v-list-item>
               <v-list-item-content>
@@ -406,6 +431,11 @@ export default {
     assignedTo: {
       required,
     },
+    review: {
+      reviewer: {
+        required,
+      }
+    }
   },
   data: () => ({
     isLoading: false,
@@ -426,12 +456,16 @@ export default {
     items: [],
     uploads: [],
     remarks: [],
+    reviewers: [],
     approvers: [],
     confirm: {
       message: "",
       show: false,
     },
     uploadPath: process.env.VUE_APP_API_UPLOAD_PATH,
+    review: {
+      reviewer: ""
+    }
   }),
   methods: {
     showConfirm(action) {
@@ -483,6 +517,75 @@ export default {
         .finally(() => {
           this.isLoading = false;
         });
+    },
+    getReviewers() {
+      this.isLoading = true;
+      let url =
+        this.$api +
+        "/" +
+        this.userType +
+        "/users/list";
+      this.$http
+        .get(url)
+        .then((response) => {
+          this.reviewers = response.data.response.users;
+        })
+        .catch((error) => {
+          let msg = "";
+          if (error.response !== undefined) {
+            msg = error.response.data.message;
+          } else {
+            msg = "Something went wrong. Please contact the administrator";
+          }
+          this.alert = {
+            show: true,
+            type: "error",
+            message: msg,
+          };
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+    update() {
+      this.isLoading = true;
+      this.$v.review.reviewer.$touch();
+      if (this.$v.review.reviewer.$invalid) {
+        this.isLoading = false;
+      } else {
+        let url =
+          this.$api +
+          "/" +
+          this.userType +
+          "/purchase-orders/" +
+          this.item.id +
+          "/reviewer";
+        this.$http
+          .put(url, this.review)
+          .then((response) => {
+            this.$emit("generateTable");
+            this.$v.$reset();
+            this.isLoading = false;
+            this.alert.show = true;
+            this.alert.message = response.data.message;
+          })
+          .catch((error) => {
+            let msg = "";
+            if (error.response !== undefined) {
+              msg = error.response.data.message;
+            } else {
+              msg = "Something went wrong. Please contact the administrator";
+            }
+            this.alert = {
+              show: true,
+              type: "error",
+              message: msg,
+            };
+          })
+          .finally(() => {
+            this.isLoading = false;
+          });
+      }
     },
     hotReloadRemarks() {
       this.isLoading = true;
@@ -605,6 +708,7 @@ export default {
         this.items = this.item.items;
         this.remarks = this.item.remarks;
         this.uploads = this.item.uploads;
+        this.review.reviewer = this.item.checked_by;
         if (
           (this.item.status == 1 && this.isReviewer) ||
           (this.item.status == 2 && this.isApprover)
@@ -613,6 +717,7 @@ export default {
         } else {
           this.showButtons = false;
         }
+        this.getReviewers();
       }
     },
     showModal: function () {
@@ -639,6 +744,12 @@ export default {
       const errors = [];
       if (!this.$v.assignedTo.$dirty) return errors;
       !this.$v.assignedTo.required && errors.push("Assign to is required");
+      return errors;
+    },
+    reviewerErrors() {
+      const errors = [];
+      if (!this.$v.review.reviewer.$dirty) return errors;
+      !this.$v.review.reviewer.required && errors.push("Reviewer is required");
       return errors;
     },
     isPrepearer: function () {
