@@ -252,7 +252,7 @@
                   <v-col cols="12" xs="12" sm="6" md="6" lg="4" xl="4">
                     <v-select
                       v-model="review.reviewer"
-                      label="Select Reviewer"
+                      label="Assigne Reviewer"
                       :items="reviewers"
                       item-text="fullname"
                       item-value="id"
@@ -717,7 +717,9 @@ export default {
         } else {
           this.showButtons = false;
         }
-        this.getReviewers();
+        if(this.isPrepearer == true) {
+          this.getReviewers();
+        }
       }
     },
     showModal: function () {
