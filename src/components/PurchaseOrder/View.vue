@@ -157,7 +157,7 @@
                       <td v-html="row.quantity"></td>
                       <td v-html="row.unit || 'pcs'"></td>
                       <td class="text-right" v-html="row.unit_price"></td>
-                      <td class="text-right" v-html="row.unit_price"></td>
+                      <td class="text-right" v-html="row.total"></td>
                     </tr>
                   </tbody>
                 </v-simple-table>
@@ -197,11 +197,11 @@
                         </tr>
                         <tr>
                           <td>Tax Rate</td>
-                          <td class="text-right">P {{ item.tax_rate || "" }}</td>
+                          <td class="text-right">{{ item.vendor.vat_rate.rate }}%</td>
                         </tr>
                         <tr>
                           <td>VAT</td>
-                          <td class="text-right">P {{ item.vat_rate }}</td>
+                          <td class="text-right">P{{ item.vat_rate || "" }}</td>
                         </tr>
                         <tr>
                           <td>S & H</td>
@@ -717,7 +717,7 @@ export default {
         } else {
           this.showButtons = false;
         }
-        if(this.isPrepearer == true) {
+        if(this.isPreparer == true) {
           this.getReviewers();
         }
       }
@@ -754,8 +754,8 @@ export default {
       !this.$v.review.reviewer.required && errors.push("Reviewer is required");
       return errors;
     },
-    isPrepearer: function () {
-      return this.$store.getters.isPrepearer;
+    isPreparer: function () {
+      return this.$store.getters.isPreparer;
     },
     isReviewer: function () {
       return this.$store.getters.isReviewer;

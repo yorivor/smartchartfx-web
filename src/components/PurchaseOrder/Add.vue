@@ -146,17 +146,13 @@
                 md="4"
               >
                 <v-text-field
-                    class="text-field"
-                    v-model="form.vat_rate"
-                    label="Vat Rate"
-                    placeholder="0.00"
-                    @input="$v.form.vat_rate.$touch()"
-                    @blur="$v.form.vat_rate.$touch()"
-                    @keyup.enter="submit"
-                    required
-                    outlined
-                    :error-messages="vatRateErrors"
-                  ></v-text-field>
+                  class="text-field"
+                  v-model="vendor.vat_rate"
+                  label="Vat Rate"
+                  required
+                  outlined
+                  disabled
+                ></v-text-field>
               </v-col>
               <v-col
                 cols="4"
@@ -255,10 +251,6 @@ export default {
       shipping_terms: {
         required,
       },
-      vat_rate: {
-        required,
-        decimal,
-      },
       comment: {
         maxLength: maxLength(320)
       }
@@ -285,7 +277,6 @@ export default {
       requisitioner: "",
       payment_terms: "",
       shipping_terms: "",
-      vat_rate: "",
       s_and_h: "",
       others: "",
       comment: "",
@@ -302,6 +293,7 @@ export default {
       this.$http.get(this.$api + "/preparer/vendors/" + this.form.vendor).then((response) => {
         this.showVendorDetails = true;
         this.vendor = response.data.response;
+        this.vendor.vat_rate = response.data.response.vat_rate.rate + "%";
       });
     },
     getCompanies() {
@@ -341,7 +333,6 @@ export default {
               requisitioner: "",
               payment_terms: "",
               shipping_terms: "",
-              vat_rate: "",
               s_and_h: "",
               others: "",
               comment: "",
@@ -349,6 +340,7 @@ export default {
             this.vendor.address = "";
             this.vendor.email = "";
             this.vendor.contact_number = "";
+            this.vendor.vat_rate = "";
             this.showVendorDetails = false;
             this.showCompanyDetails = false;
             this.alert = {
@@ -419,13 +411,6 @@ export default {
       !this.$v.form.shipping_terms.required && errors.push("Shipping Terms is Required");
       return errors;
     },
-    vatRateErrors() {
-      const errors = [];
-      if (!this.$v.form.vat_rate.$dirty) return errors;
-      !this.$v.form.vat_rate.required && errors.push("Vat Rate is required");
-      !this.$v.form.vat_rate.decimal && errors.push("Please input a decimal number");
-      return errors;
-    },
     commentErrors() {
       const errors = [];
       if (!this.$v.form.comment.$dirty) return errors;
@@ -457,7 +442,6 @@ export default {
           requisitioner: "",
           payment_terms: "",
           shipping_terms: "",
-          vat_rate: "",
           s_and_h: "",
           others: "",
           comment: "",
@@ -465,6 +449,7 @@ export default {
         this.vendor.address = "";
         this.vendor.email = "";
         this.vendor.contact_number = "";
+        this.vendor.vat_rate = "";
         this.showVendorDetails = false;
       } else {
         this.getVendors();
