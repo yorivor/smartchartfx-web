@@ -96,7 +96,7 @@
                 :error-messages="withholdingTaxErrors"
               ></v-select>
               <v-text-field
-                v-model="withholding_tax_rate"
+                v-model="form.withholding_tax_rate"
                 label="Withholding Tax Rate"
                 dense
                 outlined
@@ -265,6 +265,7 @@ export default {
       tin_number: "",
       taxpayer_classification: "",
       withholding_tax: "",
+      withholding_tax_rate: "",
       tearms: "",
       bank_account: "",
       bank_number: "",
@@ -272,7 +273,6 @@ export default {
       contact_person: "",
       contact_number: "",
     },
-    withholding_tax_rate: "",
     taxpayerClassifications: [
       { id: 0, name: 'NON-VAT' },
       { id: 1, name: 'VAT' }
@@ -287,7 +287,7 @@ export default {
     },
     getWithholdingTax() {
       this.$http.get(this.$api + "/admin/vendors/" + this.form.withholding_tax + "/withholding-tax").then((response) => {
-        this.withholding_tax_rate = response.data.response.rate + "%";
+        this.form.withholding_tax_rate = response.data.response.rate;
       });
     },
     submit() {
@@ -310,6 +310,7 @@ export default {
               tin_number: "",
               taxpayer_classification: "",
               withholding_tax: "",
+              withholding_tax_rate: "",
               tearms: "",
               bank_account: "",
               bank_number: "",
@@ -454,6 +455,7 @@ export default {
           tin_number: "",
           taxpayer_classification: "",
           withholding_tax: "",
+          withholding_tax_rate: "",
           tearms: "",
           bank_account: "",
           bank_number: "",
