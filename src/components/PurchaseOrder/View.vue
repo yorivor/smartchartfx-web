@@ -193,27 +193,27 @@
                       <tbody>
                         <tr>
                           <td>Subtotal</td>
-                          <td class="text-right">P{{ value.subtotal|| "" }}</td>
+                          <td class="text-right">P {{ item.subtotal || "" }}</td>
                         </tr>
                         <tr>
                           <td>Tax Rate</td>
-                          <td class="text-right">{{ value.tax_rate }}</td>
+                          <td class="text-right">{{ item.vendor.vat_rate.rate }}%</td>
                         </tr>
                         <tr>
                           <td>VAT</td>
-                          <td class="text-right">P{{ value.vat || "" }}</td>
+                          <td class="text-right">P{{ item.vat || "" }}</td>
                         </tr>
                         <tr>
                           <td>S & H</td>
-                          <td class="text-right">P {{ value.s_and_h }}</td>
+                          <td class="text-right">P {{ item.s_and_h }}</td>
                         </tr>
                         <tr>
                           <td>OTHER</td>
-                          <td class="text-right">P {{ value.others }}</td>
+                          <td class="text-right">P {{ item.others }}</td>
                         </tr>
                         <tr>
                           <td>TOTAL</td>
-                          <td class="text-right">P{{ value.total || "" }}</td>
+                          <td class="text-right">P {{ item.total || "" }}</td>
                         </tr>
                       </tbody>
                     </v-simple-table>
@@ -465,14 +465,6 @@ export default {
     uploadPath: process.env.VUE_APP_API_UPLOAD_PATH,
     review: {
       reviewer: ""
-    },
-    value: {
-      subtotal: '',
-      tax_rate: '',
-      vat: '',
-      s_and_h: '',
-      others: '',
-      total: '',
     }
   }),
   methods: {
@@ -537,42 +529,6 @@ export default {
         .get(url)
         .then((response) => {
           this.reviewers = response.data.response.users;
-        })
-        .catch((error) => {
-          let msg = "";
-          if (error.response !== undefined) {
-            msg = error.response.data.message;
-          } else {
-            msg = "Something went wrong. Please contact the administrator";
-          }
-          this.alert = {
-            show: true,
-            type: "error",
-            message: msg,
-          };
-        })
-        .finally(() => {
-          this.isLoading = false;
-        });
-    },
-    getTotal() {
-      this.isLoading = true;
-      let url =
-        this.$api +
-          "/" +
-          this.userType +
-          "/purchase-orders/" +
-          this.item.id +
-          "/total";
-      this.$http
-        .get(url)
-        .then((response) => {
-          this.value.subtotal = response.data.response.data.subtotal;
-          this.value.tax_rate = response.data.response.data.tax_rate;
-          this.value.vat = response.data.response.data.vat;
-          this.value.s_and_h = response.data.response.data.s_and_h;
-          this.value.others = response.data.response.data.others;
-          this.value.total = response.data.response.data.total;
         })
         .catch((error) => {
           let msg = "";
@@ -764,7 +720,6 @@ export default {
         if(this.isPreparer == true) {
           this.getReviewers();
         }
-        this.getTotal();
       }
     },
     showModal: function () {
