@@ -201,7 +201,7 @@
                         </tr>
                         <tr>
                           <td>VAT</td>
-                          <td class="text-right">P{{ item.vat_rate || "" }}</td>
+                          <td class="text-right">P{{ item.vat || "" }}</td>
                         </tr>
                         <tr>
                           <td>S & H</td>

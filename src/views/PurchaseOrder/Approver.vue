@@ -57,7 +57,9 @@ export default {
       id: "",
       created_at: new Date(),
       po_number: "",
-      vendor: { name: "" },
+      vendor: { name: "", vat_rate: {
+        rate: "",
+      } },
       company: { name: "" },
       company_address: { name: "" },
       company_contact: { name: "" },
