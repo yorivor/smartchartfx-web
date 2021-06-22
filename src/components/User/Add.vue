@@ -166,6 +166,7 @@ export default {
     showModal: false,
     showInputPassword: false,
     showInputPasswordConfirm: false,
+    isLoading: false,
     userTypes: [],
     companies: [],
     alert: {
