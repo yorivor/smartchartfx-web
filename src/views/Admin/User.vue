@@ -29,10 +29,11 @@
       @delete="deactivate"
       :hasStatus="true"
       @changeStatus="changeStatus"
-      :hasCompany="true"
-      @company="viewCompany"
       :path="'/admin/users'"
     />
+    
+      <!-- :hasCompany="true"
+      @company="viewCompany" -->
     <user-add :show="showAdd" @close="showAdd = false" @generate-table="generateTable" />
     <user-edit
       :show="showEdit"
