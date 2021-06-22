@@ -1,7 +1,9 @@
 <template>
   <div v-if="isLoading" class="modal">
     <div class="modal-content">
-      <div class="loader"></div>
+      <div class="loader-container">
+        <div class="loader"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -37,14 +39,41 @@ export default {
   width: 80%; /* Could be more or less, depending on screen size */
 }
 
+.loader-container {
+  background-image: url("/images/max.png");
+  background-repeat: no-repeat;
+  background-size: 95px 95px;
+  background-position: center center;
+  z-index: 101; /* Sit on top */
+  width: 130px;
+  height: 130px;
+  margin: auto;
+  animation: zoom 1s infinite;
+}
+
 .loader {
-  border: 16px solid #f3f3f3; /* Light grey */
-  border-top: 16px solid #fced16; /* Blue */
+  border: 16px solid #f3f3f3;
+  border-top: 16px solid #fced16;
+  border-left: 16px solid #00b4ee;
+  border-bottom: 16px solid #fced16;
+  border-right: 16px solid #00b4ee;
   border-radius: 50%;
-  width: 120px;
-  height: 120px;
+  width: 130px;
+  height: 130px;
   animation: spin 2s linear infinite;
   margin: auto;
+}
+
+@keyframes zoom {
+  0% {
+    background-size: 80px 80px;
+  }
+  50% {
+    background-size: 95px 95px;
+  }
+  100% {
+    background-size: 80px 80px;
+  }
 }
 
 @keyframes spin {

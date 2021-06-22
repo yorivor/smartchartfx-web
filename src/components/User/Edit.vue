@@ -30,13 +30,13 @@
                 item-value="id"
                 outlined
                 dense
+                multiple
                 @input="$v.form.user_type_id.$touch()"
                 @blur="$v.form.user_type_id.$touch()"
                 :error-messages="userTypeErrors"
                 required
               ></v-select>
               <v-select
-                v-if="showCompany"
                 v-model="form.company_id"
                 label="Company"
                 :items="companies"
@@ -44,6 +44,7 @@
                 item-value="id"
                 outlined
                 dense
+                multiple
                 @input="$v.form.company_id.$touch()"
                 @blur="$v.form.company_id.$touch()"
                 :error-messages="companyErrors"
@@ -62,9 +63,7 @@
               ></v-text-field>
               <v-row class="text-right">
                 <v-col cols="12">
-                  <v-btn class="my-3 mx-3" type="submit" color="primary">
-                    Submit
-                  </v-btn>
+                  <v-btn class="my-3 mx-3" type="submit" color="primary"> Submit </v-btn>
                   <v-btn class="my-3 mx-3" color="error" @click="$emit('close')">
                     Close
                   </v-btn>
@@ -101,8 +100,8 @@ export default {
       required: true,
       default: () => ({
         id: "",
-        company_id: "",
-        user_type_id: "",
+        company_id: [],
+        user_type_id: [],
         fullname: "",
         username: "",
       }),
@@ -114,9 +113,7 @@ export default {
         required,
       },
       company_id: {
-        required: requiredIf(function () {
-          return this.showCompany;
-        }),
+        required,
       },
       fullname: {
         required,
@@ -138,8 +135,8 @@ export default {
     },
     form: {
       id: "",
-      company_id: "",
-      user_type_id: "",
+      company_id: [],
+      user_type_id: [],
       fullname: "",
       username: "",
     },
@@ -156,7 +153,7 @@ export default {
       let data = {
         fullname: this.form.fullname,
         user_type_id: this.form.user_type_id,
-        company_id: this.showCompany ? this.form.company_id : null,
+        company_id: this.form.company_id,
         update_type: "details",
       };
       this.isLoading = true;
@@ -215,16 +212,6 @@ export default {
       !this.$v.form.fullname.maxLength && errors.push("Full Name max length is 120");
       return errors;
     },
-    showCompany() {
-      let itemObject = this.userTypes.find((x) => x.id == this.form.user_type_id) || {
-        code: "",
-      };
-      if (!["admin", "data"].includes(itemObject.code)) {
-        return true;
-      } else {
-        return false;
-      }
-    },
     width() {
       switch (this.$vuetify.breakpoint.name) {
         case "xs":
@@ -244,8 +231,8 @@ export default {
         this.$v.$reset();
       } else {
         this.form.id = this.item.id;
-        this.form.company_id = this.item.company_id;
-        this.form.user_type_id = this.item.user_type_id;
+        this.form.company_id = this.item.companies.map((x) => x.id);
+        this.form.user_type_id = this.item.types.map((x) => x.id);
         this.form.username = this.item.username;
         this.form.fullname = this.item.fullname;
         this.getDropdowns();
