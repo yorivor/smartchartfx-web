@@ -19,6 +19,8 @@ import PreparerPurchaseOrder from './views/PurchaseOrder/Preparer.vue'
 import ReviewerPurchaseOrder from './views/PurchaseOrder/Reviewer.vue'
 import ApproverPurchaseOrder from './views/PurchaseOrder/Approver.vue'
 
+import PurchaseOrder from './views/Order.vue'
+
 /** Common Imports End Here */
 Vue.use(Router)
 
@@ -62,6 +64,16 @@ let router = new Router({
       name: 'approver-purchase-orders',
       meta: { requiresAuth: true, title: 'Purchase Orders', access: ['approver'] },
       component: ApproverPurchaseOrder
+    },
+    {
+      path: '/purchase-orders',
+      name: 'purchase-orders',
+      meta: {
+        requiresAuth: true,
+        title: 'Purchase Orders',
+        access: ['admin', 'reviewer', 'approver']
+      },
+      component: PurchaseOrder
     },
     {
       path: '/my-account',
@@ -116,7 +128,10 @@ let router = new Router({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (to.meta.access != undefined && !to.meta.access.includes(store.getters.userType)) {
+    if (
+      to.meta.access != undefined &&
+      !to.meta.access.filter(x => store.getters.userType.includes(x))
+    ) {
       next('/unauthorized')
     }
     if (store.getters.isLoggedIn) {

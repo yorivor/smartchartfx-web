@@ -49,10 +49,10 @@
           </v-list-item-content>
         </v-list-item>
 
-        <!-- Admin Purchase Orders -->
+        <!-- Purchase Orders -->
         <v-list-item
-          v-if="isAdmin"
-          :to="{ name: 'admin-purchase-orders' }"
+          v-if="['admin', 'approver', 'reviewer'].filter((x) => userType.includes(x))"
+          :to="{ name: 'purchase-orders' }"
           link
         >
           <v-list-item-icon>
@@ -64,39 +64,7 @@
         </v-list-item>
 
         <!-- Prepearer Purchase Orders -->
-        <v-list-item
-          v-if="isPreparer"
-          :to="{ name: 'preparer-purchase-orders' }"
-          link
-        >
-          <v-list-item-icon>
-            <v-icon>mdi-table-large</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>Purchase Orders</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <!-- Reviewer Purchase Orders -->
-        <v-list-item
-          v-if="isReviewer"
-          :to="{ name: 'reviewer-purchase-orders' }"
-          link
-        >
-          <v-list-item-icon>
-            <v-icon>mdi-table-large</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>Purchase Orders</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <!-- Approver Purchase Orders -->
-        <v-list-item
-          v-if="isApprover"
-          :to="{ name: 'approver-purchase-orders' }"
-          link
-        >
+        <v-list-item v-if="isPreparer" :to="{ name: 'preparer-purchase-orders' }" link>
           <v-list-item-icon>
             <v-icon>mdi-table-large</v-icon>
           </v-list-item-icon>
@@ -178,6 +146,9 @@ export default {
     },
     displayname: function () {
       return this.$store.getters.displayname;
+    },
+    userType: function () {
+      return this.$store.getters.userType;
     },
     isAdmin: function () {
       return this.$store.getters.isAdmin;

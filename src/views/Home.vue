@@ -129,7 +129,6 @@ export default {
             }, 1000);
           })
           .catch((err) => {
-            console.log(err)
             setTimeout(() => {
               let msg = "";
               if (err.response != undefined) {
