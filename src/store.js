@@ -131,10 +131,10 @@ export default new Vuex.Store({
     displayname: state => state.displayname,
     userType: state => state.usertype,
     isDarkTheme: state => state.isDarkTheme == 'yes',
-    isAdmin: state => state.usertype == 'admin',
-    isData: state => state.usertype == 'data',
-    isPreparer: state => state.usertype == 'preparer',
-    isReviewer: state => state.usertype == 'reviewer',
-    isApprover: state => state.usertype == 'approver',
+    isAdmin: state => state.usertype.includes('admin'),
+    isData: state => state.usertype.includes('data'),
+    isPreparer: state => state.usertype.includes('preparer'),
+    isReviewer: state => state.usertype.includes('reviewer'),
+    isApprover: state => state.usertype.includes('approver'),
   }
 })
