@@ -270,7 +270,7 @@
             </v-list-item>
           </v-list>
           <v-divider></v-divider>
-          <v-list v-if="this.userType != 'preparer'" three-line subheader>
+          <v-list three-line subheader>
             <v-list-item>
               <v-list-item-content>
                 <v-row>
@@ -543,7 +543,7 @@ export default {
       if (this.$v.review.reviewer.$invalid) {
         this.isLoading = false;
       } else {
-        let url = this.$api + "/purchase-orders/" + this.item.id + "/reviewer";
+        let url = this.$api + "/preparer/purchase-orders/" + this.item.id + "/reviewer";
         this.$http
           .put(url, this.review)
           .then((response) => {

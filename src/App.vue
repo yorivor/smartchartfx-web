@@ -51,7 +51,7 @@
 
         <!-- Purchase Orders -->
         <v-list-item
-          v-if="['admin', 'approver', 'reviewer'].filter((x) => userType.includes(x))"
+          v-if="isAdmin || isReviewer || isApprover"
           :to="{ name: 'purchase-orders' }"
           link
         >
