@@ -434,8 +434,8 @@ export default {
     review: {
       reviewer: {
         required,
-      }
-    }
+      },
+    },
   },
   data: () => ({
     isLoading: false,
@@ -464,8 +464,8 @@ export default {
     },
     uploadPath: process.env.VUE_APP_API_UPLOAD_PATH,
     review: {
-      reviewer: ""
-    }
+      reviewer: "",
+    },
   }),
   methods: {
     showConfirm(action) {
@@ -489,13 +489,7 @@ export default {
     },
     getApprovers() {
       this.isLoading = true;
-      let url =
-        this.$api +
-        "/" +
-        this.userType +
-        "/purchase-orders/" +
-        this.item.id +
-        "/approvers";
+      let url = this.$api + "/purchase-orders/" + this.item.id + "/approvers";
       this.$http
         .get(url)
         .then((response) => {
@@ -520,11 +514,7 @@ export default {
     },
     getReviewers() {
       this.isLoading = true;
-      let url =
-        this.$api +
-        "/" +
-        this.userType +
-        "/users/list";
+      let url = this.$api + "/" + this.userType + "/users/list";
       this.$http
         .get(url)
         .then((response) => {
@@ -553,13 +543,7 @@ export default {
       if (this.$v.review.reviewer.$invalid) {
         this.isLoading = false;
       } else {
-        let url =
-          this.$api +
-          "/" +
-          this.userType +
-          "/purchase-orders/" +
-          this.item.id +
-          "/reviewer";
+        let url = this.$api + "/purchase-orders/" + this.item.id + "/reviewer";
         this.$http
           .put(url, this.review)
           .then((response) => {
@@ -589,8 +573,7 @@ export default {
     },
     hotReloadRemarks() {
       this.isLoading = true;
-      let url =
-        this.$api + "/" + this.userType + "/purchase-orders/" + this.item.id + "/remarks";
+      let url = this.$api + "/purchase-orders/" + this.item.id + "/remarks";
       this.$http
         .get(url)
         .then((response) => {
@@ -619,13 +602,7 @@ export default {
       if (this.$v.remark.$invalid) {
         this.isLoading = false;
       } else {
-        let url =
-          this.$api +
-          "/" +
-          this.userType +
-          "/purchase-orders/" +
-          this.item.id +
-          "/remarks";
+        let url = this.$api + "/purchase-orders/" + this.item.id + "/remarks";
         this.$http
           .post(url, this.remark)
           .then((response) => {
@@ -657,7 +634,7 @@ export default {
     },
     submit() {
       this.isLoading = true;
-      let url = this.$api + "/" + this.userType + "/purchase-orders/" + this.item.id;
+      let url = this.$api + "/purchase-orders/" + this.item.id;
       let data = {
         action: this.actionTaken,
         remark: this.remark.content,
@@ -699,6 +676,19 @@ export default {
           });
       }
     },
+    async getDetails() {
+      try {
+        let url = this.$api + "/purchase-orders/" + this.item.id;
+        let response = await this.$http.get(url);
+        this.showButtons = response.data.response.isShowButton;
+      } catch (exeception) {
+        this.alert = {
+          show: true,
+          type: "error",
+          message: "Something went wrong. Please contact the administrator",
+        };
+      }
+    },
   },
   watch: {
     show: function () {
@@ -709,15 +699,8 @@ export default {
         this.remarks = this.item.remarks;
         this.uploads = this.item.uploads;
         this.review.reviewer = this.item.checked_by;
-        if (
-          (this.item.status == 1 && this.isReviewer) ||
-          (this.item.status == 2 && this.isApprover)
-        ) {
-          this.showButtons = true;
-        } else {
-          this.showButtons = false;
-        }
-        if(this.isPreparer == true) {
+        this.getDetails();
+        if (this.isPreparer == true) {
           this.getReviewers();
         }
       }
@@ -787,7 +770,6 @@ export default {
   white-space: normal;
 }
 .img-size {
-  width:10%;
+  width: 10%;
 }
 </style>
-
