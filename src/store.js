@@ -10,7 +10,7 @@ export default new Vuex.Store({
     token: localStorage.getItem('token') || '',
     username: localStorage.getItem('username') || '',
     displayname: localStorage.getItem('displayname') || '',
-    usertype: localStorage.getItem('usertype') || '',
+    usertype: localStorage.getItem('usertype') || [],
     isDarkTheme: localStorage.getItem('isDarkTheme') || 'no',
   },
   mutations: {
@@ -21,7 +21,7 @@ export default new Vuex.Store({
       state.status = 'success'
       state.token = datum.token
       state.displayname = datum.fullname
-      state.usertype = datum.type.code
+      state.usertype = datum.types
     },
     auth_error(state) {
       state.status = 'error'
@@ -36,7 +36,7 @@ export default new Vuex.Store({
       state.token = ''
       state.username = ''
       state.displayname = ''
-      state.usertype = ''
+      state.usertype = []
     },
     set_token(state, id) {
       state.token = id.toString()
@@ -64,7 +64,7 @@ export default new Vuex.Store({
           const token = resp.data.response.token
           localStorage.setItem('token', token)
           localStorage.setItem('displayname', resp.data.response.fullname)
-          localStorage.setItem('usertype', resp.data.response.type.code)
+          localStorage.setItem('usertype', resp.data.response.types)
           axios.defaults.headers.common['X-51TALK-SESSION-ID'] = token
           commit('auth_success', resp.data.response)
           resolve(resp)
