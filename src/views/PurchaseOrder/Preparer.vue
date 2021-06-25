@@ -135,11 +135,13 @@ export default {
     },
     status: [
       { id: "", name: 'All' },
+      { id: "0", name: 'Created' },
       { id: 1, name: 'For Review' },
       { id: 2, name: 'For Approval' },
       { id: 3, name: 'Approved' },
       { id: 4, name: 'Reject' },
       { id: 5, name: 'Delivered' },
+      { id: 6, name: 'Cancelled' },
     ],
   }),
   methods: {
