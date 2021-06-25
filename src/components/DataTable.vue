@@ -258,10 +258,12 @@
       </template>
 
       <template v-if="hasPoStatus" v-slot:[`item.status`]="{ item }">
+        <span v-if="item.status == 0"> Created </span>
         <span v-if="item.status == 1"> For Review </span>
         <span v-else-if="item.status == 2"> For Approval </span>
         <span v-else-if="item.status == 3"> Approved </span>
         <span v-else-if="item.status == 4"> Declined </span>
+        <span v-else-if="item.status == 5"> Cancelled </span>
       </template>
 
       <template v-if="hasOrder" v-slot:[`item.order`]="{ item }">

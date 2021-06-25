@@ -12,6 +12,19 @@
           @change="generateTable"
         ></v-text-field>
       </v-col>
+      <v-col class="text-left my-3" xs="6" sm="6" md="3" lg="3" xl="3">
+        <v-select
+          v-model="params.status"
+          label="Select Status"
+          :items="status"
+          item-text="name"
+          item-value="id"
+          outlined
+          dense
+          required
+          @change="generateTable"
+        ></v-select>
+      </v-col>
       <v-spacer></v-spacer>
       <v-col class="text-right" cols="6">
         <v-btn class="my-3" @click="showAdd = true" depressed large color="primary">
@@ -108,7 +121,7 @@ export default {
       title: "Notification",
       message: "Sample alert",
     },
-    params: { search: "" },
+    params: { search: "", status: "" },
     form: {
       id: "",
       created_at: new Date(),
@@ -120,6 +133,16 @@ export default {
       company_address: { name: "" },
       company_contact: { name: "" },
     },
+    status: [
+      { id: "", name: 'All' },
+      { id: "0", name: 'Created' },
+      { id: 1, name: 'For Review' },
+      { id: 2, name: 'For Approval' },
+      { id: 3, name: 'Approved' },
+      { id: 4, name: 'Reject' },
+      { id: 5, name: 'Delivered' },
+      { id: 6, name: 'Cancelled' },
+    ],
   }),
   methods: {
     generateTable() {
