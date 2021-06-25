@@ -121,11 +121,21 @@
             mdi-lock-alert
           </v-icon>
           <!-- hasDelete -->
-          <v-icon color="error" v-if="hasDelete && item.status == 0" medium @click="$emit('delete', item)">
+          <v-icon
+            color="error"
+            v-if="hasDelete && item.status == 0"
+            medium
+            @click="$emit('delete', item)"
+          >
             mdi-delete
           </v-icon>
           <!-- hasAdd -->
-          <v-icon color="secondary" v-if="hasAdd && item.status == 0" medium @click="$emit('add', item)">
+          <v-icon
+            color="secondary"
+            v-if="hasAdd && item.status == 0"
+            medium
+            @click="$emit('add', item)"
+          >
             mdi-plus
           </v-icon>
         </div>
