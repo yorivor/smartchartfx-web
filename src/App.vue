@@ -72,6 +72,16 @@
             <v-list-item-title>Purchase Orders</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+
+        <!-- Data Purchase Orders -->
+        <v-list-item v-if="isData" :to="{ name: 'preparer-purchase-orders' }" link>
+          <v-list-item-icon>
+            <v-icon>mdi-table-large</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Purchase Orders</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <!-- Verdors -->
         <v-list-item v-if="isAdmin" :to="{ name: 'vendors' }" link>
           <v-list-item-icon>
