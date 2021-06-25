@@ -273,7 +273,7 @@
           <v-list three-line subheader>
             <v-list-item>
               <v-list-item-content>
-                <v-row>
+                <v-row v-if="!this.isData">
                   <v-col cols="12" xs="12" sm="6" md="6" lg="4" xl="4">
                     <v-textarea
                       v-model="remark.content"
@@ -776,6 +776,9 @@ export default {
     },
     isApprover: function () {
       return this.$store.getters.isApprover;
+    },
+    isData: function () {
+      return this.$store.getters.isData;
     },
     userType: function () {
       return this.$store.getters.userType;
