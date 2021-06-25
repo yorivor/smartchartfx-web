@@ -71,7 +71,7 @@ let router = new Router({
       meta: {
         requiresAuth: true,
         title: 'Purchase Orders',
-        access: ['admin', 'reviewer', 'approver']
+        access: ['admin', 'reviewer', 'approver', 'data']
       },
       component: PurchaseOrder
     },
