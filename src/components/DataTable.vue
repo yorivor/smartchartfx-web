@@ -263,6 +263,7 @@
         <span v-else-if="item.status == 2"> For Approval </span>
         <span v-else-if="item.status == 3"> Approved </span>
         <span v-else-if="item.status == 4"> Declined </span>
+        <span v-else-if="item.status == 5"> Cancelled </span>
       </template>
 
       <template v-if="hasOrder" v-slot:[`item.order`]="{ item }">
