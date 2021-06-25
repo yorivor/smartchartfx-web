@@ -121,11 +121,21 @@
             mdi-lock-alert
           </v-icon>
           <!-- hasDelete -->
-          <v-icon color="error" v-if="hasDelete && item.status == 0" medium @click="$emit('delete', item)">
+          <v-icon
+            color="error"
+            v-if="hasDelete && item.status == 0"
+            medium
+            @click="$emit('delete', item)"
+          >
             mdi-delete
           </v-icon>
           <!-- hasAdd -->
-          <v-icon color="secondary" v-if="hasAdd && item.status == 0" medium @click="$emit('add', item)">
+          <v-icon
+            color="secondary"
+            v-if="hasAdd && item.status == 0"
+            medium
+            @click="$emit('add', item)"
+          >
             mdi-plus
           </v-icon>
         </div>
@@ -263,7 +273,8 @@
         <span v-else-if="item.status == 2"> For Approval </span>
         <span v-else-if="item.status == 3"> Approved </span>
         <span v-else-if="item.status == 4"> Declined </span>
-        <span v-else-if="item.status == 5"> Cancelled </span>
+        <span v-else-if="item.status == 5"> Received </span>
+        <span v-else-if="item.status == 6"> Cancelled </span>
       </template>
 
       <template v-if="hasOrder" v-slot:[`item.order`]="{ item }">

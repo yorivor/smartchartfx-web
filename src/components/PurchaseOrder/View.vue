@@ -314,6 +314,16 @@
                     >
                       Decline &nbsp; <v-icon> mdi-close </v-icon>
                     </v-btn>
+                    <v-btn
+                      v-if="showCancelButton"
+                      class="mb-3"
+                      @click="showConfirm('cancel')"
+                      color="error"
+                      dense
+                      block
+                    >
+                      Cancel &nbsp; <v-icon> mdi-close </v-icon>
+                    </v-btn>
                   </v-col>
                 </v-row>
                 <template v-for="(remark, remarkKey) in remarks">
@@ -441,6 +451,7 @@ export default {
     isLoading: false,
     showModal: false,
     showApproveModal: false,
+    showCancelButton: false,
     showButtons: false,
     deactivateMessage: "",
     params: { search: "" },
@@ -468,23 +479,41 @@ export default {
     },
   }),
   methods: {
+    showConfirmBox(action) {
+      this.assignedTo = "donotvalidate";
+      this.confirm.message = "Are you sure you want to ";
+      this.confirm.message += action + " this Purchase Order ";
+      this.confirm.message += this.item.po_number;
+      this.confirm.message += "?";
+      this.confirm.show = true;
+    },
     showConfirm(action) {
       this.actionTaken = action;
-      if (this.isApprover || action == "reject") {
-        if (action == "reject") {
-          action = "decline";
-        }
-        this.assignedTo = "donotvalidate";
-        this.confirm.message = "Are you sure you want to ";
-        this.confirm.message += action + " this Purchase Order ";
-        this.confirm.message += this.item.po_number;
-        this.confirm.message += "?";
-        this.confirm.show = true;
-      } else {
-        this.$v.assignedTo.$reset();
-        this.getApprovers();
-        this.assignedTo = "";
-        this.showApproveModal = true;
+      if (action == "reject") {
+        action = "decline";
+      }
+      switch (action) {
+        case "decline":
+        case "cancel":
+          this.showConfirmBox(action);
+          break;
+        case "approve":
+          if (this.item.status == 1) {
+            this.$v.assignedTo.$reset();
+            this.getApprovers();
+            this.assignedTo = "";
+            this.showApproveModal = true;
+          } else {
+            this.showConfirmBox(action);
+          }
+          break;
+        default:
+          this.alert = {
+            show: true,
+            type: "error",
+            message: "Something Went Wrong! Please Contact the Administrator",
+          };
+          break;
       }
     },
     getApprovers() {
@@ -652,6 +681,7 @@ export default {
             this.alert.show = true;
             this.alert.message = response.data.message;
             this.showButtons = false;
+            this.showCancelButton = false;
             this.remark.content = "";
             this.hotReloadRemarks();
             this.$v.$reset();
@@ -681,6 +711,7 @@ export default {
         let url = this.$api + "/purchase-orders/" + this.item.id;
         let response = await this.$http.get(url);
         this.showButtons = response.data.response.isShowButton;
+        this.showCancelButton = response.data.response.showCancelButton;
       } catch (exeception) {
         this.alert = {
           show: true,
