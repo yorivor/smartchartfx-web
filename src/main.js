@@ -4,22 +4,7 @@ import router from './router'
 import store from './store'
 import Axios from 'axios'
 
-import VueHtmlToPaper from 'vue-html-to-paper';
-const options = {
-  name: '_blank',
-  specs: [
-    'fullscreen=yes',
-    'titlebar=yes',
-    'scrollbars=yes'
-  ],
-  styles: [
-    "/printer.css"
-  ]
-}
-
 import "@/assets/main.scss";
-
-Vue.use(VueHtmlToPaper, options);
 
 import vuetify from './plugins/vuetify';
 import 'roboto-fontface/css/roboto/roboto-fontface.css'

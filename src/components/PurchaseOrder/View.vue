@@ -347,6 +347,19 @@
                   >
                   </v-divider>
                 </template>
+                <v-row>
+                  <v-col cols="12" xs="12" sm="6" md="4" lg="3" xl="3">
+                    <v-btn
+                      class="mb-3"
+                      @click="generatePdf"
+                      color="primary"
+                      dense
+                      block
+                    >
+                      Download PDF &nbsp; <v-icon> mdi-file-download </v-icon>
+                    </v-btn>
+                  </v-col>
+                </v-row>
               </v-list-item-content>
             </v-list-item>
           </v-list>
@@ -479,6 +492,9 @@ export default {
     },
   }),
   methods: {
+    generateReport () {
+      this.$refs.html2Pdf.generatePdf()
+    },
     showConfirmBox(action) {
       this.assignedTo = "donotvalidate";
       this.confirm.message = "Are you sure you want to ";
@@ -719,6 +735,32 @@ export default {
           message: "Something went wrong. Please contact the administrator",
         };
       }
+    },
+    generatePdf() {
+      this.isLoading = true;
+      let url = this.$api + "/purchase-orders/" + this.item.id + "/download";
+      this.$http
+        .get(url)
+        .then((response) => {
+          this.link = response.data.response;
+          window.open(this.$api + '/' + this.link, '_blank');
+        })
+        .catch((error) => {
+          let msg = "";
+          if (error.response !== undefined) {
+            msg = error.response.data.message;
+          } else {
+            msg = "Something went wrong. Please contact the administrator";
+          }
+          this.alert = {
+            show: true,
+            type: "error",
+            message: msg,
+          };
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
   },
   watch: {
