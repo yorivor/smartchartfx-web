@@ -60,7 +60,6 @@ export default {
   },
   data: () => ({
     showView: false,
-    params: { search: "" },
     alert: {
       show: false,
       title: "Notification",
