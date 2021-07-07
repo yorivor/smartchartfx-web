@@ -161,7 +161,7 @@
                 <v-text-field
                     class="text-field"
                     v-model="form.s_and_h"
-                    label="S&H"
+                    label="Shipping and Handling Fee"
                     outlined
                   ></v-text-field>
               </v-col>
@@ -172,7 +172,7 @@
                 <v-text-field
                     class="text-field"
                     v-model="form.others"
-                    label="Others"
+                    label="Other fees"
                     outlined
                   ></v-text-field>
               </v-col>
@@ -189,7 +189,7 @@
                   @blur="$v.form.comment.$touch()"
                   @keyup.enter="submit"
                   counter="320"
-                  label="Others"
+                  label="Other Comments or Special Instructions"
                   outlined
                   :error-messages="commentErrors"
                 ></v-textarea>
@@ -348,7 +348,7 @@ export default {
               message: response.data.message,
             };
             this.isLoading = false;
-            this.$emit("generate-table");
+            this.$emit("generateTable");
           })
           .catch((error) => {
             let msg = "";

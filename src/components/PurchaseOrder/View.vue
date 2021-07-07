@@ -245,7 +245,7 @@
             </v-list-item>
           </v-list>
           <v-divider></v-divider>
-          <v-list v-if="this.userType == 'preparer'" three-line subheader>
+          <v-list v-if="this.isPreparer == true" three-line subheader>
             <v-list-item>
               <v-list-item-content>
                 <form @submit.prevent="update()">
@@ -273,7 +273,7 @@
           <v-list three-line subheader>
             <v-list-item>
               <v-list-item-content>
-                <v-row v-if="!this.isData">
+                <v-row v-if="this.isPreparer == true || this.isReviewer == true || this.isApprover == true">
                   <v-col cols="12" xs="12" sm="6" md="6" lg="4" xl="4">
                     <v-textarea
                       v-model="remark.content"
@@ -559,7 +559,7 @@ export default {
     },
     getReviewers() {
       this.isLoading = true;
-      let url = this.$api + "/" + this.userType + "/users/list";
+      let url = this.$api + "/preparer/users/list";
       this.$http
         .get(url)
         .then((response) => {
