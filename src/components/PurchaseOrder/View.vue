@@ -349,13 +349,7 @@
                 </template>
                 <v-row>
                   <v-col cols="12" xs="12" sm="6" md="4" lg="3" xl="3">
-                    <v-btn
-                      class="mb-3"
-                      @click="generatePdf"
-                      color="primary"
-                      dense
-                      block
-                    >
+                    <v-btn class="mb-3" @click="generatePdf" color="primary" dense block>
                       Download PDF &nbsp; <v-icon> mdi-file-download </v-icon>
                     </v-btn>
                   </v-col>
@@ -492,8 +486,8 @@ export default {
     },
   }),
   methods: {
-    generateReport () {
-      this.$refs.html2Pdf.generatePdf()
+    generateReport() {
+      this.$refs.html2Pdf.generatePdf();
     },
     showConfirmBox(action) {
       this.assignedTo = "donotvalidate";
@@ -736,16 +730,46 @@ export default {
         };
       }
     },
+    download(filename) {
+      this.$http.get(filename, { responseType: "arraybuffer" }).then((response) => {
+        const url = window.URL.createObjectURL(
+          new Blob([response.data], { type: response.data.type })
+        );
+        const link = document.createElement("a");
+        const contentDisposition = response.headers["content-disposition"];
+
+        let fileName = "unknown";
+        if (contentDisposition) {
+          let fileNameMatch = contentDisposition.match(/filename="(.+)"/);
+          if (!fileNameMatch) {
+            fileNameMatch = contentDisposition.match(/filename=(.+)/);
+            if (fileNameMatch.length === 2) {
+              fileName = fileNameMatch[1];
+            }
+          } else if (fileNameMatch.length === 2) {
+            fileName = fileNameMatch[1];
+          }
+        }
+        link.href = url;
+        link.setAttribute("download", fileName);
+        document.body.appendChild(link);
+
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
+      });
+    },
     generatePdf() {
       this.isLoading = true;
       let url = this.$api + "/purchase-orders/" + this.item.id + "/download";
       this.$http
         .get(url)
         .then((response) => {
-          this.link = response.data.response;
-          window.open(this.$api + '/' + this.link, '_blank');
+          let filename = this.$api + "/" + response.data.response;
+          this.download(filename);
         })
         .catch((error) => {
+          console.log(error);
           let msg = "";
           if (error.response !== undefined) {
             msg = error.response.data.message;
