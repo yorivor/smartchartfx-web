@@ -247,7 +247,7 @@
           <v-divider></v-divider>
           <v-list v-if="this.isPreparer == true" three-line subheader>
             <v-list-item>
-              <v-list-item-content v-if="this.item.checked_by == 0">
+              <v-list-item-content v-if="this.item.checked_by == 0 || this.item.status == 4">
                 <form @submit.prevent="update()">
                   <v-col cols="12" xs="12" sm="6" md="6" lg="4" xl="4">
                     <v-select
