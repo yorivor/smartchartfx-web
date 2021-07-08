@@ -170,6 +170,7 @@ export default {
     showModal: function () {
       if (!this.showModal) {
         this.$emit("close");
+        this.$emit("generate-table");
       }
     },
   },

@@ -263,6 +263,7 @@ export default {
           unit_price: "",
           total: "",
         };
+        this.items = [];
         this.$emit("close");
       }
     },

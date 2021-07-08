@@ -103,13 +103,13 @@
                 disabled
               ></v-text-field>
               <v-text-field
-                v-model="form.tearms"
-                label="Tearms"
+                v-model="form.terms"
+                label="Terms"
                 dense
                 outlined
-                @input="$v.form.tearms.$touch()"
-                @blur="$v.form.tearms.$touch()"
-                :error-messages="tearmsErrors"
+                @input="$v.form.terms.$touch()"
+                @blur="$v.form.terms.$touch()"
+                :error-messages="termsErrors"
                 required
               ></v-text-field>
               <v-text-field
@@ -227,7 +227,7 @@ export default {
       withholding_tax: {
         required
       },
-      tearms: {
+      terms: {
         required
       },
       bank_account: {
@@ -266,7 +266,7 @@ export default {
       taxpayer_classification: "",
       withholding_tax: "",
       withholding_tax_rate: "",
-      tearms: "",
+      terms: "",
       bank_account: "",
       bank_number: "",
       email: "",
@@ -311,7 +311,7 @@ export default {
               taxpayer_classification: "",
               withholding_tax: "",
               withholding_tax_rate: "",
-              tearms: "",
+              terms: "",
               bank_account: "",
               bank_number: "",
               email: "",
@@ -391,10 +391,10 @@ export default {
       !this.$v.form.withholding_tax.required && errors.push("Select Withholding Tax Basic and Rate");
       return errors;
     },
-    tearmsErrors() {
+    termsErrors() {
       const errors = [];
-      if (!this.$v.form.tearms.$dirty) return errors;
-      !this.$v.form.tearms.required && errors.push("Tearms is required");
+      if (!this.$v.form.terms.$dirty) return errors;
+      !this.$v.form.terms.required && errors.push("Terms is required");
       return errors;
     },
     bankAccountErrors() {
@@ -456,7 +456,7 @@ export default {
           taxpayer_classification: "",
           withholding_tax: "",
           withholding_tax_rate: "",
-          tearms: "",
+          terms: "",
           bank_account: "",
           bank_number: "",
           email: "",
