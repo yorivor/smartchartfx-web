@@ -30,7 +30,7 @@
           <!-- hasAdd -->
           <v-icon
             color="secondary"
-            v-if="hasAdd && item.status == 0"
+            v-if="hasAdd && item.status == 0 || item.status == 4"
             medium
             @click="$emit('add', item)"
           >
@@ -92,7 +92,7 @@
           <!-- hasEdit -->
           <v-icon
             color="secondary"
-            v-if="hasEdit && item.status == 0"
+            v-if="hasEdit && item.status == 0 || item.status == 4"
             medium
             class="mr-2"
             @click="$emit('edit', item)"
@@ -102,7 +102,7 @@
           <!-- hasUpload -->
           <v-icon
             color="secondary"
-            v-if="hasUpload && item.status == 0"
+            v-if="hasUpload && item.status == 0 || item.status == 4"
             medium
             class="mr-2"
             @click="$emit('upload', item)"
@@ -132,7 +132,7 @@
           <!-- hasDelete -->
           <v-icon
             color="error"
-            v-if="hasDelete && item.status == 0"
+            v-if="hasDelete && item.status == 0 || item.status == 4"
             medium
             @click="$emit('delete', item)"
           >
