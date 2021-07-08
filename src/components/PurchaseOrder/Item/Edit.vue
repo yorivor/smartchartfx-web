@@ -60,16 +60,6 @@
               :error-messages="unitPriceErrors"
               required
             ></v-text-field>
-            <v-text-field
-              v-model="form.total"
-              label="Total"
-              dense
-              outlined
-              @input="$v.form.total.$touch()"
-              @blur="$v.form.total.$touch()"
-              :error-messages="totalErrors"
-              required
-            ></v-text-field>
             <v-row class="text-right">
               <v-col cols="12">
                 <v-btn class="my-3 mx-3" type="submit" color="primary"> Submit </v-btn>
@@ -110,7 +100,6 @@ export default {
         description: "",
         quantity: "",
         unit_price: "",
-        total: "",
       }),
     },
   },
@@ -135,10 +124,6 @@ export default {
         required,
         decimal
       },
-      total: {
-        required,
-        decimal
-      },
     },
   },
   data: () => ({
@@ -155,7 +140,6 @@ export default {
       description: "",
       quantity: "",
       unit_price: "",
-      total: "",
     },
   }),
   methods: {
@@ -167,7 +151,7 @@ export default {
         description: this.form.description,
         quantity: this.form.quantity,
         unit_price: this.form.unit_price,
-        total: this.form.total,
+        
       };
       this.isLoading = true;
       this.alert.show = false;
@@ -239,13 +223,6 @@ export default {
       !this.$v.form.unit_price.decimal && errors.push("Unit Price must be Numeric or Decimal");
       return errors;
     },
-    totalErrors() {
-      const errors = [];
-      if (!this.$v.form.total.$dirty) return errors;
-      !this.$v.form.total.required && errors.push("Total is required");
-      !this.$v.form.total.decimal && errors.push("Total must be Numeric or Decimal");
-      return errors;
-    },
     width() {
       switch (this.$vuetify.breakpoint.name) {
         case "xs":
@@ -268,12 +245,12 @@ export default {
           description: this.item.description,
           quantity: this.item.quantity,
           unit_price: this.item.unit_price,
-          total: this.item.total,
         };
       }
     },
     showModal: function () {
       if (!this.showModal) {
+        this.alert.show = false;
         this.$v.$reset();
         this.form = {
           id: "",
@@ -282,7 +259,6 @@ export default {
           description: "",
           quantity: "",
           unit_price: "",
-          total: "",
         };
         this.$emit("close");
       }

@@ -60,16 +60,6 @@
               :error-messages="unitPriceErrors"
               required
             ></v-text-field>
-            <v-text-field
-              v-model="form.total"
-              label="Total"
-              dense
-              outlined
-              @input="$v.form.total.$touch()"
-              @blur="$v.form.total.$touch()"
-              :error-messages="totalErrors"
-              required
-            ></v-text-field>
             <v-row class="text-right">
               <v-col cols="12">
                 <v-btn class="my-3 mx-3" type="submit" color="primary"> Submit </v-btn>
@@ -127,10 +117,6 @@ export default {
         required,
         decimal
       },
-      total: {
-        required,
-        decimal
-      },
     },
   },
   data: () => ({
@@ -146,7 +132,6 @@ export default {
       description: "",
       quantity: "",
       unit_price: "",
-      total: "",
     },
   }),
   methods: {
@@ -168,7 +153,6 @@ export default {
               description: "",
               quantity: "",
               unit_price: "",
-              total: "",
             };
             this.alert = {
               show: true,
@@ -230,13 +214,6 @@ export default {
       !this.$v.form.unit_price.decimal && errors.push("Unit Price must be Numeric or Decimal");
       return errors;
     },
-    totalErrors() {
-      const errors = [];
-      if (!this.$v.form.total.$dirty) return errors;
-      !this.$v.form.total.required && errors.push("Total is required");
-      !this.$v.form.total.decimal && errors.push("Total must be Numeric or Decimal");
-      return errors;
-    },
     width() {
       switch (this.$vuetify.breakpoint.name) {
         case "xs":
@@ -254,6 +231,7 @@ export default {
     },
     showModal: function () {
       if (!this.showModal) {
+        this.alert.show = false;
         this.$v.$reset();
         this.form = {
           item_number: "",
@@ -261,7 +239,6 @@ export default {
           description: "",
           quantity: "",
           unit_price: "",
-          total: "",
         };
         this.items = [];
         this.$emit("close");

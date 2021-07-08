@@ -103,13 +103,13 @@
                 disabled
               ></v-text-field>
               <v-text-field
-                v-model="form.tearms"
-                label="Tearms"
+                v-model="form.terms"
+                label="terms"
                 dense
                 outlined
-                @input="$v.form.tearms.$touch()"
-                @blur="$v.form.tearms.$touch()"
-                :error-messages="tearmsErrors"
+                @input="$v.form.terms.$touch()"
+                @blur="$v.form.terms.$touch()"
+                :error-messages="termsErrors"
                 required
               ></v-text-field>
               <v-text-field
@@ -205,7 +205,7 @@ export default {
         taxpayer_classification: "",
         withholding_tax: "",
         withholding_tax_rate: "",
-        tearms: "",
+        terms: "",
         bank_account: "",
         bank_number: "",
         email: "",
@@ -242,7 +242,7 @@ export default {
       withholding_tax: {
         required
       },
-      tearms: {
+      terms: {
         required
       },
       bank_account: {
@@ -281,7 +281,7 @@ export default {
       taxpayer_classification: "",
       withholding_tax: "",
       withholding_tax_rate: "",
-      tearms: "",
+      terms: "",
       bank_account: "",
       bank_number: "",
       email: "",
@@ -316,7 +316,7 @@ export default {
         taxpayer_classification: this.form.taxpayer_classification,
         withholding_tax: this.form.withholding_tax,
         withholding_tax_rate: this.form.withholding_tax_rate,
-        tearms: this.form.tearms,
+        terms: this.form.terms,
         bank_account: this.form.bank_account,
         bank_number: this.form.bank_number,
         email: this.form.email,
@@ -406,10 +406,10 @@ export default {
       !this.$v.form.withholding_tax.required && errors.push("Select Withholding Tax Basic and Rate");
       return errors;
     },
-    tearmsErrors() {
+    termsErrors() {
       const errors = [];
-      if (!this.$v.form.tearms.$dirty) return errors;
-      !this.$v.form.tearms.required && errors.push("Tearms is required");
+      if (!this.$v.form.terms.$dirty) return errors;
+      !this.$v.form.terms.required && errors.push("Terms is required");
       return errors;
     },
     bankAccountErrors() {
@@ -472,7 +472,7 @@ export default {
         this.form.taxpayer_classification = this.item.taxpayer_classification;
         this.form.withholding_tax = this.item.withholding_tax_id;
         this.form.withholding_tax_rate = this.item.withholding_tax_rate;
-        this.form.tearms = this.item.tearms;
+        this.form.terms = this.item.terms;
         this.form.bank_account = this.item.bank_account;
         this.form.bank_number = this.item.bank_number;
         this.form.email = this.item.email;
