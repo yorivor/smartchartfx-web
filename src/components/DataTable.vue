@@ -27,6 +27,15 @@
       >
         <div v-if="hasPoStatus">
           <v-icon> </v-icon>
+          <!-- hasAdd -->
+          <v-icon
+            color="secondary"
+            v-if="hasAdd && item.status == 0"
+            medium
+            @click="$emit('add', item)"
+          >
+            mdi-plus
+          </v-icon>
           <!-- hasAddress -->
           <v-icon
             color="secondary"
@@ -128,15 +137,6 @@
             @click="$emit('delete', item)"
           >
             mdi-delete
-          </v-icon>
-          <!-- hasAdd -->
-          <v-icon
-            color="secondary"
-            v-if="hasAdd && item.status == 0"
-            medium
-            @click="$emit('add', item)"
-          >
-            mdi-plus
           </v-icon>
         </div>
         <div v-else>

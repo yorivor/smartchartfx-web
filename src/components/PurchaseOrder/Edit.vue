@@ -348,7 +348,7 @@ export default {
               message: response.data.message,
             };
             this.isLoading = false;
-            this.$emit("generateTable");
+            this.$emit("generate-table");
           })
           .catch((error) => {
             let msg = "";
@@ -433,6 +433,7 @@ export default {
       if (!this.show) {
         this.alert.show = false;
         this.$v.$reset();
+        this.$emit("generate-table");
       } else {
         this.form.id = this.item.id;
         this.form.company = this.item.company_id;

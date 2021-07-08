@@ -185,7 +185,7 @@ export default {
               message: response.data.message,
             };
             this.isLoading = false;
-            this.$emit("generateTable");
+            this.$emit("generate-table");
           })
           .catch((error) => {
             let msg = "";

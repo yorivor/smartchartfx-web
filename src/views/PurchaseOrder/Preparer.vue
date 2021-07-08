@@ -132,6 +132,7 @@ export default {
       company: { name: "" },
       company_address: { name: "" },
       company_contact: { name: "" },
+      reviewer: { fullname: "" },
     },
     status: [
       { id: "", name: 'All' },

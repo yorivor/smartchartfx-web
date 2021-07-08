@@ -204,15 +204,15 @@
                           <td class="text-right">P{{ item.vat || "" }}</td>
                         </tr>
                         <tr>
-                          <td>S & H</td>
+                          <td>Shipping and Handling Fee</td>
                           <td class="text-right">P {{ item.s_and_h }}</td>
                         </tr>
                         <tr>
-                          <td>OTHER</td>
+                          <td>Other Fees</td>
                           <td class="text-right">P {{ item.others }}</td>
                         </tr>
                         <tr>
-                          <td>TOTAL</td>
+                          <td>total</td>
                           <td class="text-right">P {{ item.total || "" }}</td>
                         </tr>
                       </tbody>
@@ -247,7 +247,7 @@
           <v-divider></v-divider>
           <v-list v-if="this.isPreparer == true" three-line subheader>
             <v-list-item>
-              <v-list-item-content>
+              <v-list-item-content v-if="this.item.checked_by == 0">
                 <form @submit.prevent="update()">
                   <v-col cols="12" xs="12" sm="6" md="6" lg="4" xl="4">
                     <v-select
@@ -471,6 +471,7 @@ export default {
     },
     form: { id: "", company_id: "", code: "", name: "" },
     remark: { content: "" },
+    reviewer: { fullname: "" },
     items: [],
     uploads: [],
     remarks: [],
@@ -553,7 +554,7 @@ export default {
     },
     getReviewers() {
       this.isLoading = true;
-      let url = this.$api + "/preparer/users/list";
+      let url = this.$api + "/preparer/users/" + this.item.id + "/list";
       this.$http
         .get(url)
         .then((response) => {
@@ -586,11 +587,13 @@ export default {
         this.$http
           .put(url, this.review)
           .then((response) => {
-            this.$emit("generateTable");
             this.$v.$reset();
             this.isLoading = false;
             this.alert.show = true;
             this.alert.message = response.data.message;
+            this.checked_by = response.data.message.checked_by;
+            this.hotReloadRemarks();
+            this.showModal = false;
           })
           .catch((error) => {
             let msg = "";
@@ -695,6 +698,7 @@ export default {
             this.remark.content = "";
             this.hotReloadRemarks();
             this.$v.$reset();
+            this.showModal = false;
           })
           .catch((error) => {
             let msg = "";
@@ -809,7 +813,7 @@ export default {
         this.uploads = [];
         this.$v.$reset();
         this.$emit("close");
-        this.$emit("generateTable");
+        this.$emit("generate-table");
       }
     },
   },

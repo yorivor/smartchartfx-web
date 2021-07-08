@@ -176,7 +176,7 @@ export default {
               message: response.data.message,
             };
             this.isLoading = false;
-            this.$emit("generateTable");
+            this.$emit("generate-table");
           })
           .catch((error) => {
             let msg = "";
@@ -263,6 +263,7 @@ export default {
           unit_price: "",
           total: "",
         };
+        this.items = [];
         this.$emit("close");
       }
     },
