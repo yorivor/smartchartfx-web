@@ -105,6 +105,7 @@
                     required
                     outlined
                     :error-messages="requisitionerErrors"
+                    disabled
                   ></v-text-field>
               </v-col>
               <v-col
@@ -287,6 +288,7 @@ export default {
     getVendors() {
       this.$http.get(this.$api + "/preparer/vendors/list").then((response) => {
         this.vendors = response.data.response.vendors;
+        this.form.requisitioner = this.displayname;
       });
     },
     getVendorInformation() {
@@ -294,6 +296,7 @@ export default {
         this.showVendorDetails = true;
         this.vendor = response.data.response;
         this.vendor.vat_rate = response.data.response.vat_rate.rate + "%";
+        this.form.payment_terms = response.data.response.terms;
       });
     },
     getCompanies() {
@@ -349,7 +352,7 @@ export default {
               message: response.data.message,
             };
             this.isLoading = false;
-            this.$emit("generateTable");
+            this.$emit("generate-table");
           })
           .catch((error) => {
             let msg = "";
@@ -416,6 +419,9 @@ export default {
       if (!this.$v.form.comment.$dirty) return errors;
       !this.$v.form.comment.maxLength && errors.push("Name max length is 320");
       return errors;
+    },
+    displayname: function () {
+      return this.$store.getters.displayname;
     },
     width() {
       switch (this.$vuetify.breakpoint.name) {

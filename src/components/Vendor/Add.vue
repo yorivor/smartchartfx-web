@@ -104,7 +104,7 @@
               ></v-text-field>
               <v-text-field
                 v-model="form.terms"
-                label="Terms"
+                label="Payment Terms"
                 dense
                 outlined
                 @input="$v.form.terms.$touch()"
@@ -117,20 +117,12 @@
                 label="Bank Account"
                 dense
                 outlined
-                @input="$v.form.bank_account.$touch()"
-                @blur="$v.form.bank_account.$touch()"
-                :error-messages="bankAccountErrors"
-                required
               ></v-text-field>
               <v-text-field
                 v-model="form.bank_number"
                 label="Bank Number"
                 dense
                 outlined
-                @input="$v.form.bank_number.$touch()"
-                @blur="$v.form.bank_number.$touch()"
-                :error-messages="bankNumberErrors"
-                required
               ></v-text-field>
               <v-text-field
                 v-model="form.email"
@@ -228,12 +220,6 @@ export default {
         required
       },
       terms: {
-        required
-      },
-      bank_account: {
-        required
-      },
-      bank_number: {
         required
       },
       email: {
@@ -395,18 +381,6 @@ export default {
       const errors = [];
       if (!this.$v.form.terms.$dirty) return errors;
       !this.$v.form.terms.required && errors.push("Terms is required");
-      return errors;
-    },
-    bankAccountErrors() {
-      const errors = [];
-      if (!this.$v.form.bank_account.$dirty) return errors;
-      !this.$v.form.bank_account.required && errors.push("Bank Account is required");
-      return errors;
-    },
-    bankNumberErrors() {
-      const errors = [];
-      if (!this.$v.form.bank_number.$dirty) return errors;
-      !this.$v.form.bank_number.required && errors.push("Bank Number is required");
       return errors;
     },
     emailErrors() {
