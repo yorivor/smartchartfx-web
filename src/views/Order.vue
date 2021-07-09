@@ -96,7 +96,7 @@ import PurchaseOrderUpload from "../components/PurchaseOrder/Upload/Index.vue";
 import ConfirmBox from "../components/ConfirmBox.vue";
 import AlertBox from "../components/AlertBox.vue";
 export default {
-  name: "purchase-order-preparer",
+  name: "purchase-order",
   components: {
     DataTable,
     PurchaseOrderItem,
