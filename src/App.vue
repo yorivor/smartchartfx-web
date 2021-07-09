@@ -51,20 +51,10 @@
 
         <!-- Purchase Orders -->
         <v-list-item
-          v-if="isAdmin || isReviewer || isApprover || isData"
+          v-if="isAdmin || isReviewer || isApprover || isData || isPreparer"
           :to="{ name: 'purchase-orders' }"
           link
         >
-          <v-list-item-icon>
-            <v-icon>mdi-table-large</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>Purchase Orders</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <!-- Prepearer Purchase Orders -->
-        <v-list-item v-if="isPreparer" :to="{ name: 'preparer-purchase-orders' }" link>
           <v-list-item-icon>
             <v-icon>mdi-table-large</v-icon>
           </v-list-item-icon>
