@@ -30,7 +30,7 @@
           <!-- hasAdd -->
           <v-icon
             color="secondary"
-            v-if="hasAdd && item.status == 0 || item.status == 4"
+            v-if="hasAdd && item.status == 0 || item.status == 4  && isPreparer"
             medium
             @click="$emit('add', item)"
           >
@@ -92,7 +92,7 @@
           <!-- hasEdit -->
           <v-icon
             color="secondary"
-            v-if="hasEdit && item.status == 0 || item.status == 4"
+            v-if="hasEdit && item.status == 0 || item.status == 4  && isPreparer"
             medium
             class="mr-2"
             @click="$emit('edit', item)"
@@ -102,7 +102,7 @@
           <!-- hasUpload -->
           <v-icon
             color="secondary"
-            v-if="hasUpload && item.status == 0 || item.status == 4"
+            v-if="hasUpload && item.status == 0 || item.status == 4  && isPreparer"
             medium
             class="mr-2"
             @click="$emit('upload', item)"
@@ -132,7 +132,7 @@
           <!-- hasDelete -->
           <v-icon
             color="error"
-            v-if="hasDelete && item.status == 0 || item.status == 4"
+            v-if="hasDelete && item.status == 0 || item.status == 4 && isPreparer"
             medium
             @click="$emit('delete', item)"
           >
@@ -607,6 +607,23 @@ export default {
           alert("Something Went Wrong. Please Contact the Administrator.");
           this.isLoading = false;
         });
+    },
+  },
+  computed: {
+    isLoggedIn: function () {
+      return this.$store.getters.isLoggedIn;
+    },
+    isData: function () {
+      return this.$store.getters.isData;
+    },
+    isPreparer: function () {
+      return this.$store.getters.isPreparer;
+    },
+    isReviewer: function () {
+      return this.$store.getters.isReviewer;
+    },
+    isApprover: function () {
+      return this.$store.getters.isApprover;
     },
   },
 };
