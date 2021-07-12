@@ -270,6 +270,26 @@
             </v-list-item>
           </v-list>
           <v-divider></v-divider>
+          <v-list v-if="this.item.status == 3 && this.isAdmin == true || this.isPreparer == true || this.isData == true" three-line subheader>
+            <v-list-item>
+              <v-list-item-content>
+                <form @submit.prevent="isDelivered()">
+                  Purchase Order Delivered?
+                  <v-btn class="my-3 mx-3" type="submit" color="primary">Yes</v-btn>
+                </form>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+          <v-list v-if="this.item.status == 5 && this.isAdmin == true" three-line subheader>
+            <v-list-item>
+              <v-list-item-content>
+                <form @submit.prevent="isDelivered()">
+                  <v-btn class="my-3 mx-3" type="submit" color="primary">Change Status to approved</v-btn>
+                </form>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+          <v-divider></v-divider>
           <v-list three-line subheader>
             <v-list-item>
               <v-list-item-content>
@@ -720,6 +740,38 @@ export default {
           });
       }
     },
+    isDelivered() {
+      this.isLoading = true;
+      let url = this.$api + "/purchase-orders/" + this.item.id + "/toggle-status";
+      this.$http
+        .put(url)
+        .then((response) => {
+          this.isLoading = false;
+          this.alert.show = true;
+          this.alert.message = response.data.message;
+          this.hotReloadRemarks();
+          this.$v.$reset();
+          this.showModal = false;
+        })
+        .catch((error) => {
+          let msg = "";
+          if (error.response !== undefined) {
+            msg = error.response.data.message;
+          } else {
+            msg = "Something went wrong. Please contact the administrator";
+          }
+          this.alert = {
+            show: true,
+            type: "error",
+            message: msg,
+          };
+          this.isLoading = false;
+        })
+          .finally(() => {
+            this.$emit("generateTable");
+            this.isLoading = false;
+          });
+    },
     async getDetails() {
       try {
         let url = this.$api + "/purchase-orders/" + this.item.id;
@@ -837,6 +889,9 @@ export default {
       if (!this.$v.review.reviewer.$dirty) return errors;
       !this.$v.review.reviewer.required && errors.push("Reviewer is required");
       return errors;
+    },
+    isAdmin: function () {
+      return this.$store.getters.isAdmin;
     },
     isPreparer: function () {
       return this.$store.getters.isPreparer;
