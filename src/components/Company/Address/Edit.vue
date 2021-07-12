@@ -22,7 +22,7 @@
             <v-text-field
               v-model="form.name"
               :counter="120"
-              label="Name"
+              label="Address"
               dense
               outlined
               @input="$v.form.name.$touch()"
@@ -182,6 +182,7 @@ export default {
     },
     showModal: function () {
       if (!this.showModal) {
+        this.alert.show = false;
         this.$v.$reset();
         this.form = {
           id: "",

@@ -164,6 +164,7 @@ export default {
     },
     showModal: function () {
       if (!this.showModal) {
+        this.alert.show = false;
         this.$v.$reset();
         this.form = {
           code: "",
