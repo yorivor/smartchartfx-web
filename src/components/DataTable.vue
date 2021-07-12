@@ -28,116 +28,130 @@
         <div v-if="hasPoStatus">
           <v-icon> </v-icon>
           <!-- hasAdd -->
-          <v-icon
-            color="secondary"
-            v-if="hasAdd && item.status == 0 || item.status == 4  && isPreparer"
-            medium
-            @click="$emit('add', item)"
-          >
-            mdi-plus
-          </v-icon>
-          <!-- hasAddress -->
-          <v-icon
-            color="secondary"
-            v-if="hasAddress"
-            medium
-            @click="$emit('viewAddress', item)"
-            class="mr-2"
-          >
-            mdi-map-marker
-          </v-icon>
-          <!-- hasCompany -->
-          <v-icon
-            color="secondary"
-            v-if="hasCompany && !['data', 'admin'].includes(item.type.code)"
-            medium
-            @click="$emit('company', item)"
-            class="mr-2"
-          >
-            mdi-office-building
-          </v-icon>
-          <v-icon color="grey" v-else-if="hasCompany" medium class="mr-2">
-            mdi-office-building
-          </v-icon>
-          <!-- hasContact -->
-          <v-icon
-            color="secondary"
-            v-if="hasContact"
-            medium
-            @click="$emit('viewContact', item)"
-            class="mr-2"
-          >
-            mdi-card-account-phone
-          </v-icon>
-          <!-- hasView -->
-          <v-icon
-            color="secondary"
-            v-if="hasView"
-            medium
-            class="mr-2 float-center"
-            @click="$emit('view', item)"
-          >
-            mdi-file-eye
-          </v-icon>
-          <!-- hasPrint -->
-          <v-icon
-            color="secondary"
-            v-if="hasPrint"
-            medium
-            class="mr-2"
-            @click="$emit('print', item)"
-          >
-            mdi-printer
-          </v-icon>
-          <!-- hasEdit -->
-          <v-icon
-            color="secondary"
-            v-if="hasEdit && item.status == 0 || item.status == 4  && isPreparer"
-            medium
-            class="mr-2"
-            @click="$emit('edit', item)"
-          >
-            mdi-pencil
-          </v-icon>
-          <!-- hasUpload -->
-          <v-icon
-            color="secondary"
-            v-if="hasUpload && item.status == 0 || item.status == 4  && isPreparer"
-            medium
-            class="mr-2"
-            @click="$emit('upload', item)"
-          >
-            mdi-file-upload
-          </v-icon>
-          <!-- hasUser -->
-          <v-icon
-            color="secondary"
-            v-if="hasUser"
-            medium
-            class="mr-2"
-            @click="$emit('user', item)"
-          >
-            mdi-account-child
-          </v-icon>
-          <!-- hasChangePassword -->
-          <v-icon
-            color="secondary"
-            v-if="hasChangePassword"
-            medium
-            class="mr-2"
-            @click="$emit('changePassword', item)"
-          >
-            mdi-lock-alert
-          </v-icon>
-          <!-- hasDelete -->
-          <v-icon
-            color="error"
-            v-if="hasDelete && item.status == 0 || item.status == 4 && isPreparer"
-            medium
-            @click="$emit('delete', item)"
-          >
-            mdi-delete
-          </v-icon>
+          <span v-if="isAdmin">
+            <!-- hasView -->
+            <v-icon
+              color="secondary"
+              v-if="hasView"
+              medium
+              class="mr-2 float-center"
+              @click="$emit('view', item)"
+            >
+              mdi-file-eye
+            </v-icon>
+          </span>
+          <span v-else> 
+            <v-icon
+              color="secondary"
+              v-if="hasAdd && item.status == 0 || item.status == 4 && isPreparer"
+              medium
+              @click="$emit('add', item)"
+            >
+              mdi-plus
+            </v-icon>
+            <!-- hasAddress -->
+            <v-icon
+              color="secondary"
+              v-if="hasAddress"
+              medium
+              @click="$emit('viewAddress', item)"
+              class="mr-2"
+            >
+              mdi-map-marker
+            </v-icon>
+            <!-- hasCompany -->
+            <v-icon
+              color="secondary"
+              v-if="hasCompany && !['data', 'admin'].includes(item.type.code)"
+              medium
+              @click="$emit('company', item)"
+              class="mr-2"
+            >
+              mdi-office-building
+            </v-icon>
+            <v-icon color="grey" v-else-if="hasCompany" medium class="mr-2">
+              mdi-office-building
+            </v-icon>
+            <!-- hasContact -->
+            <v-icon
+              color="secondary"
+              v-if="hasContact"
+              medium
+              @click="$emit('viewContact', item)"
+              class="mr-2"
+            >
+              mdi-card-account-phone
+            </v-icon>
+            <!-- hasView -->
+            <v-icon
+              color="secondary"
+              v-if="hasView"
+              medium
+              class="mr-2 float-center"
+              @click="$emit('view', item)"
+            >
+              mdi-file-eye
+            </v-icon>
+            <!-- hasPrint -->
+            <v-icon
+              color="secondary"
+              v-if="hasPrint"
+              medium
+              class="mr-2"
+              @click="$emit('print', item)"
+            >
+              mdi-printer
+            </v-icon>
+            <!-- hasEdit -->
+            <v-icon
+              color="secondary"
+              v-if="hasEdit && item.status == 0 || item.status == 4 && isPreparer"
+              medium
+              class="mr-2"
+              @click="$emit('edit', item)"
+            >
+              mdi-pencil
+            </v-icon>
+            <!-- hasUpload -->
+            <v-icon
+              color="secondary"
+              v-if="hasUpload && item.status == 0 || item.status == 4 && isPreparer"
+              medium
+              class="mr-2"
+              @click="$emit('upload', item)"
+            >
+              mdi-file-upload
+            </v-icon>
+            <!-- hasUser -->
+            <v-icon
+              color="secondary"
+              v-if="hasUser"
+              medium
+              class="mr-2"
+              @click="$emit('user', item)"
+            >
+              mdi-account-child
+            </v-icon>
+            <!-- hasChangePassword -->
+            <v-icon
+              color="secondary"
+              v-if="hasChangePassword"
+              medium
+              class="mr-2"
+              @click="$emit('changePassword', item)"
+            >
+              mdi-lock-alert
+            </v-icon>
+            <!-- hasDelete -->
+            <v-icon
+              color="error"
+              v-if="hasDelete && item.status == 0 || item.status == 4 && isPreparer"
+              medium
+              @click="$emit('delete', item)"
+            >
+              mdi-delete
+            </v-icon>
+          </span>
         </div>
         <div v-else>
           <v-icon> </v-icon>
@@ -273,7 +287,7 @@
         <span v-else-if="item.status == 2"> For Approval </span>
         <span v-else-if="item.status == 3"> Approved </span>
         <span v-else-if="item.status == 4"> Declined </span>
-        <span v-else-if="item.status == 5"> Received </span>
+        <span v-else-if="item.status == 5"> Delivered </span>
         <span v-else-if="item.status == 6"> Cancelled </span>
       </template>
 
@@ -612,6 +626,9 @@ export default {
   computed: {
     isLoggedIn: function () {
       return this.$store.getters.isLoggedIn;
+    },
+    isAdmin: function () {
+      return this.$store.getters.isAdmin;
     },
     isData: function () {
       return this.$store.getters.isData;

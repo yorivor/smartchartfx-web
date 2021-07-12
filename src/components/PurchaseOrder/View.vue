@@ -270,8 +270,8 @@
             </v-list-item>
           </v-list>
           <v-divider></v-divider>
-          <v-list v-if="this.item.status == 3 && this.isAdmin == true || this.isPreparer == true || this.isData == true" three-line subheader>
-            <v-list-item>
+          <v-list v-if="this.item.status == 3" three-line subheader>
+            <v-list-item v-if="this.isAdmin == true || this.isPreparer == true || this.isData == true">
               <v-list-item-content>
                 <form @submit.prevent="isDelivered()">
                   Purchase Order Delivered?
