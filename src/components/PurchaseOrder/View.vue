@@ -232,7 +232,8 @@
                     <v-col :key="uploadKey" cols="3">
                       <a
                         :style="{ color: isDarkTheme ? '#ffe800 ' : '#000' }"
-                        :href="$api + uploadPath + upload.file"
+                        :href="upload.file"
+                        @click.prevent="download($api + uploadPath + upload.file)"
                         :download="upload.file"
                         target="_blank"
                         v-html="upload.file"
@@ -796,9 +797,11 @@ export default {
         .then((response) => {
           const url = window.URL.createObjectURL(new Blob([response.data]));
           const link = document.createElement("a");
-          let fileName = this.item.po_number + ".pdf";
+          let startNameIndex = filename.search("/");
+          let downloadName = filename.substring(startNameIndex);
+
           link.href = url;
-          link.setAttribute("download", fileName);
+          link.setAttribute("download", downloadName);
           document.body.appendChild(link);
           link.click();
           // link.remove();
