@@ -245,9 +245,9 @@
             </v-list-item>
           </v-list>
           <v-divider></v-divider>
-          <v-list v-if="this.isPreparer == true" three-line subheader>
+          <v-list v-if="isPreparer" three-line subheader>
             <v-list-item>
-              <v-list-item-content v-if="this.item.checked_by == 0 || this.item.status == 4">
+              <v-list-item-content v-if="item.checked_by == 0 || item.status == 4">
                 <form @submit.prevent="update()">
                   <v-col cols="12" xs="12" sm="6" md="6" lg="4" xl="4">
                     <v-select
@@ -270,8 +270,8 @@
             </v-list-item>
           </v-list>
           <v-divider></v-divider>
-          <v-list v-if="this.item.status == 3 && this.isAdmin == true || this.isPreparer == true || this.isData == true" three-line subheader>
-            <v-list-item>
+          <v-list v-if="item.status == 3" three-line subheader>
+            <v-list-item v-if="isAdmin || isPreparer || isData">
               <v-list-item-content>
                 <form @submit.prevent="isDelivered()">
                   Purchase Order Delivered?
@@ -280,7 +280,7 @@
               </v-list-item-content>
             </v-list-item>
           </v-list>
-          <v-list v-if="this.item.status == 5 && this.isAdmin == true" three-line subheader>
+          <v-list v-if="item.status == 5 && isAdmin" three-line subheader>
             <v-list-item>
               <v-list-item-content>
                 <form @submit.prevent="isDelivered()">
@@ -293,7 +293,7 @@
           <v-list three-line subheader>
             <v-list-item>
               <v-list-item-content>
-                <v-row v-if="this.isPreparer == true || this.isReviewer == true || this.isApprover == true">
+                <v-row v-if="isPreparer || isReviewer || isApprover">
                   <v-col cols="12" xs="12" sm="6" md="6" lg="4" xl="4">
                     <v-textarea
                       v-model="remark.content"
