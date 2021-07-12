@@ -284,7 +284,9 @@
             <v-list-item>
               <v-list-item-content>
                 <form @submit.prevent="isDelivered()">
-                  <v-btn class="my-3 mx-3" type="submit" color="primary">Change Status to approved</v-btn>
+                  <v-btn class="my-3 mx-3" type="submit" color="primary"
+                    >Change Status to approved</v-btn
+                  >
                 </form>
               </v-list-item-content>
             </v-list-item>
@@ -767,10 +769,10 @@ export default {
           };
           this.isLoading = false;
         })
-          .finally(() => {
-            this.$emit("generateTable");
-            this.isLoading = false;
-          });
+        .finally(() => {
+          this.$emit("generateTable");
+          this.isLoading = false;
+        });
     },
     async getDetails() {
       try {
@@ -787,33 +789,21 @@ export default {
       }
     },
     download(filename) {
-      this.$http.get(filename, { responseType: "arraybuffer" }).then((response) => {
-        const url = window.URL.createObjectURL(
-          new Blob([response.data], { type: response.data.type })
-        );
-        const link = document.createElement("a");
-        const contentDisposition = response.headers["content-disposition"];
-
-        let fileName = "unknown";
-        if (contentDisposition) {
-          let fileNameMatch = contentDisposition.match(/filename="(.+)"/);
-          if (!fileNameMatch) {
-            fileNameMatch = contentDisposition.match(/filename=(.+)/);
-            if (fileNameMatch.length === 2) {
-              fileName = fileNameMatch[1];
-            }
-          } else if (fileNameMatch.length === 2) {
-            fileName = fileNameMatch[1];
-          }
-        }
-        link.href = url;
-        link.setAttribute("download", fileName);
-        document.body.appendChild(link);
-
-        link.click();
-        link.remove();
-        window.URL.revokeObjectURL(url);
-      });
+      this.$http
+        .get(filename, {
+          responseType: "arraybuffer",
+        })
+        .then((response) => {
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement("a");
+          let fileName = this.item.po_number + ".pdf";
+          link.href = url;
+          link.setAttribute("download", fileName);
+          document.body.appendChild(link);
+          link.click();
+          // link.remove();
+          // window.URL.revokeObjectURL(url);
+        });
     },
     generatePdf() {
       this.isLoading = true;
