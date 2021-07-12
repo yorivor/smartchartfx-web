@@ -212,7 +212,7 @@
                           <td class="text-right">P {{ item.others }}</td>
                         </tr>
                         <tr>
-                          <td>total</td>
+                          <td>Total</td>
                           <td class="text-right">P {{ item.total || "" }}</td>
                         </tr>
                       </tbody>

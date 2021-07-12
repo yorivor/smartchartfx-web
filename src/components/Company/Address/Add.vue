@@ -22,7 +22,7 @@
             <v-text-field
               v-model="form.name"
               :counter="120"
-              label="Name"
+              label="Address"
               dense
               outlined
               @input="$v.form.name.$touch()"
