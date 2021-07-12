@@ -2,7 +2,7 @@
   <v-dialog v-model="showModal" transition="dialog-top-transition" :width="width">
     <template>
       <v-card>
-        <v-toolbar color="primary">Upload Documetns</v-toolbar>
+        <v-toolbar color="primary">Upload Documents</v-toolbar>
         <v-container>
           <v-alert v-if="alert.show" cols="12" :type="alert.type">
             <span v-html="alert.message"></span>
