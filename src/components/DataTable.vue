@@ -39,6 +39,15 @@
             >
               mdi-file-eye
             </v-icon>
+            <!-- hasCancel -->
+            <v-icon
+              color="error"
+              v-if="hasCancel && item.status != 6"
+              medium
+              @click="$emit('cancel', item)"
+            >
+            mdi-cancel
+            </v-icon>
           </span>
           <span v-else> 
             <v-icon
@@ -141,6 +150,15 @@
               @click="$emit('changePassword', item)"
             >
               mdi-lock-alert
+            </v-icon>
+            <!-- hasCancel -->
+            <v-icon
+              color="error"
+              v-if="hasCancel || isPreparer"
+              medium
+              @click="$emit('cancel', item)"
+            >
+              mdi-cancel
             </v-icon>
             <!-- hasDelete -->
             <v-icon
@@ -252,6 +270,10 @@
           <v-icon color="error" v-if="hasDelete" medium @click="$emit('delete', item)">
             mdi-delete
           </v-icon>
+          <!-- hasCancel -->
+            <v-icon color="error" medium @click="$emit('cancel', item)">
+              mdi-cancel
+            </v-icon>
           <!-- hasAdd -->
           <v-icon color="secondary" v-if="hasAdd" medium @click="$emit('add', item)">
             mdi-plus
@@ -426,6 +448,11 @@ export default {
       default: false,
     },
     hasDelete: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    hasCancel: {
       type: Boolean,
       required: false,
       default: false,

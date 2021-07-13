@@ -43,6 +43,8 @@
       @edit="edit"
       :hasAdd="true"
       @add="addItem"
+      :hasCancel="true"
+      @cancel="cancel"
       :hasDelete="true"
       @delete="deactivate"
       :path="'/purchase-orders'"
@@ -172,6 +174,32 @@ export default {
       this.deactivateMessage += item.po_number;
       this.deactivateMessage += "?";
       this.showDeactivate = true;
+    },
+    cancel(item) {
+      this.isLoading = true;
+      let url = this.$api + "/purchase-orders/" + item.id + "/cancel";
+      this.$http
+        .put(url)
+        .then((response) => {
+          this.generateTable();
+          this.isLoading = false;
+          this.alert.show = true;
+          this.alert.message = response.data.message;
+        })
+        .catch((error) => {
+          let msg = "";
+          if (error.response !== undefined) {
+            msg = error.response.data.message;
+          } else {
+            msg = "Something went wrong. Please contact the administrator";
+          }
+          this.alert = {
+            show: true,
+            type: "error",
+            message: msg,
+          };
+          this.isLoading = false;
+        });
     },
     submit() {
       this.isLoading = true;
