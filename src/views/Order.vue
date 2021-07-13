@@ -2,7 +2,7 @@
   <v-container>
     <v-list-item-title class="headline mb-1">Purchase Orders</v-list-item-title>
     <v-row>
-      <v-col class="text-left my-3" xs="6" sm="6" md="3" lg="3" xl="3">
+      <v-col class="text-left" xs="6" sm="6" md="3" lg="3" xl="3">
         <v-text-field
           v-model="params.search"
           label="Search"
@@ -12,7 +12,7 @@
           @change="generateTable"
         ></v-text-field>
       </v-col>
-      <v-col class="text-left my-3" xs="6" sm="6" md="3" lg="3" xl="3">
+      <v-col class="text-left" xs="6" sm="6" md="3" lg="3" xl="3">
         <v-select
           v-model="params.status"
           label="Select Status"
@@ -25,7 +25,65 @@
           @change="generateTable"
         ></v-select>
       </v-col>
-      <v-spacer></v-spacer>
+    </v-row>
+    <v-row v-if="isAdmin">
+      <v-col class="text-left" xs="6" sm="6" md="3" lg="3" xl="3">
+        <v-menu
+          v-model="fromDateMenu"
+          :close-on-content-click="false"
+          :nudge-right="40"
+          transition="scale-transition"
+          offset-y
+          min-width="290px"
+          required
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-text-field
+              v-model="params.dateFrom"
+              label="Date From"
+              v-bind="attrs"
+              v-on="on"
+              readonly
+              outlined
+              dense
+              required
+            ></v-text-field>
+          </template>
+          <v-date-picker v-model="params.dateFrom" @input="fromDateMenu = false" @change="generateTable"></v-date-picker>
+        </v-menu>
+      </v-col>
+      <v-col class="text-left" xs="6" sm="6" md="3" lg="3" xl="3">
+        <v-menu
+          v-model="toDateMenu"
+          :close-on-content-click="false"
+          :nudge-right="40"
+          transition="scale-transition"
+          offset-y
+          min-width="290px"
+          required
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-text-field
+              v-model="params.dateTo"
+              label="Date To"
+              v-bind="attrs"
+              v-on="on"
+              readonly
+              outlined
+              dense
+              required
+            ></v-text-field>
+          </template>
+          <v-date-picker v-model="params.dateTo" @input="toDateMenu = false" @change="generateTable"></v-date-picker>
+        </v-menu>
+      </v-col>
+      <v-col class="text-left" xs="2" sm="2" md="1" lg="1" xl="1">
+        <v-btn @click="clear" depressed color="primary">
+          Clear
+        </v-btn>
+      </v-col>
+    </v-row>
+    <v-row>
       <v-col v-if="isPreparer" class="text-right" cols="6">
         <v-btn class="my-3" @click="showAdd = true" depressed large color="primary">
           Create Purchase Order
@@ -49,6 +107,16 @@
       @delete="deactivate"
       :path="'/purchase-orders'"
     />
+    <v-row>
+      <v-col class="text-left" xs="4" sm="4" md="2" lg="2" xl="2">
+        <download-excel
+          :fileName="'purchase-order-report'"
+          :path='"/purchase-orders/excel?search=" + 
+          this.params.search + "&status=" + this.params.status + 
+          "&dateFrom=" + this.params.dateFrom + "&dateTo=" + this.params.dateTo'
+        >Download</download-excel>
+      </v-col>
+    </v-row>
     <purchase-order-item
       :show="showAddItem"
       @close="showAddItem = false"
@@ -97,6 +165,7 @@ import PurchaseOrderItem from "../components/PurchaseOrder/Item/Index.vue";
 import PurchaseOrderUpload from "../components/PurchaseOrder/Upload/Index.vue";
 import ConfirmBox from "../components/ConfirmBox.vue";
 import AlertBox from "../components/AlertBox.vue";
+import DownloadExcel from "../components/DownloadExcel.vue";
 export default {
   name: "purchase-order",
   components: {
@@ -108,6 +177,7 @@ export default {
     PurchaseOrderEdit,
     ConfirmBox,
     AlertBox,
+    DownloadExcel,
   },
   data: () => ({
     usedKey: "",
@@ -117,13 +187,15 @@ export default {
     showAddItem: false,
     showAddUpload: false,
     showDeactivate: false,
+    fromDateMenu: false,
+    toDateMenu: false,
     deactivateMessage: "",
     alert: {
       show: false,
       title: "Notification",
       message: "Sample alert",
     },
-    params: { search: "", status: "" },
+    params: { search: "", status: "", dateFrom: "", dateTo: "" },
     form: {
       id: "",
       created_at: new Date(),
@@ -148,10 +220,19 @@ export default {
     ],
   }),
   methods: {
+    clear() {
+      this.params = { 
+        search: "", 
+        status: "", 
+        dateFrom: "", 
+        dateTo: "",
+      };
+      this.generateTable();
+    },
     generateTable() {
       this.$refs.purchaseOrders.setParameters(this.params);
       this.$refs.purchaseOrders.generate();
-    },
+    },    
     view(item) {
       this.form = item;
       this.showView = true;
@@ -289,6 +370,9 @@ export default {
     },
     isPreparer: function () {
       return this.$store.getters.isPreparer;
+    },
+    isAdmin: function () {
+      return this.$store.getters.isAdmin;
     },
   },
 };

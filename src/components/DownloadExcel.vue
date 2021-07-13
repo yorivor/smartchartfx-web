@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a v-if="!loading" :class="className" href="#" @click.prevent="downloadExcel" v-html="label"></a>
+    <v-btn v-if="!loading" depressed large color="primary" href="#" @click.prevent="downloadExcel" v-html="label"></v-btn>
     <span v-else>
       <img src="/bars.svg" style="height: 10px" /> Please Wait.
     </span>
@@ -23,7 +23,7 @@ export default {
     className: {
       type: String,
       required: false,
-      default: ""
+      default: "btn-download"
     },
     fileName: {
       type: String,
