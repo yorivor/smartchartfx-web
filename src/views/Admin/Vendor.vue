@@ -2,7 +2,7 @@
   <v-container>
     <v-list-item-title class="headline mb-1">Vendor Management</v-list-item-title>
     <v-row>
-      <v-col class="text-left" xs="6" sm="6" md="3" lg="3" xl="3">
+      <v-col class="text-left my-3" xs="6" sm="6" md="3" lg="3" xl="3">
         <v-text-field
           v-model="params.search"
           label="Search"
@@ -12,7 +12,7 @@
           @change="generateTable"
         ></v-text-field>
       </v-col>
-      <v-col class="text-left" xs="6" sm="6" md="3" lg="3" xl="3">
+      <v-col class="text-left my-3" xs="6" sm="6" md="3" lg="3" xl="3">
         <v-menu
           v-model="fromDateMenu"
           :close-on-content-click="false"
@@ -37,7 +37,7 @@
           <v-date-picker v-model="params.dateFrom" @input="fromDateMenu = false" @change="generateTable"></v-date-picker>
         </v-menu>
       </v-col>
-      <v-col class="text-left" xs="6" sm="6" md="3" lg="3" xl="3">
+      <v-col class="text-left my-3" xs="6" sm="6" md="3" lg="3" xl="3">
         <v-menu
           v-model="toDateMenu"
           :close-on-content-click="false"
@@ -62,7 +62,7 @@
           <v-date-picker v-model="params.dateTo" @input="toDateMenu = false" @change="generateTable"></v-date-picker>
         </v-menu>
       </v-col>
-      <v-col class="text-left" xs="2" sm="2" md="1" lg="1" xl="1">
+      <v-col class="text-left my-3" xs="2" sm="2" md="1" lg="1" xl="1">
         <v-btn @click="clear" depressed color="primary">
           Clear
         </v-btn>
