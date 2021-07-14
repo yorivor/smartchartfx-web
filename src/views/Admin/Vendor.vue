@@ -2,7 +2,7 @@
   <v-container>
     <v-list-item-title class="headline mb-1">Vendor Management</v-list-item-title>
     <v-row>
-      <v-col class="text-left my-3" xs="6" sm="6" md="3" lg="3" xl="3">
+      <v-col class="text-left" xs="6" sm="6" md="3" lg="3" xl="3">
         <v-text-field
           v-model="params.search"
           label="Search"
@@ -12,6 +12,63 @@
           @change="generateTable"
         ></v-text-field>
       </v-col>
+      <v-col class="text-left" xs="6" sm="6" md="3" lg="3" xl="3">
+        <v-menu
+          v-model="fromDateMenu"
+          :close-on-content-click="false"
+          :nudge-right="40"
+          transition="scale-transition"
+          offset-y
+          min-width="290px"
+          required
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-text-field
+              v-model="params.dateFrom"
+              label="Date From"
+              v-bind="attrs"
+              v-on="on"
+              readonly
+              outlined
+              dense
+              required
+            ></v-text-field>
+          </template>
+          <v-date-picker v-model="params.dateFrom" @input="fromDateMenu = false" @change="generateTable"></v-date-picker>
+        </v-menu>
+      </v-col>
+      <v-col class="text-left" xs="6" sm="6" md="3" lg="3" xl="3">
+        <v-menu
+          v-model="toDateMenu"
+          :close-on-content-click="false"
+          :nudge-right="40"
+          transition="scale-transition"
+          offset-y
+          min-width="290px"
+          required
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-text-field
+              v-model="params.dateTo"
+              label="Date To"
+              v-bind="attrs"
+              v-on="on"
+              readonly
+              outlined
+              dense
+              required
+            ></v-text-field>
+          </template>
+          <v-date-picker v-model="params.dateTo" @input="toDateMenu = false" @change="generateTable"></v-date-picker>
+        </v-menu>
+      </v-col>
+      <v-col class="text-left" xs="2" sm="2" md="1" lg="1" xl="1">
+        <v-btn @click="clear" depressed color="primary">
+          Clear
+        </v-btn>
+      </v-col>
+    </v-row>
+    <v-row>
       <v-spacer></v-spacer>
       <v-col class="text-right" cols="6">
         <div class="my-3">
@@ -31,6 +88,15 @@
       @changeStatus="changeStatus"
       :path="'/admin/vendors'"
     />
+    <v-row>
+      <v-col class="text-left" xs="4" sm="4" md="2" lg="2" xl="2">
+        <download-excel
+          :fileName="'vendor-report'"
+          :path='"/admin/vendors/excel?search=" + 
+          this.params.search + "&dateFrom=" + this.params.dateFrom + "&dateTo=" + this.params.dateTo'
+        >Download</download-excel>
+      </v-col>
+    </v-row>
     <vendor-add :show="showAdd" @close="showAdd = false" @generate-table="generateTable" />
     <vendor-edit
       :show="showEdit"
@@ -58,6 +124,7 @@ import VendorAdd from "../../components/Vendor/Add.vue";
 import VendorEdit from "../../components/Vendor/Edit.vue";
 import ConfirmBox from "../../components/ConfirmBox.vue";
 import AlertBox from "../../components/AlertBox.vue";
+import DownloadExcel from "../../components/DownloadExcel.vue";
 export default {
   name: "vendors",
   components: {
@@ -66,14 +133,17 @@ export default {
     VendorEdit,
     ConfirmBox,
     AlertBox,
+    DownloadExcel
   },
   data: () => ({
     usedKey: "",
     showAdd: false,
     showEdit: false,
     showDeactivate: false,
+    fromDateMenu: false,
+    toDateMenu: false,
     deactivateMessage: "",
-    params: { search: "" },
+    params: { search: "", dateFrom: "", dateTo: "" },
     alert: {
       show: false,
       title: "Notification",
@@ -82,6 +152,14 @@ export default {
     form: {},
   }),
   methods: {
+    clear() {
+      this.params = { 
+        search: "", 
+        dateFrom: "", 
+        dateTo: "",
+      };
+      this.generateTable();
+    },
     generateTable() {
       this.$refs.vendors.setParameters(this.params);
       this.$refs.vendors.generate();

@@ -84,6 +84,7 @@
       </v-col>
     </v-row>
     <v-row>
+      <v-spacer></v-spacer>
       <v-col v-if="isPreparer" class="text-right" cols="6">
         <v-btn class="my-3" @click="showAdd = true" depressed large color="primary">
           Create Purchase Order
