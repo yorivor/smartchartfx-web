@@ -25,9 +25,7 @@
           @change="generateTable"
         ></v-select>
       </v-col>
-    </v-row>
-    <v-row v-if="isAdmin">
-      <v-col class="text-left" xs="6" sm="6" md="3" lg="3" xl="3">
+      <v-col v-if="isAdmin" class="text-left" xs="4" sm="4" md="2" lg="2" xl="2">
         <v-menu
           v-model="fromDateMenu"
           :close-on-content-click="false"
@@ -52,7 +50,7 @@
           <v-date-picker v-model="params.dateFrom" @input="fromDateMenu = false" @change="generateTable"></v-date-picker>
         </v-menu>
       </v-col>
-      <v-col class="text-left" xs="6" sm="6" md="3" lg="3" xl="3">
+      <v-col v-if="isAdmin" class="text-left" xs="4" sm="4" md="2" lg="2" xl="2">
         <v-menu
           v-model="toDateMenu"
           :close-on-content-click="false"
@@ -77,7 +75,7 @@
           <v-date-picker v-model="params.dateTo" @input="toDateMenu = false" @change="generateTable"></v-date-picker>
         </v-menu>
       </v-col>
-      <v-col class="text-left" xs="2" sm="2" md="1" lg="1" xl="1">
+      <v-col v-if="isAdmin" class="text-left" xs="2" sm="2" md="1" lg="1" xl="1">
         <v-btn @click="clear" depressed color="primary">
           Clear
         </v-btn>

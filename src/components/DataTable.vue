@@ -271,7 +271,7 @@
             mdi-delete
           </v-icon>
           <!-- hasCancel -->
-            <v-icon color="error" medium @click="$emit('cancel', item)">
+            <v-icon color="error" v-if="hasCancel" medium @click="$emit('cancel', item)">
               mdi-cancel
             </v-icon>
           <!-- hasAdd -->
