@@ -117,30 +117,18 @@
                 label="Bank Account"
                 dense
                 outlined
-                @input="$v.form.bank_account.$touch()"
-                @blur="$v.form.bank_account.$touch()"
-                :error-messages="bankAccountErrors"
-                required
               ></v-text-field>
               <v-text-field
                 v-model="form.bank_number"
                 label="Bank Number"
                 dense
                 outlined
-                @input="$v.form.bank_number.$touch()"
-                @blur="$v.form.bank_number.$touch()"
-                :error-messages="bankNumberErrors"
-                required
               ></v-text-field>
               <v-text-field
                 v-model="form.email"
                 label="Email Address"
                 dense
                 outlined
-                @input="$v.form.email.$touch()"
-                @blur="$v.form.email.$touch()"
-                :error-messages="emailErrors"
-                required
               ></v-text-field>
               <v-text-field
                 v-model="form.contact_person"
@@ -245,16 +233,6 @@ export default {
       terms: {
         required
       },
-      bank_account: {
-        required
-      },
-      bank_number: {
-        required
-      },
-      email: {
-        required,
-        email
-      },
       contact_person: {
         required,
         minLength: minLength(4),
@@ -289,7 +267,7 @@ export default {
       contact_number: "",
     },
     taxpayerClassifications: [
-      { id: 0, name: 'NON-VAT' },
+      { id: 2, name: 'NON-VAT' },
       { id: 1, name: 'VAT' }
     ],
     withholdingTaxes: [],
@@ -410,25 +388,6 @@ export default {
       const errors = [];
       if (!this.$v.form.terms.$dirty) return errors;
       !this.$v.form.terms.required && errors.push("Terms is required");
-      return errors;
-    },
-    bankAccountErrors() {
-      const errors = [];
-      if (!this.$v.form.bank_account.$dirty) return errors;
-      !this.$v.form.bank_account.required && errors.push("Bank Account is required");
-      return errors;
-    },
-    bankNumberErrors() {
-      const errors = [];
-      if (!this.$v.form.bank_number.$dirty) return errors;
-      !this.$v.form.bank_number.required && errors.push("Bank Number is required");
-      return errors;
-    },
-    emailErrors() {
-      const errors = [];
-      if (!this.$v.form.email.$dirty) return errors;
-      !this.$v.form.email.required && errors.push("Email is required");
-      !this.$v.form.email.email && errors.push("E-Mail is invalid");
       return errors;
     },
     contactPersonErrors() {
