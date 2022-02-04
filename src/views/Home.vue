@@ -1,181 +1,253 @@
 <template>
-  <v-container>
-    <v-row class="mt-10" align="center" justify="center">
-      <v-col v-if="!showTopBanner" xs="12" sm="8" md="6" lg="5" xl="3">
-        <v-img src="/images/51Talk-10-Years-Logo.png"></v-img>
-      </v-col>
-      <v-col offset-lg="1" xs="12" sm="8" md="6" lg="5" xl="3">
-        <v-card class="mx-auto" outlined>
-          <v-img v-if="showTopBanner" src="/images/51Talk-10-Years-Logo.png"></v-img>
-          <v-card-title> {{ appName }} Login </v-card-title>
-          <v-list-item three-line>
-            <v-list-item-content>
-              <form>
-                <!-- <v-list-item-title class="headline mb-3"></v-list-item-title> -->
-                <v-alert v-if="alert.show" cols="12" :type="alert.type">
-                  <span v-html="alert.message"></span>
-                </v-alert>
+  <v-app>
+    <v-container>
+      <h1>Contact List</h1>
+      <v-row>
+        <v-col class="text-right" cols="12">
+          <v-btn @click="showCreate" depressed large light-blue darken-4>
+            Create Contact
+          </v-btn>
+        </v-col>
+      </v-row>
+      <v-alert v-if="alertTwo.show" cols="12" :type="alertTwo.type">
+        <span v-html="alertTwo.message"></span>
+      </v-alert>
+      <v-simple-table>
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th class="text-left">
+                Name
+              </th>
+              <th class="text-left">
+              Address
+              </th>
+              <th class="text-left">
+              Phone Number
+              </th>
+              <th class="text-left">
+              Facebook Username
+              </th>
+              <th class="text-left">
+              Action
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="list in contactList" :key="list.id">
+              <td>{{ list.name }}</td>
+              <td>{{ list.address }}</td>
+              <td>{{ list.phone_number }}</td>
+              <td>{{ list.fb_username }}</td>
+              <td>
+                <v-icon
+                 @click="getContact(list.id)" 
+                >
+                  mdi-pencil-outline
+                </v-icon>
+                <v-icon
+                 @click="deleteContact(list.id)" 
+                >
+                  mdi-delete
+                </v-icon>
+              </td>
+            </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
+      <v-dialog
+        v-model="showModal"
+        persistent
+        transition="dialog-top-transition"
+      >
+        <template>
+          <v-card>
+            <v-toolbar color="primary">Create Contact</v-toolbar>
+            <v-container>
+              <v-alert v-if="alert.show" cols="12" :type="alert.type">
+                <span v-html="alert.message"></span>
+              </v-alert>
+              <v-form @submit.prevent="submit(type)">
                 <v-text-field
-                  cols="12"
-                  v-model="form.username"
-                  label="Username"
-                  @input="$v.form.username.$touch()"
-                  @blur="$v.form.username.$touch()"
-                  @keyup.enter="submit"
-                  :error-messages="usernameErrors"
-                  :disabled="isLoading"
-                  outlined
+                  v-model="form.name"
+                  label="Name"
                   required
                 ></v-text-field>
                 <v-text-field
-                  cols="12"
-                  v-model="form.password"
-                  :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                  :type="showPassword ? 'text' : 'password'"
-                  @click:append="showPassword = !showPassword"
-                  label="Password"
-                  @input="$v.form.password.$touch()"
-                  @blur="$v.form.password.$touch()"
-                  @keyup.enter="submit"
-                  :error-messages="passwordErrors"
-                  :disabled="isLoading"
-                  outlined
+                  v-model="form.address"
+                  label="Address"
                   required
                 ></v-text-field>
-              </form>
-              <v-btn
-                class="py-6"
-                color="primary"
-                :loading="isLoading"
-                @click="submit"
-                block
-              >
-                Submit
-              </v-btn>
-              <v-row>
-                <v-col class="mt-3" cols="12" align="center">
-                  <v-btn
-                    :loading="isLoading"
-                    :to="{ name: 'forgot-password' }"
-                    class="ma-1"
-                    color="#00B4EE"
-                    plain
-                  >
-                    Forgot Password?
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-list-item-content>
-          </v-list-item>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-    </v-row>
-    <loading :is-loading="isLoading" />
-  </v-container>
+                <v-text-field
+                  v-model="form.phone_number"
+                  label="Phone Number"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  v-model="form.fb_username"
+                  label="Facebook Username"
+                ></v-text-field>
+                <v-row class="text-right">
+                  <v-col cols="12">
+                    <v-btn class="my-3 mx-3" type="submit" color="primary"> Submit </v-btn>
+                    <v-btn class="my-3 mx-3" color="error" @click="showModal = false">
+                      Close
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-form>
+            </v-container>
+          </v-card>
+        </template>
+      </v-dialog>
+    </v-container>
+  </v-app>
 </template>
 
 <script>
-import { validationMixin } from "vuelidate";
-import { required } from "vuelidate/lib/validators";
-import Loading from "../components/Loading";
+
 export default {
   name: "home",
-  mixins: [validationMixin],
-  components: { Loading },
-  validations: {
-    form: {
-      password: { required },
-      username: { required },
-    },
-  },
   data: () => ({
-    appName: process.env.VUE_APP_TITLE || "",
-    isLoading: false,
-    showPassword: false,
-    form: {
-      username: "",
-      password: "",
-    },
+    usedKey: 0,
+    showModal: false,
+    contactList: [],
+    type: 'Create',
     alert: {
       show: false,
       message: "",
       type: "error",
     },
+    alertTwo: {
+      show: false,
+      message: "",
+      type: "error",
+    },
+    form: {
+      name: "",
+      address: "",
+      phone_number: "",
+      fb_username: "",
+    }
   }),
   methods: {
+    showCreate() {
+      this.showModal = true;
+      this.form = {
+        name: "",
+        address: "",
+        phone_number: "",
+        fb_username: "",
+      };
+      this.alert = {
+        show: false,
+      };
+    },
+    getContactList() {
+        this.$http.get(this.$api + "/").then((response) => {
+        this.contactList = response.data.data;
+      });
+    },
+    getContact(id) {
+      this.showModal = true;
+      this.type = 'Update';
+      this.usedKey = id;
+      this.alert = {
+        show: false,
+      };
+      this.$http
+        .get(this.$api + "/contact/" + id)
+        .then((response) => {
+          this.form.name = response.data.information.name;
+          this.form.address = response.data.information.address;
+          this.form.phone_number = response.data.information.phone_number;
+          this.form.fb_username = response.data.information.fb_username;
+        });
+    },
     submit() {
-      this.isLoading = true;
-      this.alert.show = false;
-      this.$v.$touch();
-      if (this.$v.$invalid) {
-        this.isLoading = false;
-        this.alert = {
-          show: true,
-          type: "error",
-          message: "Please Check Errors Below",
-        };
-      } else {
-        this.$store
-          .dispatch("login", this.form)
-          .then((response) => {
-            setTimeout(() => {
-              this.$router.push({
-                name: "account",
-              });
-              this.isLoading = false;
-            }, 1000);
-          })
-          .catch((err) => {
-            setTimeout(() => {
-              let msg = "";
-              if (err.response != undefined) {
-                msg = err.response.data.message;
-              } else {
-                msg = "Something went wrong. Please contact the administrator";
-              }
-              this.alert = {
-                show: true,
-                type: "error",
-                message: msg,
-              };
-              this.isLoading = false;
-            }, 1000);
-          });
+      var url = ''
+      var data = {}
+      switch (this.type) {
+        case 'Create' :
+          url = this.$api + '/add'
+          data = {
+            name: this.form.name,
+            address: this.form.address,
+            phone_number: this.form.phone_number,
+            fb_username: this.form.fb_username,
+          }
+        break;
+        case 'Update' :
+          url = this.$api + '/contact/update/' + this.usedKey
+          data = {
+            name: this.form.name,
+            address: this.form.address,
+            phone_number: this.form.phone_number,
+            fb_username: this.form.fb_username,
+            _method: 'PUT',
+          }
+          break;
       }
+      this.$http
+        .post(url, data)
+        .then((success) => {
+          if(this.type == 'Create') {
+            this.form = {
+              name: "",
+              address: "",
+              phone_number: "",
+              fb_username: "",
+            };
+          }
+          this.alert = {
+            show: true,
+            type: "success",
+            message: success.data.message,
+          };
+          this.getContactList();
+        })
+        .catch((error) => {
+          let msg = "";
+          if (error.response.data.message) {
+            msg = error.response.data.message;
+          } else {
+            msg = "Something went wrong. Please contact the administrator";
+          }
+          this.alert = {
+            show: true,
+            type: "error",
+            message: msg,
+          };
+        });
     },
+    deleteContact(id) {
+      this.$http
+        .delete(this.$api + "/contact/delete/" + id)
+        .then((response) => {
+          this.getContactList();
+          this.alertTwo = {
+            show: true,
+            type: "success",
+            message: response.data.message,
+          };
+        })
+        .catch((error) => {
+          let msg = "";
+          if (error.response.data.message) {
+            msg = error.response.data.message;
+          } else {
+            msg = "Something went wrong. Please contact the administrator";
+          }
+          this.alertTwo = {
+            show: true,
+            type: "error",
+            message: msg,
+          };
+        });
+    }
   },
-  computed: {
-    usernameErrors() {
-      const errors = [];
-      if (!this.$v.form.username.$dirty) return errors;
-      !this.$v.form.username.required && errors.push("E-mail is required");
-      return errors;
-    },
-    passwordErrors() {
-      const errors = [];
-      if (!this.$v.form.password.$dirty) return errors;
-      !this.$v.form.password.required && errors.push("Password is required");
-      return errors;
-    },
-    showTopBanner() {
-      switch (this.$vuetify.breakpoint.name) {
-        case "xs":
-          return 220;
-        case "sm":
-          return 400;
-        case "md":
-          return false;
-        case "lg":
-          return false;
-        case "xl":
-          return false;
-        default:
-          return false;
-      }
-    },
-  },
+  mounted() {
+    this.getContactList();
+  }
 };
 </script>
